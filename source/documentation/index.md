@@ -1,21 +1,25 @@
-# Hello, World!
+# GOV.UK Kubernetes Cluster User Documentation
 
-## Edit Me!
+## Introduction
 
-Open `source/documentation/index.md` in your favourite text editor and start editing!
+## Who is this documentation for?
 
-You can write content in [Markdown](https://daringfireball.net/projects/markdown/) using **all** of the _usual_ syntax that you're used to!
+## Kubernetes overview
 
-This means you can use things like tables:
+## Helm overview
 
-Food | Kind | Tasty?
---- | --- | ---
-Bananas | Fruit | Yes
-Aubergines | Vegetable | No
-Apricots | Fruit | Yes
+## Tools setup
 
-To change the title of the page or include additional files you'll need to edit `source/index.html.md.erb`.
+## Getting access to the cluster
 
-If you want slightly more control, you can always use <strong>HTML</strong>.
+## Interact with the cluster with `kubectl`
 
-For more detail and troubleshooting, take a look at the `README.md` file in the root of this project.
+## Continuous Integration and Continous Deployment (CI/CD)
+
+### Github Actions (CI)
+
+### ArgoCD (CD)
+
+## Access application logs
+
+## Security constraints
