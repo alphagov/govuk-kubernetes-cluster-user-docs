@@ -1,9 +1,9 @@
 on:
   push:
   pull_request:
-  # schedule:
-  #   # Deploy hourly between 9am and 7pm on weekdays
-  #   - cron: "0 9-19 * * 1-5"
+  schedule:
+    # Deploy hourly between 9am and 7pm on weekdays
+    - cron: "0 9-19 * * 1-5"
 jobs:
   deploy:
     runs-on: ubuntu-latest
