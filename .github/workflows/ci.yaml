@@ -1,0 +1,34 @@
+on:
+  push:
+  pull_request:
+  # schedule:
+  #   # Deploy hourly between 9am and 7pm on weekdays
+  #   - cron: "0 9-19 * * 1-5"
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    if: ${{ github.ref == 'refs/heads/main' }}
+    steps:
+      - name: Set commit message up front
+        id: commit_message_writer
+        run: | # `github.event.number` will be blank if this is a cron
+          if [ "${{ github.event.number }}" == "" ]; then
+            echo "::set-output name=commit_message::Hourly scheduled redeploy"
+          else
+            echo "::set-output name=commit_message::Deploy via merge"
+          fi
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+      - name: Build 'build' folder ready for deployment
+        run: bundle exec middleman build
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./build
+          # cname: docs.publishing.service.gov.uk
+          commit_message: ${{steps.commit_message_writer.outputs.commit_message}}
