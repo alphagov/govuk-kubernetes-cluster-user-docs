@@ -6,6 +6,8 @@ The GOV.UK Kubernetes Platform is an AWS-hosted [Kubernetes](https://kubernetes.
 
 ## Who is this documentation for?
 
+As the GOV.UK Kubernetes Platform is currently in an early alpha stage, this documentation is intended for developers participating in user testing only.
+
 ## Kubernetes overview
 
 Kubernetes is a portable, extensible, open-source platform for managing containerized workloads and services, that facilitates both [declarative](https://kubernetes.io/docs/tasks/manage-kubernetes-objects/declarative-config/) configuration and automation. Kubernetes manages the entire lifecycle of containerised applications (e.g. start, stop, update, scale), as well as providing mechanisms for:
