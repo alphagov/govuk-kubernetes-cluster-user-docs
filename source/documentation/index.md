@@ -46,8 +46,8 @@ The Kubernetes API supports many [object types](https://kubernetes.io/docs/conce
 
 * [`Pod`](https://kubernetes.io/docs/concepts/workloads/pods/) - a group of one or more containers
 * [`Deployment`](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/) - one or more replicas of a `Pod`, and an associated [deployment strategy](https://www.weave.works/blog/kubernetes-deployment-strategies)
-* [`Service`](https://kubernetes.io/docs/concepts/services-networking/service/) - a means of exposing `Pod` or `Deployment` objects as a network service using a DNS name
-* [`Ingress`](https://kubernetes.io/docs/concepts/services-networking/ingress/) - a means of exposing `Service` objects externally via a load balancer, with associated SSL/TLS certificates and DNS names
+* [`Service`](https://kubernetes.io/docs/concepts/services-networking/service/) - a means of exposing `Pod` or `Deployment` objects as a network service using a [DNS](https://en.wikipedia.org/wiki/Domain_Name_System) name
+* [`Ingress`](https://kubernetes.io/docs/concepts/services-networking/ingress/) - a means of exposing `Service` objects externally via a load balancer, with associated [TLS](https://en.wikipedia.org/wiki/Transport_Layer_Security) certificates and [DNS](https://en.wikipedia.org/wiki/Domain_Name_System) names
 * [`ConfigMap`](https://kubernetes.io/docs/concepts/configuration/configmap/) - a collection of configuration key/value pairs, commonly used to provide environment variables to Pod containers
 * [`Secrets`](https://kubernetes.io/docs/concepts/configuration/secret/) - a collection of sensitive key/value pairs, commonly used to provide environment variables to containers
 
@@ -57,7 +57,7 @@ The GOV.UK Kubernetes Platform includes some third party API objects and control
 
 * [external-secrets](https://external-secrets.io) - stores secrets in [AWS Secrets Manager](https://aws.amazon.com/secrets-manager/), and makes them available to applications as standard Kubernetes `Secret` objects
 * [AWS Load Balancer Controller](https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.3/) - provides and manages AWS Load Balancers to fulfil `Ingress` objects' specifications
-* [external-dns](https://github.com/kubernetes-sigs/external-dns) - creates and manages DNS records in AWS Route53 to fulfil `Ingress` objects' specifications
+* [external-dns](https://github.com/kubernetes-sigs/external-dns) - creates and manages [DNS](https://en.wikipedia.org/wiki/Domain_Name_System) records in [AWS Route 53](https://aws.amazon.com/route53/) to fulfil `Ingress` objects' specifications
 
 
 ### Further Kubernetes Information
