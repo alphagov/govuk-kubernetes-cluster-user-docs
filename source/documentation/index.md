@@ -95,6 +95,29 @@ Here are some links to introductory Kubernetes resources:
 
 ### ArgoCD (CD)
 
+The GOV.UK Kubernetes Platform provides an [ArgoCD] instance for continuous
+delivery of applications to the cluster.
+
+ArgoCD is a declarative, GitOps continuous delivery tool for Kubernetes.
+ArgoCD will replace the feature set currently provided by Deploy Jenkins.
+
+#### Access the ArgoCD integration instance
+
+NOTE: In future we will use our Google Accounts for Single Sign-On (SSO) to Argo.
+Our MVP for user testing uses a shared username and password.
+
+1. Authenticate to the Kubernetes cluster (see [getting access to the cluster])
+2. Acquire the password for Argo:
+  ```
+  kubectl -n cluster-services get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo
+  ```
+3. Navigate to [ArgoCD (Integration)][argo-integration] and sign in using the
+  username `admin` and the password acquired from the previous step.
+
+[ArgoCD]: https://argo-cd.readthedocs.io/en/stable/
+[getting access to the cluster]: #getting-access-to-the-cluster
+[argo-integration]: https://argo.eks.integration.govuk.digital/
+
 ## Access application logs
 
 ## Security constraints
