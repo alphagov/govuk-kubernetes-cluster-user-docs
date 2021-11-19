@@ -11,7 +11,18 @@
 ## Tools setup
 
 ## Getting access to the cluster
+1. Assume the proper IAM role using [gds-cli](https://github.com/alphagov/gds-cli#usage)
+2. If it's your first time accessing the cluster through kubectl:
+```
+aws eks update-kubeconfig --name govuk
+```
+This will add the govuk cluster to your kubectl configuration in ~/.kube/config
 
+3. To check that you have access, run:
+```
+kubectl cluster-info
+```
+If you have access this should return information about the govuk EKS cluster control plane
 ## Interact with the cluster with `kubectl`
 
 ## Continuous Integration and Continous Deployment (CI/CD)
