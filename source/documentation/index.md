@@ -2,7 +2,7 @@
 
 ## Introduction
 
-The GOV.UK Kubernetes Platform is an AWS-hosted [Kubernetes](https://kubernetes.io) (aka **"k8s"**) cluster, using Amazon's [Elastic Kubernetes Service](https://aws.amazon.com/eks/) (aka **"EKS"**).
+The GOV.UK Kubernetes Platform is an AWS-hosted [Kubernetes](https://kubernetes.io) cluster, using Amazon's [Elastic Kubernetes Service](https://aws.amazon.com/eks/).
 
 ## Who is this documentation for?
 
@@ -10,38 +10,52 @@ As the GOV.UK Kubernetes Platform is currently in an early alpha stage, this doc
 
 ## Kubernetes overview
 
-Kubernetes is a portable, extensible, open-source platform for managing containerized workloads and services, that facilitates both [declarative](https://kubernetes.io/docs/tasks/manage-kubernetes-objects/declarative-config/) configuration and automation. Kubernetes manages the entire lifecycle of containerised applications (e.g. start, stop, update, scale), as well as providing mechanisms for:
+Kubernetes is a portable, extensible, open-source platform for managing containerized workloads and services, that facilitates both [declarative configuration](https://kubernetes.io/docs/tasks/manage-kubernetes-objects/declarative-config/) and automation. Kubernetes manages the entire lifecycle of containerised applications (for example, start, stop, update, scale), as well as providing mechanisms for:
 
-- Service discovery and load balancing
-- Persistent storage orchestration
-- Automated rollouts and rollbacks
-- Self-healing deployments
-- Secrets and config management
+- service discovery and load balancing
+- persistent storage orchestration
+- automated rollouts and rollbacks
+- self-healing deployments
+- secrets and config management
 
-See [What is Kubernetes?](https://kubernetes.io/docs/concepts/overview/what-is-kubernetes/) for more details.
+See the official [Kubernetes overview documentation](https://kubernetes.io/docs/concepts/overview/what-is-kubernetes/) for more details.
 
 ### Kubernetes declarative state model
 
-Declarative configuration is a fundamental part of the design of Kubernetes, and it is important to understand the distinction between this declarative model and more traditional imperative models.
+A core design concept of Kubernetes is the declarative state model, where Kubernetes users define their applications in terms of the desired end state. This differs from an imperative model, where the sequential steps to achieve a running application are defined instead. For example:
 
-Briefly, the desired state of an application is submitted to the Kubernetes API (e.g. this container at a specific tag should be running, with these environment variables, with this port exposed to the internet), and Kubernetes internal components will then work to bring the current state of the application in line with the declared desired state; this is known as **state reconciliation**, and is handled via [Kubernetes controllers](https://kubernetes.io/docs/concepts/architecture/controller/).
+#### Declarative
+
+* Container `hello-world` with tag `v1` should be running
+* The `hello-world` container should expose port 80
+* A load balancer routing to port 80 on the container should exist
+
+#### Imperative
+
+1. Pull the `hello-world` container with tag `v1`
+2. Start the `hello-world` container with port 80 exposed
+3. Create a load balancer
+4. Create a load balancer routing rule pointing to port 80 on the container
+
+In the Kubernetes declarative model, internal Kubernetes components called [controllers](https://kubernetes.io/docs/concepts/architecture/controller/) handle the details of transitioning an application from the current state to the declared desired state on your behalf. See [Imperative vs Declarative](https://dominik-tornow.medium.com/imperative-vs-declarative-8abc7dcae82e) for a more detailed comparison of the two models.
+
 
 ### Kubernetes objects
 
 The Kubernetes API supports many [object types](https://kubernetes.io/docs/concepts/overview/working-with-objects/kubernetes-objects/) representing the state of component parts of an application. The major resource types that will be used in most (if not all) applications are:
 
-* [Pods](https://kubernetes.io/docs/concepts/workloads/pods/) - a group of one ore more containers
-* [Deployments](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/) - one or more replicas of a pod, and an associated [deployment strategy](https://www.weave.works/blog/kubernetes-deployment-strategies)
-* [Services](https://kubernetes.io/docs/concepts/services-networking/service/) - a means of exposing pods or deployments as a network service via a DNS name
-* [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) - a means of exposing Services externally via a load balancer, with associated SSL/TLS certificates and DNS names
-* [ConfigMap](https://kubernetes.io/docs/concepts/configuration/configmap/) - a collection of configuration key/value pairs, commonly used to provide environment variables to containers
-* [Secrets](https://kubernetes.io/docs/concepts/configuration/secret/) - much like ConfigMap, but for smaller, sensitive key/value pairs
+* [`Pod`](https://kubernetes.io/docs/concepts/workloads/pods/) - a group of one or more containers
+* [`Deployment`](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/) - one or more replicas of a `Pod`, and an associated [deployment strategy](https://www.weave.works/blog/kubernetes-deployment-strategies)
+* [`Service`](https://kubernetes.io/docs/concepts/services-networking/service/) - a means of exposing `Pod` or `Deployment` objects as a network service using a DNS name
+* [`Ingress`](https://kubernetes.io/docs/concepts/services-networking/ingress/) - a means of exposing `Service` objects externally via a load balancer, with associated SSL/TLS certificates and DNS names
+* [`ConfigMap`](https://kubernetes.io/docs/concepts/configuration/configmap/) - a collection of configuration key/value pairs, commonly used to provide environment variables to Pod containers
+* [`Secrets`](https://kubernetes.io/docs/concepts/configuration/secret/) - a collection of sensitive key/value pairs, commonly used to provide environment variables to containers
 
-### Custom kubernetes objects
+### Custom Kubernetes objects
 
-The GOV.UK Kubernetes Platform includes some third party API objects and controllers to allow for easy integration with AWS services:
+The GOV.UK Kubernetes Platform includes some third party API objects and controllers to allow AWS services to be used through the Kubernetes API:
 
-* [ExternalSecrets](https://external-secrets.io) - stores secrets in [AWS Secrets Manager](https://aws.amazon.com/secrets-manager/), and makes them available to applications as standard Kubernetes `Secret` objects
+* [external-secrets](https://external-secrets.io) - stores secrets in [AWS Secrets Manager](https://aws.amazon.com/secrets-manager/), and makes them available to applications as standard Kubernetes `Secret` objects
 * [AWS Load Balancer Controller](https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.3/) - provides and manages AWS Load Balancers to fulfil `Ingress` objects' specifications
 * [external-dns](https://github.com/kubernetes-sigs/external-dns) - creates and manages DNS records in AWS Route53 to fulfil `Ingress` objects' specifications
 
@@ -54,8 +68,8 @@ Content based on https://github.com/ministryofjustice/cloud-platform-user-guide/
 
 Here are some links to introductory Kubernetes resources:
 
- * For a brief and light-hearted introduction to what Kubernetes is all about, try this [comic][k8s-comic] from Google.
- * [Concept video][k8s-video]
+ * For a brief introduction to what Kubernetes is all about, try this [comic][k8s-comic] from Google.
+ * [Kubernetes concepts video][k8s-video]
  * [Katacoda kubernetes course][] - In-browser, free (registration required), bite-sized kubernetes lessons.
  * [Pluralsight k8s course][]
  * [Udacity k8s course][]
