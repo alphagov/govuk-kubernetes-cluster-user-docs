@@ -93,7 +93,7 @@ This acts as a quick reference to kubectl, listing some of the most common opera
 
 The examples here only address the most basic approach to these operations. For more options, please refer to the command-line help of kubectl subcommands, which you can access like this:
 ```
-kubectl get --help
+$ kubectl get --help
 ```
 
 There is also a more detailed [cheatsheet](https://kubernetes.io/docs/reference/kubectl/cheatsheet/) in the official kubernetes documentation.
