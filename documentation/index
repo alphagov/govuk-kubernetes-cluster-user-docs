@@ -69,6 +69,42 @@ Content based on https://github.com/ministryofjustice/cloud-platform-user-guide/
 <h2 id="tools-setup">Tools setup</h2>
 <h2 id="getting-access-to-the-cluster">Getting access to the cluster</h2>
 <h2 id="interact-with-the-cluster-with-kubectl">Interact with the cluster with <code>kubectl</code></h2>
+<p>This acts as a quick reference to kubectl, listing some of the most common operations.</p>
+<p>The examples here only address the most basic approach to these operations. For more options, please refer to the command-line help of kubectl subcommands, which you can access like this:
+<code>
+$ kubectl get --help
+</code></p>
+<p>There is also a more detailed <a href="https://kubernetes.io/docs/reference/kubectl/cheatsheet/">cheatsheet</a> in the official kubernetes documentation.</p>
+<h3 id="inspecting-running-instances-of-an-application">Inspecting running instances of an application</h3>
+<p>To list running Pods:
+<code>
+$ kubectl -n &lt;namespace&gt; get pods
+</code></p>
+<p>To view details for a Pod:
+<code>
+$ kubectl -n &lt;namespace&gt; describe pod &lt;pod&gt;
+</code></p>
+<h3 id="viewing-logs">Viewing logs</h3>
+<p>To access the logs of a running container:
+<code>
+$ kubectl -n &lt;namespace&gt; logs &lt;pod&gt;
+</code></p>
+<h3 id="viewing-kubernetes-events">Viewing kubernetes events</h3>
+<p>To see kubernetes events, which can help debugging:
+<code>
+$ kubectl -n &lt;namespace&gt; get events
+</code></p>
+<h3 id="container-shell">Container shell</h3>
+<p>You can get a shell inside a running container:
+<code>
+$ kubectl -n &lt;namespace&gt; exec -it &lt;pod&gt; sh
+</code></p>
+<p>For more information, click <a href="https://kubernetes.io/docs/tasks/debug-application-cluster/get-shell-running-container/">here</a></p>
+<h3 id="pod-port-forwarding">Pod port-forwarding</h3>
+<p>To forward port 5000 on localhost to port 5001 in the Pod:
+<code>
+$ kubectl -n &lt;namespace&gt; port-forward &lt;pod&gt; 5000:5001
+</code></p>
 <h2 id="continuous-integration-and-continous-deployment-ci-cd">Continuous Integration and Continous Deployment (CI/CD)</h2>
 <h3 id="github-actions-ci">Github Actions (CI)</h3>
 <h3 id="argocd-cd">ArgoCD (CD)</h3>
