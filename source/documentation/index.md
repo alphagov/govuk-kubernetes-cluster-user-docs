@@ -190,4 +190,40 @@ Our MVP for user testing uses a shared username and password.
 
 ## Access application logs
 
+You can view application logs using [`kubectl logs`](https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#logs).
+
+View logs for an app:
+
+```
+kubectl logs -n apps deploy/<deployment> <container>
+```
+
+- `<deployment>` is the name of the Deployment for the app.
+- `<app>` is the name of the container you want to view logs from.
+
+For example:
+
+```
+kubectl logs -n apps deploy/publisher-web app
+```
+
+View logs for a specific pod:
+
+```
+kubectl logs -n apps <pod> <container>
+```
+
+- `<pod>` is the name of the Pod you want to view logs from.
+- `<container>` is the name of the container you want to view logs from.
+
+For example:
+
+```
+kubectl logs -n apps frontend-7bd8c786d-t5x99 frontend
+```
+
+We recommend using [tab completion](https://kubernetes.io/docs/reference/kubectl/cheatsheet/#kubectl-autocomplete) to avoid the need to copy-paste pod and container names.
+
+See the [`kubectl` Cheat Sheet](https://kubernetes.io/docs/reference/kubectl/cheatsheet/#interacting-with-running-pods) for more examples.
+
 ## Security constraints
