@@ -390,7 +390,35 @@ username <code>admin</code> and the password acquired from the previous step.</l
 
 <h2 id="access-application-logs">Access application logs</h2>
 
-<h2 id="security-constraints">Security constraints</h2>
+<p>You can view application logs using <a href="https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#logs"><code>kubectl logs</code></a>.</p>
+
+<p>View logs for an app:</p>
+
+<div class="highlight"><pre class="highlight plaintext" tabindex="0"><code>kubectl logs -n apps deploy/&lt;deployment&gt; &lt;container&gt;
+</code></pre></div>
+
+<ul>
+<li><code>&lt;deployment&gt;</code> is the name of the Deployment for the app.</li>
+<li><code>&lt;app&gt;</code> is the name of the container you want to view logs from.</li>
+</ul>
+
+<p>For example:</p>
+
+<div class="highlight"><pre class="highlight plaintext" tabindex="0"><code>kubectl logs -n apps deploy/publisher-web app
+</code></pre></div><p>View logs for a specific pod:</p>
+<div class="highlight"><pre class="highlight plaintext" tabindex="0"><code>kubectl logs -n apps &lt;pod&gt; &lt;container&gt;
+</code></pre></div>
+
+<ul>
+<li><code>&lt;pod&gt;</code> is the name of the Pod you want to view logs from.</li>
+<li><code>&lt;container&gt;</code> is the name of the container you want to view logs from.</li>
+</ul>
+
+<p>For example:</p>
+<p><div class="highlight"><pre class="highlight plaintext" tabindex="0"><code>kubectl logs -n apps frontend-7bd8c786d-t5x99 frontend
+</code></pre></div><p>We recommend using <a href="https://kubernetes.io/docs/reference/kubectl/cheatsheet/#kubectl-autocomplete">tab completion</a> to avoid the need to copy-paste pod and container names.</p>
+<p>See the <a href="https://kubernetes.io/docs/reference/kubectl/cheatsheet/#interacting-with-running-pods"><code>kubectl</code> Cheat Sheet</a> for more examples.</p>
+<h2 id="security-constraints">Security constraints</h2></p>
 
             
           </main>
