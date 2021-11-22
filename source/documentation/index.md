@@ -22,7 +22,10 @@ This will add the govuk cluster to your kubectl configuration in `~/.kube/config
 ```
 kubectl cluster-info
 ```
-If you have access this should return information about the govuk EKS cluster control plane
+If you have access this should return information about the govuk EKS cluster control plane, it should look like this:
+```
+Kubernetes control plane is A115198D15A398EB0BAC40CA32F24B5E.gr7.eu-west-1.eks.amazonaws.com
+```
 ## Interact with the cluster with `kubectl`
 
 ## Continuous Integration and Continous Deployment (CI/CD)
