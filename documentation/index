@@ -68,7 +68,27 @@ Content based on https://github.com/ministryofjustice/cloud-platform-user-guide/
 <h2 id="helm-overview">Helm overview</h2>
 <h2 id="tools-setup">Tools setup</h2>
 <h2 id="getting-access-to-the-cluster">Getting access to the cluster</h2>
-<h2 id="interact-with-the-cluster-with-kubectl">Interact with the cluster with <code>kubectl</code></h2>
+<h3 id="prerequesite">Prerequesite</h3>
+<p>To follow this guide you will need to have an <a href="https://docs.publishing.service.gov.uk/manual/get-started.html#7-get-aws-access">AWS access</a>, have <a href="https://docs.publishing.service.gov.uk/manual/get-started.html#3-install-gds-command-line-tools">gds-cli installed</a> and have <a href="https://docs.publishing.service.gov.uk/manual/get-started.html#8-access-aws-for-the-first-time">gds-cli set up</a> to access AWS.</p>
+<h3 id="follow-those-steps">Follow those steps</h3>
+
+<ol>
+<li>Assume the proper IAM role using <a href="https://github.com/alphagov/gds-cli#usage">gds-cli</a></li>
+<li><p>If it&rsquo;s your first time accessing the cluster through kubectl:
+<code>
+aws eks update-kubeconfig --name govuk
+</code>
+This will add the govuk cluster to your kubectl configuration in <code>~/.kube/config</code></p></li>
+<li><p>To check that you have access, run:
+<code>
+kubectl cluster-info
+</code>
+If you have access this should return information about the govuk EKS cluster control plane, it should look like this:
+<code>
+Kubernetes control plane is https://{GOVUK_CLUSTER_ADDRESS}.{AWS_REGION}.eks.amazonaws.com
+</code></p>
+<h2 id="interact-with-the-cluster-with-kubectl">Interact with the cluster with <code>kubectl</code></h2></li>
+</ol>
 <p>This acts as a quick reference to kubectl, listing some of the most common operations.</p>
 <p>The examples here only address the most basic approach to these operations. For more options, please refer to the command-line help of kubectl subcommands, which you can access like this:
 <code>
