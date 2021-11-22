@@ -192,7 +192,7 @@ Our MVP for user testing uses a shared username and password.
 
 You can view application logs using [`kubectl logs`](https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#logs).
 
-View logs for an app:
+### View logs for an app
 
 ```
 kubectl logs -n apps deploy/<deployment> <container>
@@ -207,7 +207,7 @@ For example:
 kubectl logs -n apps deploy/publisher-web app
 ```
 
-View logs for a specific pod:
+### View logs for a specific pod
 
 ```
 kubectl logs -n apps <pod> <container>
