@@ -16,7 +16,7 @@
 ```
 aws eks update-kubeconfig --name govuk
 ```
-This will add the govuk cluster to your kubectl configuration in ~/.kube/config
+This will add the govuk cluster to your kubectl configuration in `~/.kube/config`
 
 3. To check that you have access, run:
 ```
