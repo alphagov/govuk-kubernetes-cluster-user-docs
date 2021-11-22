@@ -1,15 +1,8 @@
 # GOV.UK Kubernetes Cluster User Documentation
 
+The documentation is available to view online [here][documentation-home].
+
 This project uses the [Tech Docs Template][template], which is a [Middleman template][mmt] that you can use to build technical documentation using a GOV.UK style.
-
-You’re welcome to use the template even if your service isn’t considered part of GOV.UK, but your site or service must not:
-
-- identify itself as being part of GOV.UK
-- use the crown or GOV.UK logotype in the header
-- use the GDS Transport typeface
-- suggest that it’s an official UK government website if it’s not
-
-👉 To find out more about setting up and managing content for a website using this template, see the [Tech Docs Template documentation][tdt-docs].
 
 ## Before you start
 
@@ -83,3 +76,4 @@ The documentation is [© Crown copyright][copyright] and available under the ter
 [install-middleman]: https://tdt-documentation.london.cloudapps.digital/install_macs.html#install-middleman
 [gem]: https://github.com/alphagov/tech-docs-gem
 [template]: https://github.com/alphagov/tech-docs-template
+[documentation-home]: https://govuk-k8s-user-docs.publishing.service.gov.uk
