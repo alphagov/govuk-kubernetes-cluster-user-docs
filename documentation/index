@@ -72,5 +72,22 @@ Content based on https://github.com/ministryofjustice/cloud-platform-user-guide/
 <h2 id="continuous-integration-and-continous-deployment-ci-cd">Continuous Integration and Continous Deployment (CI/CD)</h2>
 <h3 id="github-actions-ci">Github Actions (CI)</h3>
 <h3 id="argocd-cd">ArgoCD (CD)</h3>
+<p>The GOV.UK Kubernetes Platform provides an <a href="https://argo-cd.readthedocs.io/en/stable/">ArgoCD</a> instance for continuous
+delivery of applications to the cluster.</p>
+<p>ArgoCD is a declarative, GitOps continuous delivery tool for Kubernetes.
+ArgoCD will replace the feature set currently provided by Deploy Jenkins.</p>
+<h4 id="access-the-argocd-integration-instance">Access the ArgoCD integration instance</h4>
+<p>NOTE: In future we will use our Google Accounts for Single Sign-On (SSO) to Argo.
+Our MVP for user testing uses a shared username and password.</p>
+
+<ol>
+<li>Authenticate to the Kubernetes cluster (see <a href="#getting-access-to-the-cluster">getting access to the cluster</a>)</li>
+<li>Acquire the password for Argo:
+<code>
+kubectl -n cluster-services get secret argocd-initial-admin-secret -o jsonpath=&quot;{.data.password}&quot; | base64 -d; echo
+</code></li>
+<li>Navigate to <a href="https://argo.eks.integration.govuk.digital/">ArgoCD (Integration)</a> and sign in using the
+username <code>admin</code> and the password acquired from the previous step.</li>
+</ol>
 <h2 id="access-application-logs">Access application logs</h2>
 <h2 id="security-constraints">Security constraints</h2>
