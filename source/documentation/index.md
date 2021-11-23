@@ -163,6 +163,21 @@ $ kubectl -n <namespace> port-forward <pod> 5000:5001
 
 ### Github Actions (CI)
 
+With GitHub Actions, we can now automatically build and publish our docker image to our private GOV.UK production AWS Elastic Container Repository.
+
+The GitHub Actions workflow CI yaml file can be found within each repository in the following location: `.github/workflows/ci.yaml`
+
+When a user merges a branch to main, the GitHub Action Workflows will be triggered, the defined job within the ci.yaml file will then start.
+Within the job there are steps which will checkout the code, build a new Docker image and then push that new Dcoker image to GOV.UK production AWS Elastic Container Repository.
+Each new image will be tagged with merge commit GitHub simple hashing algorithm (SHA).
+
+You can view the status of GitHub Actions CI on `https://github.com/alphagov/<application repo>/actions`. The workflow is named `Build and publish to ECR`.
+
+#### Sensitive data
+AWS credentials are stored as Github Organisation level secrets and have been made available to individual repos. If a new repo requires access to secrets, please [contact the Replatforming team on Slack](https://gds.slack.com/archives/C013F737737).
+
+[Official documentation on GitHub action](https://docs.github.com/en/actions)
+
 ### ArgoCD (CD)
 
 The GOV.UK Kubernetes Platform provides an [ArgoCD] instance for continuous
