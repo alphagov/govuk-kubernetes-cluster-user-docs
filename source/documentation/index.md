@@ -85,6 +85,46 @@ Here are some links to introductory Kubernetes resources:
 
 ## Tools setup
 
+### Install Kubectl
+You can use Homebrew to install Kubectl on macOS.
+```sh
+brew install kubectl
+```
+Test that kubectl is working.
+```sh
+kubectl version --client
+```
+[Official installation guide](https://kubernetes.io/docs/tasks/tools/install-kubectl-macos/)
+
+### Install HELM
+You can use Homebrew to install HELM on macOS.
+```sh
+brew install helm
+```
+Test Helm is working:
+```sh
+helm version
+```
+[Official installation guide](https://helm.sh/docs/intro/install/)
+
+### Install GDS-CLI and AWS-Vault
+You can use Homebrew to install both, please refer to the official guide for [gds-cli](https://github.com/alphagov/gds-cli) and [aws-vault](https://github.com/99designs/aws-vault#readme) for more detailed information.
+```sh
+brew install alphagov/gds/gds-cli
+```
+Test gds-cli
+```sh
+gds --version
+```
+Install aws-vault:
+```sh
+brew install --cask aws-vault
+```
+Test aws-vault
+```sh
+aws-vault --version
+```
+
 ## Getting access to the cluster
 
 ### Prerequesite
