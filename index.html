@@ -177,6 +177,11 @@
         <ul>
           <li>
             <a href="#github-actions-ci"><span>Github Actions (CI)</span></a>
+            <ul>
+              <li>
+                <a href="#sensitive-data"><span>Sensitive data</span></a>
+              </li>
+            </ul>
           </li>
           <li>
             <a href="#argocd-cd"><span>ArgoCD (CD)</span></a>
@@ -418,6 +423,22 @@ $ kubectl -n &lt;namespace&gt; port-forward &lt;pod&gt; 5000:5001
 <h2 id="continuous-integration-and-continous-deployment-ci-cd">Continuous Integration and Continous Deployment (CI/CD)</h2>
 
 <h3 id="github-actions-ci">Github Actions (CI)</h3>
+
+<p>With GitHub Actions, we can now automatically build and publish our docker image to our private GOV.UK production AWS Elastic Container Repository.</p>
+
+<p>The GitHub Actions workflow CI yaml file can be found within each repository in the following location: <code>.github/workflows/ci.yaml</code></p>
+
+<p>When a user merges a branch to main, the GitHub Action Workflows will be triggered, the defined job within the ci.yaml file will then start.
+Within the job there are steps which will checkout the code, build a new Docker image and then push that new Dcoker image to GOV.UK production AWS Elastic Container Repository.
+Each new image will be tagged with merge commit GitHub simple hashing algorithm (SHA).</p>
+
+<p>You can view the status of GitHub Actions CI on <code>https://github.com/alphagov/&lt;application repo&gt;/actions</code>. The workflow is named <code>Build and publish to ECR</code>.</p>
+
+<h4 id="sensitive-data">Sensitive data</h4>
+
+<p>AWS credentials are stored as Github Organisation level secrets and have been made available to individual repos. If a new repo requires access to secrets, please <a href="https://gds.slack.com/archives/C013F737737">contact the Replatforming team on Slack</a>.</p>
+
+<p><a href="https://docs.github.com/en/actions">Official documentation on GitHub action</a></p>
 
 <h3 id="argocd-cd">ArgoCD (CD)</h3>
 
