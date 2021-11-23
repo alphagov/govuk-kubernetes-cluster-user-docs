@@ -145,7 +145,7 @@
         <a href="#getting-access-to-the-cluster"><span>Getting access to the cluster</span></a>
         <ul>
           <li>
-            <a href="#prerequesite"><span>Prerequesite</span></a>
+            <a href="#prerequisite"><span>Prerequisite</span></a>
           </li>
           <li>
             <a href="#follow-those-steps"><span>Follow those steps</span></a>
@@ -173,7 +173,7 @@
         </ul>
       </li>
       <li>
-        <a href="#continuous-integration-and-continous-deployment-ci-cd"><span>Continuous Integration and Continous Deployment (CI/CD)</span></a>
+        <a href="#continuous-integration-and-continuous-deployment-ci-cd"><span>Continuous Integration and Continuous Deployment (CI/CD)</span></a>
         <ul>
           <li>
             <a href="#github-actions-ci"><span>Github Actions (CI)</span></a>
@@ -195,6 +195,14 @@
       </li>
       <li>
         <a href="#access-application-logs"><span>Access application logs</span></a>
+        <ul>
+          <li>
+            <a href="#view-logs-for-an-app"><span>View logs for an app</span></a>
+          </li>
+          <li>
+            <a href="#view-logs-for-a-specific-pod"><span>View logs for a specific pod</span></a>
+          </li>
+        </ul>
       </li>
       <li>
         <a href="#security-constraints"><span>Security constraints</span></a>
@@ -345,7 +353,7 @@ aws-vault --version
 
 <h2 id="getting-access-to-the-cluster">Getting access to the cluster</h2>
 
-<h3 id="prerequesite">Prerequesite</h3>
+<h3 id="prerequisite">Prerequisite</h3>
 
 <p>To follow this guide you will need to have an <a href="https://docs.publishing.service.gov.uk/manual/get-started.html#7-get-aws-access">AWS access</a>, have <a href="https://docs.publishing.service.gov.uk/manual/get-started.html#3-install-gds-command-line-tools">gds-cli installed</a> and have <a href="https://docs.publishing.service.gov.uk/manual/get-started.html#8-access-aws-for-the-first-time">gds-cli set up</a> to access AWS.</p>
 
@@ -420,7 +428,7 @@ $ kubectl -n &lt;namespace&gt; exec -it &lt;pod&gt; sh
 $ kubectl -n &lt;namespace&gt; port-forward &lt;pod&gt; 5000:5001
 </code></p>
 
-<h2 id="continuous-integration-and-continous-deployment-ci-cd">Continuous Integration and Continous Deployment (CI/CD)</h2>
+<h2 id="continuous-integration-and-continuous-deployment-ci-cd">Continuous Integration and Continuous Deployment (CI/CD)</h2>
 
 <h3 id="github-actions-ci">Github Actions (CI)</h3>
 
@@ -467,7 +475,7 @@ username <code>admin</code> and the password acquired from the previous step.</l
 
 <p>You can view application logs using <a href="https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#logs"><code>kubectl logs</code></a>.</p>
 
-<p>View logs for an app:</p>
+<h3 id="view-logs-for-an-app">View logs for an app</h3>
 
 <div class="highlight"><pre class="highlight plaintext" tabindex="0"><code>kubectl logs -n apps deploy/&lt;deployment&gt; &lt;container&gt;
 </code></pre></div>
@@ -480,7 +488,7 @@ username <code>admin</code> and the password acquired from the previous step.</l
 <p>For example:</p>
 
 <div class="highlight"><pre class="highlight plaintext" tabindex="0"><code>kubectl logs -n apps deploy/publisher-web app
-</code></pre></div><p>View logs for a specific pod:</p>
+</code></pre></div><h3 id="view-logs-for-a-specific-pod">View logs for a specific pod</h3>
 <div class="highlight"><pre class="highlight plaintext" tabindex="0"><code>kubectl logs -n apps &lt;pod&gt; &lt;container&gt;
 </code></pre></div>
 

@@ -105,7 +105,7 @@ Test aws-vault
 aws-vault --version
 </code></p>
 <h2 id="getting-access-to-the-cluster">Getting access to the cluster</h2>
-<h3 id="prerequesite">Prerequesite</h3>
+<h3 id="prerequisite">Prerequisite</h3>
 <p>To follow this guide you will need to have an <a href="https://docs.publishing.service.gov.uk/manual/get-started.html#7-get-aws-access">AWS access</a>, have <a href="https://docs.publishing.service.gov.uk/manual/get-started.html#3-install-gds-command-line-tools">gds-cli installed</a> and have <a href="https://docs.publishing.service.gov.uk/manual/get-started.html#8-access-aws-for-the-first-time">gds-cli set up</a> to access AWS.</p>
 <h3 id="follow-those-steps">Follow those steps</h3>
 
@@ -162,7 +162,7 @@ $ kubectl -n &lt;namespace&gt; exec -it &lt;pod&gt; sh
 <code>
 $ kubectl -n &lt;namespace&gt; port-forward &lt;pod&gt; 5000:5001
 </code></p>
-<h2 id="continuous-integration-and-continous-deployment-ci-cd">Continuous Integration and Continous Deployment (CI/CD)</h2>
+<h2 id="continuous-integration-and-continuous-deployment-ci-cd">Continuous Integration and Continuous Deployment (CI/CD)</h2>
 <h3 id="github-actions-ci">Github Actions (CI)</h3>
 <p>With GitHub Actions, we can now automatically build and publish our docker image to our private GOV.UK production AWS Elastic Container Repository.</p>
 <p>The GitHub Actions workflow CI yaml file can be found within each repository in the following location: <code>.github/workflows/ci.yaml</code></p>
@@ -193,7 +193,7 @@ username <code>admin</code> and the password acquired from the previous step.</l
 </ol>
 <h2 id="access-application-logs">Access application logs</h2>
 <p>You can view application logs using <a href="https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#logs"><code>kubectl logs</code></a>.</p>
-<p>View logs for an app:</p>
+<h3 id="view-logs-for-an-app">View logs for an app</h3>
 <div class="highlight"><pre class="highlight plaintext" tabindex="0"><code>kubectl logs -n apps deploy/&lt;deployment&gt; &lt;container&gt;
 </code></pre></div>
 <ul>
@@ -202,7 +202,7 @@ username <code>admin</code> and the password acquired from the previous step.</l
 </ul>
 <p>For example:</p>
 <div class="highlight"><pre class="highlight plaintext" tabindex="0"><code>kubectl logs -n apps deploy/publisher-web app
-</code></pre></div><p>View logs for a specific pod:</p>
+</code></pre></div><h3 id="view-logs-for-a-specific-pod">View logs for a specific pod</h3>
 <div class="highlight"><pre class="highlight plaintext" tabindex="0"><code>kubectl logs -n apps &lt;pod&gt; &lt;container&gt;
 </code></pre></div>
 <ul>
