@@ -105,7 +105,7 @@ Test aws-vault
 aws-vault --version
 </code></p>
 <h2 id="getting-access-to-the-cluster">Getting access to the cluster</h2>
-<h3 id="prerequisite">Prerequisite</h3>
+<h3 id="prerequesite">Prerequesite</h3>
 <p>To follow this guide you will need to have an <a href="https://docs.publishing.service.gov.uk/manual/get-started.html#7-get-aws-access">AWS access</a>, have <a href="https://docs.publishing.service.gov.uk/manual/get-started.html#3-install-gds-command-line-tools">gds-cli installed</a> and have <a href="https://docs.publishing.service.gov.uk/manual/get-started.html#8-access-aws-for-the-first-time">gds-cli set up</a> to access AWS.</p>
 <h3 id="follow-those-steps">Follow those steps</h3>
 
@@ -162,7 +162,7 @@ $ kubectl -n &lt;namespace&gt; exec -it &lt;pod&gt; sh
 <code>
 $ kubectl -n &lt;namespace&gt; port-forward &lt;pod&gt; 5000:5001
 </code></p>
-<h2 id="continuous-integration-and-continuous-deployment-ci-cd">Continuous Integration and Continuous Deployment (CI/CD)</h2>
+<h2 id="continuous-integration-and-continous-deployment-ci-cd">Continuous Integration and Continous Deployment (CI/CD)</h2>
 <h3 id="github-actions-ci">Github Actions (CI)</h3>
 <p>With GitHub Actions, we can now automatically build and publish our docker image to our private GOV.UK production AWS Elastic Container Repository.</p>
 <p>The GitHub Actions workflow CI yaml file can be found within each repository in the following location: <code>.github/workflows/ci.yaml</code></p>
