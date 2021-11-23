@@ -145,7 +145,7 @@
         <a href="#getting-access-to-the-cluster"><span>Getting access to the cluster</span></a>
         <ul>
           <li>
-            <a href="#prerequesite"><span>Prerequesite</span></a>
+            <a href="#prerequisite"><span>Prerequisite</span></a>
           </li>
           <li>
             <a href="#follow-those-steps"><span>Follow those steps</span></a>
@@ -173,7 +173,7 @@
         </ul>
       </li>
       <li>
-        <a href="#continuous-integration-and-continous-deployment-ci-cd"><span>Continuous Integration and Continous Deployment (CI/CD)</span></a>
+        <a href="#continuous-integration-and-continuous-deployment-ci-cd"><span>Continuous Integration and Continuous Deployment (CI/CD)</span></a>
         <ul>
           <li>
             <a href="#github-actions-ci"><span>Github Actions (CI)</span></a>
@@ -206,6 +206,9 @@
       </li>
       <li>
         <a href="#security-constraints"><span>Security constraints</span></a>
+      </li>
+      <li>
+        <a href="#aws-integrations"><span>AWS Integrations</span></a>
       </li>
     </ul>
   </li>
@@ -353,7 +356,7 @@ aws-vault --version
 
 <h2 id="getting-access-to-the-cluster">Getting access to the cluster</h2>
 
-<h3 id="prerequesite">Prerequesite</h3>
+<h3 id="prerequisite">Prerequisite</h3>
 
 <p>To follow this guide you will need to have an <a href="https://docs.publishing.service.gov.uk/manual/get-started.html#7-get-aws-access">AWS access</a>, have <a href="https://docs.publishing.service.gov.uk/manual/get-started.html#3-install-gds-command-line-tools">gds-cli installed</a> and have <a href="https://docs.publishing.service.gov.uk/manual/get-started.html#8-access-aws-for-the-first-time">gds-cli set up</a> to access AWS.</p>
 
@@ -428,7 +431,7 @@ $ kubectl -n &lt;namespace&gt; exec -it &lt;pod&gt; sh
 $ kubectl -n &lt;namespace&gt; port-forward &lt;pod&gt; 5000:5001
 </code></p>
 
-<h2 id="continuous-integration-and-continous-deployment-ci-cd">Continuous Integration and Continous Deployment (CI/CD)</h2>
+<h2 id="continuous-integration-and-continuous-deployment-ci-cd">Continuous Integration and Continuous Deployment (CI/CD)</h2>
 
 <h3 id="github-actions-ci">Github Actions (CI)</h3>
 
@@ -501,7 +504,24 @@ username <code>admin</code> and the password acquired from the previous step.</l
 <p><div class="highlight"><pre class="highlight plaintext" tabindex="0"><code>kubectl logs -n apps frontend-7bd8c786d-t5x99 frontend
 </code></pre></div><p>We recommend using <a href="https://kubernetes.io/docs/reference/kubectl/cheatsheet/#kubectl-autocomplete">tab completion</a> to avoid the need to copy-paste pod and container names.</p>
 <p>See the <a href="https://kubernetes.io/docs/reference/kubectl/cheatsheet/#interacting-with-running-pods"><code>kubectl</code> Cheat Sheet</a> for more examples.</p>
-<h2 id="security-constraints">Security constraints</h2></p>
+<h2 id="security-constraints">Security constraints</h2>
+<h2 id="aws-integrations">AWS Integrations</h2>
+<p>The Kubernetes cluster interacts with AWS services to provide features
+such as DNS, ALB ingress, and Secret provisioning.
+Here we list the operators installed in the cluster that integrate with AWS.</p></p>
+
+<ul>
+<li>Secrets: The cluster uses the <a href="https://github.com/external-secrets/external-secrets">external-secrets</a> operator to access secrets
+in AWS Secrets Manager and automatically injects the values as Kubernetes Secrets.</li>
+<li>DNS: <a href="https://github.com/kubernetes-sigs/external-dns">external-dns</a> is a Kubernetes addon that configures public DNS servers
+(in our case AWS Route53) with information about exposed Kubernetes services
+to make them discoverable.</li>
+<li>ALB Ingress: <a href="https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.3/">aws-load-balancer-controller</a> provisions AWS ALBs for Kubernetes
+Ingress resources and NLBs for Kubernetes Services.</li>
+<li>Cluster autoscaling: <a href="https://github.com/kubernetes/autoscaler/tree/master/cluster-autoscaler">cluster-autoscaler</a> is responsible for managing
+AWS EC2 Auto Scaling Groups to ensure pods won&rsquo;t fail due to insufficient
+resources and nodes aren&rsquo;t underutilized.</li>
+</ul>
 
             
           </main>
