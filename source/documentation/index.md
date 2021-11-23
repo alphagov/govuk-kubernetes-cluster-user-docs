@@ -127,7 +127,7 @@ aws-vault --version
 
 ## Getting access to the cluster
 
-### Prerequesite
+### Prerequisite
 To follow this guide you will need to have an [AWS access](https://docs.publishing.service.gov.uk/manual/get-started.html#7-get-aws-access), have [gds-cli installed](https://docs.publishing.service.gov.uk/manual/get-started.html#3-install-gds-command-line-tools) and have [gds-cli set up](https://docs.publishing.service.gov.uk/manual/get-started.html#8-access-aws-for-the-first-time) to access AWS.
 
 ### Follow those steps
@@ -199,7 +199,7 @@ To forward port 5000 on localhost to port 5001 in the Pod:
 $ kubectl -n <namespace> port-forward <pod> 5000:5001
 ```
 
-## Continuous Integration and Continous Deployment (CI/CD)
+## Continuous Integration and Continuous Deployment (CI/CD)
 
 ### Github Actions (CI)
 
