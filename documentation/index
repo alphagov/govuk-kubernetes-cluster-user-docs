@@ -67,6 +67,43 @@ Content based on https://github.com/ministryofjustice/cloud-platform-user-guide/
 </ul>
 <h2 id="helm-overview">Helm overview</h2>
 <h2 id="tools-setup">Tools setup</h2>
+<h3 id="install-kubectl">Install Kubectl</h3>
+<p>You can use Homebrew to install Kubectl on macOS.
+<code>sh
+brew install kubectl
+</code>
+Test that kubectl is working.
+<code>sh
+kubectl version --client
+</code>
+<a href="https://kubernetes.io/docs/tasks/tools/install-kubectl-macos/">Official installation guide</a></p>
+<h3 id="install-helm">Install HELM</h3>
+<p>You can use Homebrew to install HELM on macOS.
+<code>sh
+brew install helm
+</code>
+Test Helm is working:
+<code>sh
+helm version
+</code>
+<a href="https://helm.sh/docs/intro/install/">Official installation guide</a></p>
+<h3 id="install-gds-cli-and-aws-vault">Install GDS-CLI and AWS-Vault</h3>
+<p>You can use Homebrew to install both, please refer to the official guide for <a href="https://github.com/alphagov/gds-cli">gds-cli</a> and <a href="https://github.com/99designs/aws-vault#readme">aws-vault</a> for more detailed information.
+<code>sh
+brew install alphagov/gds/gds-cli
+</code>
+Test gds-cli
+<code>sh
+gds --version
+</code>
+Install aws-vault:
+<code>sh
+brew install --cask aws-vault
+</code>
+Test aws-vault
+<code>sh
+aws-vault --version
+</code></p>
 <h2 id="getting-access-to-the-cluster">Getting access to the cluster</h2>
 <h3 id="prerequesite">Prerequesite</h3>
 <p>To follow this guide you will need to have an <a href="https://docs.publishing.service.gov.uk/manual/get-started.html#7-get-aws-access">AWS access</a>, have <a href="https://docs.publishing.service.gov.uk/manual/get-started.html#3-install-gds-command-line-tools">gds-cli installed</a> and have <a href="https://docs.publishing.service.gov.uk/manual/get-started.html#8-access-aws-for-the-first-time">gds-cli set up</a> to access AWS.</p>
