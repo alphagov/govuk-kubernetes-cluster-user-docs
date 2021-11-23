@@ -282,3 +282,25 @@ We recommend using [tab completion](https://kubernetes.io/docs/reference/kubectl
 See the [`kubectl` Cheat Sheet](https://kubernetes.io/docs/reference/kubectl/cheatsheet/#interacting-with-running-pods) for more examples.
 
 ## Security constraints
+
+## AWS Integrations
+
+The Kubernetes cluster interacts with AWS services to provide features
+such as DNS, ALB ingress, and Secret provisioning.
+Here we list the operators installed in the cluster that integrate with AWS.
+
+* Secrets: The cluster uses the [external-secrets] operator to access secrets
+in AWS Secrets Manager and automatically injects the values as Kubernetes Secrets.
+* DNS: [external-dns] is a Kubernetes addon that configures public DNS servers
+(in our case AWS Route53) with information about exposed Kubernetes services
+to make them discoverable.
+* ALB Ingress: [aws-load-balancer-controller] provisions AWS ALBs for Kubernetes
+Ingress resources and NLBs for Kubernetes Services.
+* Cluster autoscaling: [cluster-autoscaler] is responsible for managing
+AWS EC2 Auto Scaling Groups to ensure pods won't fail due to insufficient
+resources and nodes aren't underutilized.
+
+[external-secrets]: https://github.com/external-secrets/external-secrets
+[external-dns]: https://github.com/kubernetes-sigs/external-dns
+[aws-load-balancer-controller]: https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.3/
+[cluster-autoscaler]: https://github.com/kubernetes/autoscaler/tree/master/cluster-autoscaler
