@@ -4,11 +4,11 @@
 
 The GOV.UK Kubernetes Platform is an AWS-hosted [Kubernetes](https://kubernetes.io) cluster, using Amazon's [Elastic Kubernetes Service](https://aws.amazon.com/eks/).
 
-## Who is this documentation for?
+## Who is this Documentation for?
 
 As the GOV.UK Kubernetes Platform is currently in an early alpha stage, this documentation is intended for developers participating in user testing only.
 
-## Kubernetes overview
+## Kubernetes Overview
 
 Kubernetes is a portable, extensible, open-source platform for managing containerized workloads and services, that facilitates both [declarative configuration](https://kubernetes.io/docs/tasks/manage-kubernetes-objects/declarative-config/) and automation. Kubernetes manages the entire lifecycle of containerised applications (for example, start, stop, update, scale), as well as providing mechanisms for:
 
@@ -20,7 +20,7 @@ Kubernetes is a portable, extensible, open-source platform for managing containe
 
 See the official [Kubernetes overview documentation](https://kubernetes.io/docs/concepts/overview/what-is-kubernetes/) for more details.
 
-### Kubernetes declarative state model
+### Kubernetes Declarative State Model
 
 A core design concept of Kubernetes is the declarative state model, where Kubernetes users define their applications in terms of the desired end state. This differs from an imperative model, where the sequential steps to achieve a running application are defined instead. For example:
 
@@ -32,15 +32,15 @@ A core design concept of Kubernetes is the declarative state model, where Kubern
 
 #### Imperative
 
-1. Pull the `hello-world` container with tag `v1`
-2. Start the `hello-world` container with port 80 exposed
-3. Create a load balancer
-4. Create a load balancer routing rule pointing to port 80 on the container
+* Pull the `hello-world` container with tag `v1`
+* Start the `hello-world` container with port 80 exposed
+* Create a load balancer
+* Create a load balancer routing rule pointing to port 80 on the container
 
 In the Kubernetes declarative model, internal Kubernetes components called [controllers](https://kubernetes.io/docs/concepts/architecture/controller/) handle the details of transitioning an application from the current state to the declared desired state on your behalf. See [Imperative vs Declarative](https://dominik-tornow.medium.com/imperative-vs-declarative-8abc7dcae82e) for a more detailed comparison of the two models.
 
 
-### Kubernetes objects
+### Kubernetes Objects
 
 The Kubernetes API supports many [object types](https://kubernetes.io/docs/concepts/overview/working-with-objects/kubernetes-objects/) representing the state of component parts of an application. The major resource types that will be used in most (if not all) applications are:
 
@@ -51,7 +51,7 @@ The Kubernetes API supports many [object types](https://kubernetes.io/docs/conce
 * [`ConfigMap`](https://kubernetes.io/docs/concepts/configuration/configmap/) - a collection of configuration key/value pairs, commonly used to provide environment variables to Pod containers
 * [`Secrets`](https://kubernetes.io/docs/concepts/configuration/secret/) - a collection of sensitive key/value pairs, commonly used to provide environment variables to containers
 
-### Custom Kubernetes objects
+### Custom Kubernetes Objects
 
 The GOV.UK Kubernetes Platform includes some third party API objects and controllers to allow AWS services to be used through the Kubernetes API:
 
@@ -81,138 +81,174 @@ Here are some links to introductory Kubernetes resources:
 [Katacoda kubernetes course]: https://www.katacoda.com/courses/kubernetes
 
 
-## Helm overview
+## Helm Overview
 
-## Tools setup
+## Tools Setup
 
 ### Install Kubectl
-You can use Homebrew to install Kubectl on macOS.
+
+You can use Homebrew to install Kubectl on macOS:
+
 ```sh
 brew install kubectl
 ```
-Test that kubectl is working.
+
+Test that kubectl is working:
+
 ```sh
 kubectl version --client
 ```
+
 [Official installation guide](https://kubernetes.io/docs/tasks/tools/install-kubectl-macos/)
 
 ### Install HELM
-You can use Homebrew to install HELM on macOS.
+
+You can use Homebrew to install HELM on macOS:
+
 ```sh
 brew install helm
 ```
+
 Test Helm is working:
+
 ```sh
 helm version
 ```
+
 [Official installation guide](https://helm.sh/docs/intro/install/)
 
 ### Install GDS-CLI and AWS-Vault
-You can use Homebrew to install both, please refer to the official guide for [gds-cli](https://github.com/alphagov/gds-cli) and [aws-vault](https://github.com/99designs/aws-vault#readme) for more detailed information.
+
+Install gds-cli:
+
 ```sh
 brew install alphagov/gds/gds-cli
 ```
-Test gds-cli
+
+Test gds-cli:
+
 ```sh
 gds --version
 ```
+
 Install aws-vault:
+
 ```sh
 brew install --cask aws-vault
 ```
-Test aws-vault
+
+Test aws-vault:
+
 ```sh
 aws-vault --version
 ```
 
-## Getting access to the cluster
+Please refer to the official guide for [gds-cli](https://github.com/alphagov/gds-cli) and [aws-vault](https://github.com/99designs/aws-vault#readme) for more detailed information.
 
-### Prerequisite
-To follow this guide you will need to have an [AWS access](https://docs.publishing.service.gov.uk/manual/get-started.html#7-get-aws-access), have [gds-cli installed](https://docs.publishing.service.gov.uk/manual/get-started.html#3-install-gds-command-line-tools) and have [gds-cli set up](https://docs.publishing.service.gov.uk/manual/get-started.html#8-access-aws-for-the-first-time) to access AWS.
+## Getting Access to the Cluster
 
-### Follow those steps
+### Prerequisites
+To follow this guide you will need to have:
+
+1. [AWS access](https://docs.publishing.service.gov.uk/manual/get-started.html#7-get-aws-access)
+2. gds-cli [installed](https://docs.publishing.service.gov.uk/manual/get-started.html#3-install-gds-command-line-tools) and [set up](https://docs.publishing.service.gov.uk/manual/get-started.html#8-access-aws-for-the-first-time).
+
+### Assuming Roles and Testing Access
+
 1. Assume the proper IAM role using [gds-cli](https://github.com/alphagov/gds-cli#usage) by
 exporting the AWS credentials for the GOV.UK environment and role that you wish:
-```
-eval $(gds aws govuk-<govuk-environment>-<role> -e --art 8h)
-export AWS_REGION=eu-west-1
-```
-  where:
 
-  1. `<govuk-environment>` is the the GOV.UK environment that you want to get credentials for. e.g. `test`, `integration`
+    ```sh
+    eval $(gds aws govuk-<govuk-environment>-<role> -e --art 8h)
+    export AWS_REGION=eu-west-1
+    ```
 
-  2. `<role>` is the role mentioned [here](https://docs.publishing.service.gov.uk/manual/deploying-terraform.html#1-check-that-you-have-sufficient-access)
+     where:
+     - `<govuk-environment>` is the the GOV.UK environment that you want to get credentials for. e.g. `test`, `integration`
+     - `<role>` is the role mentioned [here](https://docs.publishing.service.gov.uk/manual/deploying-terraform.html#1-check-that-you-have-sufficient-access)
+     - `art` option is used to request that the AWS credentials last for the requested time.
 
-  3. `art` option is used to request that the AWS credentials last for the requested time.
-
-  For the user research session , you should use the  `eval $(gds aws govuk-integration-admin -e --art 8h)` command since
-the session is run in the Integration GOV.UK cluster and `admin` role will allow full access.
+    For the user research session , you should use the `eval $(gds aws govuk-integration-admin -e --art 8h)` command since
+    the session is run in the Integration GOV.UK cluster and `admin` role will allow full access.
 
 2. If it's your first time accessing the cluster through kubectl:
-```
-aws eks update-kubeconfig --name govuk
-```
-This will add the govuk cluster to your kubectl configuration in `~/.kube/config`
+
+    ```sh
+    aws eks update-kubeconfig --name govuk
+    ```
+
+    This will add the govuk cluster to your kubectl configuration in `~/.kube/config`
 
 3. To check that you have access, run:
-```
-kubectl cluster-info
-```
-If you have access this should return information about the govuk EKS cluster control plane, it should look like this:
-```
-Kubernetes control plane is https://{GOVUK_CLUSTER_ADDRESS}.{AWS_REGION}.eks.amazonaws.com
-```
-## Interact with the cluster with `kubectl`
+
+    ```sh
+    kubectl cluster-info
+    ```
+
+    If you have access this should return information about the govuk EKS cluster control plane, it should look like this:
+
+    ```sh
+    Kubernetes control plane is https://{GOVUK_CLUSTER_ADDRESS}.{AWS_REGION}.eks.amazonaws.com
+    ```
+
+## Interact with the Cluster with `kubectl`
 
 This acts as a quick reference to kubectl, listing some of the most common operations.
 
 The examples here only address the most basic approach to these operations. For more options, please refer to the command-line help of kubectl subcommands, which you can access like this:
-```
-$ kubectl get --help
+
+```sh
+kubectl get --help
 ```
 
-There is also a more detailed [cheatsheet](https://kubernetes.io/docs/reference/kubectl/cheatsheet/) in the official kubernetes documentation.
+There is also a more detailed [cheatsheet](https://kubernetes.io/docs/reference/kubectl/cheatsheet/) in the official Kubernetes documentation.
 
-### Inspecting running instances of an application
+### Inspecting running Instances of an Application
 
 To list running Pods:
-```
-$ kubectl -n <namespace> get pods
+
+```sh
+kubectl -n <namespace> get pods
 ```
 
 To view details for a Pod:
-```
-$ kubectl -n <namespace> describe pod <pod>
+
+```sh
+kubectl -n <namespace> describe pod <pod>
 ```
 
-### Viewing logs
+### Viewing Logs
 
 To access the logs of a running container:
-```
-$ kubectl -n <namespace> logs <pod>
+
+```sh
+kubectl -n <namespace> logs <pod>
 ```
 
-### Viewing kubernetes events
+### Viewing Kubernetes Events
 
 To see kubernetes events, which can help debugging:
-```
-$ kubectl -n <namespace> get events
+
+```sh
+kubectl -n <namespace> get events
 ```
 
-### Container shell
+### Container Shell
 
 You can get a shell inside a running container:
-```
-$ kubectl -n <namespace> exec -it <pod> sh
+
+```sh
+kubectl -n <namespace> exec -it <pod> sh
 ```
 
 For more information, click [here](https://kubernetes.io/docs/tasks/debug-application-cluster/get-shell-running-container/)
 
-### Pod port-forwarding
+### Pod Port-forwarding
 
 To forward port 5000 on localhost to port 5001 in the Pod:
-```
-$ kubectl -n <namespace> port-forward <pod> 5000:5001
+
+```sh
+kubectl -n <namespace> port-forward <pod> 5000:5001
 ```
 
 ## Continuous Integration and Continuous Deployment (CI/CD)
@@ -229,7 +265,8 @@ Each new image will be tagged with merge commit GitHub simple hashing algorithm 
 
 You can view the status of GitHub Actions CI on `https://github.com/alphagov/<application repo>/actions`. The workflow is named `Build and publish to ECR`.
 
-#### Sensitive data
+#### Sensitive Data
+
 AWS credentials are stored as Github Organisation level secrets and have been made available to individual repos. If a new repo requires access to secrets, please [contact the Replatforming team on Slack](https://gds.slack.com/archives/C013F737737).
 
 [Official documentation on GitHub action](https://docs.github.com/en/actions)
@@ -242,16 +279,18 @@ delivery of applications to the cluster.
 ArgoCD is a declarative, GitOps continuous delivery tool for Kubernetes.
 ArgoCD will replace the feature set currently provided by Deploy Jenkins.
 
-#### Access the ArgoCD integration instance
+#### Access the ArgoCD Integration Instance
 
 NOTE: In future we will use our Google Accounts for Single Sign-On (SSO) to Argo.
 Our MVP for user testing uses a shared username and password.
 
 1. Authenticate to the Kubernetes cluster (see [getting access to the cluster])
 2. Acquire the password for Argo:
-  ```
-  kubectl -n cluster-services get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo
-  ```
+
+    ```sh
+    kubectl -n cluster-services get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo
+    ```
+
 3. Navigate to [ArgoCD (Integration)][argo-integration] and sign in using the
   username `admin` and the password acquired from the previous step.
 
@@ -259,33 +298,37 @@ Our MVP for user testing uses a shared username and password.
 [getting access to the cluster]: #getting-access-to-the-cluster
 [argo-integration]: https://argo.eks.integration.govuk.digital/
 
-## Access application logs
+## Access Application Logs
 
 You can view application logs using [`kubectl logs`](https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#logs).
 
-### View logs for an app
+### View Logs for an App
 
-```
+```sh
 kubectl logs -n apps deploy/<deployment> <container>
 ```
 
-- `<deployment>` is the name of the Deployment for the app.
-- `<app>` is the name of the container you want to view logs from.
+where:
+
+  - `<deployment>` is the name of the Deployment for the app.
+  - `<app>` is the name of the container you want to view logs from.
 
 For example:
 
-```
+```sh
 kubectl logs -n apps deploy/publisher-web app
 ```
 
-### View logs for a specific pod
+### View Logs for a Specific Pod
 
-```
+```sh
 kubectl logs -n apps <pod> <container>
 ```
 
-- `<pod>` is the name of the Pod you want to view logs from.
-- `<container>` is the name of the container you want to view logs from.
+where:
+
+  - `<pod>` is the name of the Pod you want to view logs from.
+  - `<container>` is the name of the container you want to view logs from.
 
 For example:
 
@@ -297,7 +340,7 @@ We recommend using [tab completion](https://kubernetes.io/docs/reference/kubectl
 
 See the [`kubectl` Cheat Sheet](https://kubernetes.io/docs/reference/kubectl/cheatsheet/#interacting-with-running-pods) for more examples.
 
-## Security constraints
+## Security Constraints
 
 ## AWS Integrations
 
