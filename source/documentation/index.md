@@ -131,7 +131,23 @@ aws-vault --version
 To follow this guide you will need to have an [AWS access](https://docs.publishing.service.gov.uk/manual/get-started.html#7-get-aws-access), have [gds-cli installed](https://docs.publishing.service.gov.uk/manual/get-started.html#3-install-gds-command-line-tools) and have [gds-cli set up](https://docs.publishing.service.gov.uk/manual/get-started.html#8-access-aws-for-the-first-time) to access AWS.
 
 ### Follow those steps
-1. Assume the proper IAM role using [gds-cli](https://github.com/alphagov/gds-cli#usage)
+1. Assume the proper IAM role using [gds-cli](https://github.com/alphagov/gds-cli#usage) by
+exporting the AWS credentials for the GOV.UK environment and role that you wish:
+```
+eval $(gds aws govuk-<govuk-environment>-<role> -e --art 8h)
+export AWS_REGION=eu-west-1
+```
+  where:
+
+  1. `<govuk-environment>` is the the GOV.UK environment that you want to get credentials for. e.g. `test`, `integration`
+
+  2. `<role>` is the role mentioned [here](https://docs.publishing.service.gov.uk/manual/deploying-terraform.html#1-check-that-you-have-sufficient-access)
+
+  3. `art` option is used to request that the AWS credentials last for the requested time.
+
+  For the user research session , you should use the  `eval $(gds aws govuk-integration-admin -e --art 8h)` command since
+the session is run in the Integration GOV.UK cluster and `admin` role will allow full access.
+
 2. If it's your first time accessing the cluster through kubectl:
 ```
 aws eks update-kubeconfig --name govuk
