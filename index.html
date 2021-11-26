@@ -120,7 +120,7 @@
             <a href="#custom-kubernetes-objects"><span>Custom Kubernetes objects</span></a>
           </li>
           <li>
-            <a href="#further-kubernetes-information"><span>Further Kubernetes Information</span></a>
+            <a href="#further-kubernetes-information"><span>Further Kubernetes information</span></a>
           </li>
         </ul>
       </li>
@@ -128,7 +128,7 @@
         <a href="#helm-overview"><span>Helm overview</span></a>
       </li>
       <li>
-        <a href="#tools-setup"><span>Tools setup</span></a>
+        <a href="#set-up-tools"><span>Set up tools</span></a>
         <ul>
           <li>
             <a href="#install-kubectl"><span>Install Kubectl</span></a>
@@ -145,10 +145,10 @@
         <a href="#getting-access-to-the-cluster"><span>Getting access to the cluster</span></a>
         <ul>
           <li>
-            <a href="#prerequisite"><span>Prerequisite</span></a>
+            <a href="#prerequisites"><span>Prerequisites</span></a>
           </li>
           <li>
-            <a href="#follow-those-steps"><span>Follow those steps</span></a>
+            <a href="#assuming-roles-and-testing-access"><span>Assuming roles and testing access</span></a>
           </li>
         </ul>
       </li>
@@ -162,7 +162,7 @@
             <a href="#viewing-logs"><span>Viewing logs</span></a>
           </li>
           <li>
-            <a href="#viewing-kubernetes-events"><span>Viewing kubernetes events</span></a>
+            <a href="#viewing-kubernetes-events"><span>Viewing Kubernetes events</span></a>
           </li>
           <li>
             <a href="#container-shell"><span>Container shell</span></a>
@@ -173,10 +173,10 @@
         </ul>
       </li>
       <li>
-        <a href="#continuous-integration-and-continuous-deployment-ci-cd"><span>Continuous Integration and Continuous Deployment (CI/CD)</span></a>
+        <a href="#continuous-integration-ci-and-continuous-deployment-cd"><span>Continuous Integration (CI) and Continuous Deployment (CD)</span></a>
         <ul>
           <li>
-            <a href="#github-actions-ci"><span>Github Actions (CI)</span></a>
+            <a href="#github-actions-ci"><span>Github actions (CI)</span></a>
             <ul>
               <li>
                 <a href="#sensitive-data"><span>Sensitive data</span></a>
@@ -208,7 +208,7 @@
         <a href="#security-constraints"><span>Security constraints</span></a>
       </li>
       <li>
-        <a href="#aws-integrations"><span>AWS Integrations</span></a>
+        <a href="#aws-integrations"><span>AWS integrations</span></a>
       </li>
     </ul>
   </li>
@@ -291,7 +291,7 @@
 <li><a href="https://github.com/kubernetes-sigs/external-dns">external-dns</a> - creates and manages <a href="https://en.wikipedia.org/wiki/Domain_Name_System">DNS</a> records in <a href="https://aws.amazon.com/route53/">AWS Route 53</a> to fulfil <code>Ingress</code> objects&rsquo; specifications</li>
 </ul>
 
-<h3 id="further-kubernetes-information">Further Kubernetes Information</h3>
+<h3 id="further-kubernetes-information">Further Kubernetes information</h3>
 
 <!--
 Content based on https://github.com/ministryofjustice/cloud-platform-user-guide/blob/main/source/documentation/concepts/kubernetes.html.md.erb
@@ -302,194 +302,125 @@ Content based on https://github.com/ministryofjustice/cloud-platform-user-guide/
 <ul>
 <li>For a brief introduction to what Kubernetes is all about, try this <a href="https://cloud.google.com/kubernetes-engine/kubernetes-comic/">comic</a> from Google.</li>
 <li><a href="https://www.youtube.com/watch?v=IMOZCDhH7do">Kubernetes concepts video</a></li>
-<li><a href="https://www.katacoda.com/courses/kubernetes">Katacoda kubernetes course</a> - In-browser, free (registration required), bite-sized kubernetes lessons.</li>
+<li><a href="https://www.katacoda.com/courses/kubernetes">Katacoda kubernetes course</a> - In-browser, free (registration required), bite-sized Kubernetes lessons.</li>
 <li><a href="https://www.pluralsight.com/courses/kubernetes-getting-started">Pluralsight k8s course</a></li>
 <li><a href="https://eu.udacity.com/course/scalable-microservices-with-kubernetes--ud615">Udacity k8s course</a></li>
 </ul>
 
 <h2 id="helm-overview">Helm overview</h2>
 
-<h2 id="tools-setup">Tools setup</h2>
+<h2 id="set-up-tools">Set up tools</h2>
 
 <h3 id="install-kubectl">Install Kubectl</h3>
 
-<p>You can use Homebrew to install Kubectl on macOS.
-<code>sh
-brew install kubectl
-</code>
-Test that kubectl is working.
-<code>sh
-kubectl version --client
-</code>
-<a href="https://kubernetes.io/docs/tasks/tools/install-kubectl-macos/">Official installation guide</a></p>
-
+<p>You can use Homebrew to install Kubectl on macOS:</p>
+<p><div class="highlight"><pre class="highlight shell" tabindex="0"><code>brew <span class="nb">install </span>kubectl
+</code></pre></div><p>Test that Kubectl is working:</p>
+<div class="highlight"><pre class="highlight shell" tabindex="0"><code>kubectl version <span class="nt">--client</span>
+</code></pre></div><p><a href="https://kubernetes.io/docs/tasks/tools/install-kubectl-macos/">Official installation guide</a></p>
 <h3 id="install-helm">Install HELM</h3>
-
-<p>You can use Homebrew to install HELM on macOS.
-<code>sh
-brew install helm
-</code>
-Test Helm is working:
-<code>sh
-helm version
-</code>
-<a href="https://helm.sh/docs/intro/install/">Official installation guide</a></p>
-
+<p>You can use Homebrew to install HELM on macOS:</p>
+<div class="highlight"><pre class="highlight shell" tabindex="0"><code>brew <span class="nb">install </span>helm
+</code></pre></div><p>Test Helm is working:</p>
+<div class="highlight"><pre class="highlight shell" tabindex="0"><code>helm version
+</code></pre></div><p><a href="https://helm.sh/docs/intro/install/">Official installation guide</a></p>
 <h3 id="install-gds-cli-and-aws-vault">Install GDS-CLI and AWS-Vault</h3>
-
-<p>You can use Homebrew to install both, please refer to the official guide for <a href="https://github.com/alphagov/gds-cli">gds-cli</a> and <a href="https://github.com/99designs/aws-vault#readme">aws-vault</a> for more detailed information.
-<code>sh
-brew install alphagov/gds/gds-cli
-</code>
-Test gds-cli
-<code>sh
-gds --version
-</code>
-Install aws-vault:
-<code>sh
-brew install --cask aws-vault
-</code>
-Test aws-vault
-<code>sh
-aws-vault --version
-</code></p>
-
+<p>Install gds-cli:</p>
+<div class="highlight"><pre class="highlight shell" tabindex="0"><code>brew <span class="nb">install </span>alphagov/gds/gds-cli
+</code></pre></div><p>Test gds-cli:</p>
+<div class="highlight"><pre class="highlight shell" tabindex="0"><code>gds <span class="nt">--version</span>
+</code></pre></div><p>Install aws-vault:</p>
+<div class="highlight"><pre class="highlight shell" tabindex="0"><code>brew <span class="nb">install</span> <span class="nt">--cask</span> aws-vault
+</code></pre></div><p>Test aws-vault:</p>
+<div class="highlight"><pre class="highlight shell" tabindex="0"><code>aws-vault <span class="nt">--version</span>
+</code></pre></div><p>Please refer to the official guide for <a href="https://github.com/alphagov/gds-cli">gds-cli</a> and <a href="https://github.com/99designs/aws-vault#readme">aws-vault</a> for more detailed information.</p>
 <h2 id="getting-access-to-the-cluster">Getting access to the cluster</h2>
+<h3 id="prerequisites">Prerequisites</h3>
+<p>To follow this guide you will need to have:</p></p>
 
-<h3 id="prerequisite">Prerequisite</h3>
+<ol>
+<li><a href="https://docs.publishing.service.gov.uk/manual/get-started.html#7-get-aws-access">AWS access</a></li>
+<li>gds-cli <a href="https://docs.publishing.service.gov.uk/manual/get-started.html#3-install-gds-command-line-tools">installed</a> and <a href="https://docs.publishing.service.gov.uk/manual/get-started.html#8-access-aws-for-the-first-time">set up</a>.</li>
+</ol>
 
-<p>To follow this guide you will need to have an <a href="https://docs.publishing.service.gov.uk/manual/get-started.html#7-get-aws-access">AWS access</a>, have <a href="https://docs.publishing.service.gov.uk/manual/get-started.html#3-install-gds-command-line-tools">gds-cli installed</a> and have <a href="https://docs.publishing.service.gov.uk/manual/get-started.html#8-access-aws-for-the-first-time">gds-cli set up</a> to access AWS.</p>
-
-<h3 id="follow-those-steps">Follow those steps</h3>
+<h3 id="assuming-roles-and-testing-access">Assuming roles and testing access</h3>
 
 <ol>
 <li><p>Assume the proper IAM role using <a href="https://github.com/alphagov/gds-cli#usage">gds-cli</a> by
-exporting the AWS credentials for the GOV.UK environment and role that you wish:
-<code>
-eval $(gds aws govuk-&lt;govuk-environment&gt;-&lt;role&gt; -e --art 8h)
-export AWS_REGION=eu-west-1
-</code>
-where:</p>
+exporting the AWS credentials for the GOV.UK environment and role that you wish:</p>
+<div class="highlight"><pre class="highlight shell" tabindex="0"><code><span class="nb">eval</span> <span class="si">$(</span>gds aws govuk-&lt;govuk-environment&gt;-&lt;role&gt; <span class="nt">-e</span> <span class="nt">--art</span> 8h<span class="si">)</span>
+<span class="nb">export </span><span class="nv">AWS_REGION</span><span class="o">=</span>eu-west-1
+</code></pre></div><p>where:</p>
 
-<ol>
-<li><code>&lt;govuk-environment&gt;</code> is the the GOV.UK environment that you want to get credentials for. e.g. <code>test</code>, <code>integration</code></li>
-<li><code>&lt;role&gt;</code> is the role mentioned <a href="https://docs.publishing.service.gov.uk/manual/deploying-terraform.html#1-check-that-you-have-sufficient-access">here</a></li>
+<ul>
+<li><code>&lt;govuk-environment&gt;</code> is the the GOV.UK environment that you want to get credentials for. For example, <code>test</code>, <code>integration</code></li>
+<li><code>&lt;role&gt;</code> is the role mentioned in this <a href="https://docs.publishing.service.gov.uk/manual/deploying-terraform.html#1-check-that-you-have-sufficient-access">deploying terraform documentation</a></li>
 <li><code>art</code> option is used to request that the AWS credentials last for the requested time.</li>
-</ol></li>
+</ul>
+<p>For the user research session , you should use the <code>eval $(gds aws govuk-integration-admin -e --art 8h)</code> command since
+the session is run in the Integration GOV.UK cluster and <code>admin</code> role will allow full access.</p></li>
+<li><p>If it&rsquo;s your first time accessing the cluster through Kubectl:</p>
+<div class="highlight"><pre class="highlight shell" tabindex="0"><code>aws eks update-kubeconfig <span class="nt">--name</span> govuk
+</code></pre></div><p>This will add the govuk cluster to your Kubectl configuration in <code>~/.kube/config</code></p></li>
+<li><p>To check that you have access, run:</p>
+<div class="highlight"><pre class="highlight shell" tabindex="0"><code>kubectl cluster-info
+</code></pre></div><p>If you have access this should return information about the GOV.UK EKS cluster control plane, it should look like this:</p>
+<div class="highlight"><pre class="highlight shell" tabindex="0"><code>Kubernetes control plane is https://<span class="o">{</span>GOVUK_CLUSTER_ADDRESS<span class="o">}</span>.<span class="o">{</span>AWS_REGION<span class="o">}</span>.eks.amazonaws.com
+</code></pre></div></li>
 </ol>
 
-<p>For the user research session , you should use the  <code>eval $(gds aws govuk-integration-admin -e --art 8h)</code> command since
-the session is run in the Integration GOV.UK cluster and <code>admin</code> role will allow full access.</p>
+<h2 id="interact-with-the-cluster-with-kubectl">Interact with the cluster with <code>kubectl</code></h2>
 
-<ol>
-<li><p>If it&rsquo;s your first time accessing the cluster through kubectl:
-<code>
-aws eks update-kubeconfig --name govuk
-</code>
-This will add the govuk cluster to your kubectl configuration in <code>~/.kube/config</code></p></li>
-<li><p>To check that you have access, run:
-<code>
-kubectl cluster-info
-</code>
-If you have access this should return information about the govuk EKS cluster control plane, it should look like this:
-<code>
-Kubernetes control plane is https://{GOVUK_CLUSTER_ADDRESS}.{AWS_REGION}.eks.amazonaws.com
-</code></p>
-<h2 id="interact-with-the-cluster-with-kubectl">Interact with the cluster with <code>kubectl</code></h2></li>
-</ol>
+<p>This acts as a quick reference to Kubectl, listing some of the most common operations.</p>
 
-<p>This acts as a quick reference to kubectl, listing some of the most common operations.</p>
-
-<p>The examples here only address the most basic approach to these operations. For more options, please refer to the command-line help of kubectl subcommands, which you can access like this:
-<code>
-$ kubectl get --help
-</code></p>
-
-<p>There is also a more detailed <a href="https://kubernetes.io/docs/reference/kubectl/cheatsheet/">cheatsheet</a> in the official kubernetes documentation.</p>
-
+<p>The examples here only address the most basic approach to these operations. For more options, please refer to the command-line help of <code>kubectl</code> subcommands, which you can access like this:</p>
+<p><div class="highlight"><pre class="highlight shell" tabindex="0"><code>kubectl get <span class="nt">--help</span>
+</code></pre></div><p>There is also a more detailed <a href="https://kubernetes.io/docs/reference/kubectl/cheatsheet/">cheatsheet</a> in the official Kubernetes documentation.</p>
 <h3 id="inspecting-running-instances-of-an-application">Inspecting running instances of an application</h3>
-
-<p>To list running Pods:
-<code>
-$ kubectl -n &lt;namespace&gt; get pods
-</code></p>
-
-<p>To view details for a Pod:
-<code>
-$ kubectl -n &lt;namespace&gt; describe pod &lt;pod&gt;
-</code></p>
-
-<h3 id="viewing-logs">Viewing logs</h3>
-
-<p>To access the logs of a running container:
-<code>
-$ kubectl -n &lt;namespace&gt; logs &lt;pod&gt;
-</code></p>
-
-<h3 id="viewing-kubernetes-events">Viewing kubernetes events</h3>
-
-<p>To see kubernetes events, which can help debugging:
-<code>
-$ kubectl -n &lt;namespace&gt; get events
-</code></p>
-
-<h3 id="container-shell">Container shell</h3>
-
-<p>You can get a shell inside a running container:
-<code>
-$ kubectl -n &lt;namespace&gt; exec -it &lt;pod&gt; sh
-</code></p>
-
-<p>For more information, click <a href="https://kubernetes.io/docs/tasks/debug-application-cluster/get-shell-running-container/">here</a></p>
-
+<p>To list running Pods:</p>
+<div class="highlight"><pre class="highlight shell" tabindex="0"><code>kubectl <span class="nt">-n</span> &lt;namespace&gt; get pods
+</code></pre></div><p>To view details for a Pod:</p>
+<div class="highlight"><pre class="highlight shell" tabindex="0"><code>kubectl <span class="nt">-n</span> &lt;namespace&gt; describe pod &lt;pod&gt;
+</code></pre></div><h3 id="viewing-logs">Viewing logs</h3>
+<p>To access the logs of a running container:</p>
+<div class="highlight"><pre class="highlight shell" tabindex="0"><code>kubectl <span class="nt">-n</span> &lt;namespace&gt; logs &lt;pod&gt;
+</code></pre></div><h3 id="viewing-kubernetes-events">Viewing Kubernetes events</h3>
+<p>To see Kubernetes events, which can help debugging:</p>
+<div class="highlight"><pre class="highlight shell" tabindex="0"><code>kubectl <span class="nt">-n</span> &lt;namespace&gt; get events
+</code></pre></div><h3 id="container-shell">Container shell</h3>
+<p>You can get a shell inside a running container:</p>
+<div class="highlight"><pre class="highlight shell" tabindex="0"><code>kubectl <span class="nt">-n</span> &lt;namespace&gt; <span class="nb">exec</span> <span class="nt">-it</span> &lt;pod&gt; sh
+</code></pre></div><p>For more information, click <a href="https://kubernetes.io/docs/tasks/debug-application-cluster/get-shell-running-container/">here</a></p>
 <h3 id="pod-port-forwarding">Pod port-forwarding</h3>
-
-<p>To forward port 5000 on localhost to port 5001 in the Pod:
-<code>
-$ kubectl -n &lt;namespace&gt; port-forward &lt;pod&gt; 5000:5001
-</code></p>
-
-<h2 id="continuous-integration-and-continuous-deployment-ci-cd">Continuous Integration and Continuous Deployment (CI/CD)</h2>
-
-<h3 id="github-actions-ci">Github Actions (CI)</h3>
-
+<p>To forward port 5000 on localhost to port 5001 in the Pod:</p>
+<div class="highlight"><pre class="highlight shell" tabindex="0"><code>kubectl <span class="nt">-n</span> &lt;namespace&gt; port-forward &lt;pod&gt; 5000:5001
+</code></pre></div><h2 id="continuous-integration-ci-and-continuous-deployment-cd">Continuous Integration (CI) and Continuous Deployment (CD)</h2>
+<h3 id="github-actions-ci">Github actions (CI)</h3>
 <p>With GitHub Actions, we can now automatically build and publish our docker image to our private GOV.UK production AWS Elastic Container Repository.</p>
-
 <p>The GitHub Actions workflow CI yaml file can be found within each repository in the following location: <code>.github/workflows/ci.yaml</code></p>
-
 <p>When a user merges a branch to main, the GitHub Action Workflows will be triggered, the defined job within the ci.yaml file will then start.
 Within the job there are steps which will checkout the code, build a new Docker image and then push that new Dcoker image to GOV.UK production AWS Elastic Container Repository.
 Each new image will be tagged with merge commit GitHub simple hashing algorithm (SHA).</p>
-
 <p>You can view the status of GitHub Actions CI on <code>https://github.com/alphagov/&lt;application repo&gt;/actions</code>. The workflow is named <code>Build and publish to ECR</code>.</p>
-
 <h4 id="sensitive-data">Sensitive data</h4>
-
 <p>AWS credentials are stored as Github Organisation level secrets and have been made available to individual repos. If a new repo requires access to secrets, please <a href="https://gds.slack.com/archives/C013F737737">contact the Replatforming team on Slack</a>.</p>
-
-<p><a href="https://docs.github.com/en/actions">Official documentation on GitHub action</a></p>
-
+<p>See the <a href="https://docs.github.com/en/actions">documentation on GitHub Actions</a> for more information.</p>
 <h3 id="argocd-cd">ArgoCD (CD)</h3>
-
 <p>The GOV.UK Kubernetes Platform provides an <a href="https://argo-cd.readthedocs.io/en/stable/">ArgoCD</a> instance for continuous
 delivery of applications to the cluster.</p>
-
 <p>ArgoCD is a declarative, GitOps continuous delivery tool for Kubernetes.
 ArgoCD will replace the feature set currently provided by Deploy Jenkins.</p>
-
 <h4 id="access-the-argocd-integration-instance">Access the ArgoCD integration instance</h4>
-
 <p>NOTE: In future we will use our Google Accounts for Single Sign-On (SSO) to Argo.
-Our MVP for user testing uses a shared username and password.</p>
+Our MVP for user testing uses a shared username and password.</p></p>
 
 <ol>
 <li>Authenticate to the Kubernetes cluster (see <a href="#getting-access-to-the-cluster">getting access to the cluster</a>)</li>
-<li>Acquire the password for Argo:
-<code>
-kubectl -n cluster-services get secret argocd-initial-admin-secret -o jsonpath=&quot;{.data.password}&quot; | base64 -d; echo
-</code></li>
-<li>Navigate to <a href="https://argo.eks.integration.govuk.digital/">ArgoCD (Integration)</a> and sign in using the
-username <code>admin</code> and the password acquired from the previous step.</li>
+<li><p>Acquire the password for Argo:</p>
+<div class="highlight"><pre class="highlight shell" tabindex="0"><code>kubectl <span class="nt">-n</span> cluster-services get secret argocd-initial-admin-secret <span class="nt">-o</span> <span class="nv">jsonpath</span><span class="o">=</span><span class="s2">"{.data.password}"</span> | <span class="nb">base64</span> <span class="nt">-d</span><span class="p">;</span> <span class="nb">echo</span>
+</code></pre></div></li>
+<li><p>Navigate to <a href="https://argo.eks.integration.govuk.digital/">ArgoCD (Integration)</a> and sign in using the
+username <code>admin</code> and the password acquired from the previous step.</p></li>
 </ol>
 
 <h2 id="access-application-logs">Access application logs</h2>
@@ -497,9 +428,8 @@ username <code>admin</code> and the password acquired from the previous step.</l
 <p>You can view application logs using <a href="https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#logs"><code>kubectl logs</code></a>.</p>
 
 <h3 id="view-logs-for-an-app">View logs for an app</h3>
-
-<div class="highlight"><pre class="highlight plaintext" tabindex="0"><code>kubectl logs -n apps deploy/&lt;deployment&gt; &lt;container&gt;
-</code></pre></div>
+<p><div class="highlight"><pre class="highlight shell" tabindex="0"><code>kubectl logs <span class="nt">-n</span> apps deploy/&lt;deployment&gt; &lt;container&gt;
+</code></pre></div><p>where:</p></p>
 
 <ul>
 <li><code>&lt;deployment&gt;</code> is the name of the Deployment for the app.</li>
@@ -507,11 +437,10 @@ username <code>admin</code> and the password acquired from the previous step.</l
 </ul>
 
 <p>For example:</p>
-
-<div class="highlight"><pre class="highlight plaintext" tabindex="0"><code>kubectl logs -n apps deploy/publisher-web app
+<p><div class="highlight"><pre class="highlight shell" tabindex="0"><code>kubectl logs <span class="nt">-n</span> apps deploy/publisher-web app
 </code></pre></div><h3 id="view-logs-for-a-specific-pod">View logs for a specific pod</h3>
-<div class="highlight"><pre class="highlight plaintext" tabindex="0"><code>kubectl logs -n apps &lt;pod&gt; &lt;container&gt;
-</code></pre></div>
+<div class="highlight"><pre class="highlight shell" tabindex="0"><code>kubectl logs <span class="nt">-n</span> apps &lt;pod&gt; &lt;container&gt;
+</code></pre></div><p>where:</p></p>
 
 <ul>
 <li><code>&lt;pod&gt;</code> is the name of the Pod you want to view logs from.</li>
@@ -523,7 +452,7 @@ username <code>admin</code> and the password acquired from the previous step.</l
 </code></pre></div><p>We recommend using <a href="https://kubernetes.io/docs/reference/kubectl/cheatsheet/#kubectl-autocomplete">tab completion</a> to avoid the need to copy-paste pod and container names.</p>
 <p>See the <a href="https://kubernetes.io/docs/reference/kubectl/cheatsheet/#interacting-with-running-pods"><code>kubectl</code> Cheat Sheet</a> for more examples.</p>
 <h2 id="security-constraints">Security constraints</h2>
-<h2 id="aws-integrations">AWS Integrations</h2>
+<h2 id="aws-integrations">AWS integrations</h2>
 <p>The Kubernetes cluster interacts with AWS services to provide features
 such as DNS, ALB ingress, and Secret provisioning.
 Here we list the operators installed in the cluster that integrate with AWS.</p></p>
