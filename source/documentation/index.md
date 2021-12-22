@@ -260,7 +260,7 @@ With GitHub Actions, we can now automatically build and publish our docker image
 The GitHub Actions workflow CI yaml file can be found within each repository in the following location: `.github/workflows/ci.yaml`
 
 When a user merges a branch to main, the GitHub Action Workflows will be triggered, the defined job within the ci.yaml file will then start.
-Within the job there are steps which will checkout the code, build a new Docker image and then push that new Dcoker image to GOV.UK production AWS Elastic Container Repository.
+Within the job there are steps which will checkout the code, build a new Docker image and then push that new Docker image to GOV.UK production AWS Elastic Container Repository.
 Each new image will be tagged with merge commit GitHub simple hashing algorithm (SHA).
 
 You can view the status of GitHub Actions CI on `https://github.com/alphagov/<application repo>/actions`. The workflow is named `Build and publish to ECR`.
