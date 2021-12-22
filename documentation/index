@@ -150,7 +150,7 @@ the session is run in the Integration GOV.UK cluster and <code>admin</code> role
 <p>With GitHub Actions, we can now automatically build and publish our docker image to our private GOV.UK production AWS Elastic Container Repository.</p>
 <p>The GitHub Actions workflow CI yaml file can be found within each repository in the following location: <code>.github/workflows/ci.yaml</code></p>
 <p>When a user merges a branch to main, the GitHub Action Workflows will be triggered, the defined job within the ci.yaml file will then start.
-Within the job there are steps which will checkout the code, build a new Docker image and then push that new Dcoker image to GOV.UK production AWS Elastic Container Repository.
+Within the job there are steps which will checkout the code, build a new Docker image and then push that new Docker image to GOV.UK production AWS Elastic Container Repository.
 Each new image will be tagged with merge commit GitHub simple hashing algorithm (SHA).</p>
 <p>You can view the status of GitHub Actions CI on <code>https://github.com/alphagov/&lt;application repo&gt;/actions</code>. The workflow is named <code>Build and publish to ECR</code>.</p>
 <h4 id="sensitive-data">Sensitive data</h4>
