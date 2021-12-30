@@ -10,39 +10,43 @@ As the GOV.UK Kubernetes Platform is currently in an early alpha stage, this doc
 
 ## Kubernetes overview
 
-Kubernetes is a portable, extensible, open-source platform for managing containerized workloads and services, that facilitates both [declarative configuration](https://kubernetes.io/docs/tasks/manage-kubernetes-objects/declarative-config/) and automation. Kubernetes manages the entire lifecycle of containerised applications (for example, start, stop, update, scale), as well as providing mechanisms for:
+Kubernetes is a portable, extensible, open-source platform for managing containerized workloads and services that:
+
+- facilitates both [declarative configuration](https://kubernetes.io/docs/tasks/manage-kubernetes-objects/declarative-config/) and automation
+- manages the entire lifecycle of containerised applications (for example, start, stop, update, scale)
+
+Kubernetes also enables:
 
 - service discovery and load balancing
 - persistent storage orchestration
 - automated rollouts and rollbacks
 - self-healing deployments
-- secrets and config management
+- secrets and configuration management
 
-See the official [Kubernetes overview documentation](https://kubernetes.io/docs/concepts/overview/what-is-kubernetes/) for more details.
+See the official [Kubernetes overview documentation](https://kubernetes.io/docs/concepts/overview/what-is-kubernetes/) for more information.
 
 ### Kubernetes declarative state model
 
-A core design concept of Kubernetes is the declarative state model, where Kubernetes users define their applications in terms of the desired end state. This differs from an imperative model, where the sequential steps to achieve a running application are defined instead. For example:
+A core design concept of Kubernetes is the declarative state model, where Kubernetes users define their applications in terms of the desired end state. This differs from an imperative model, where users define the sequential steps to achieve a running application.
 
-#### Declarative
+For example, with a declarative state model, a Kubernetes user defines that:
 
-* Container `hello-world` with tag `v1` should be running
-* The `hello-world` container should expose port 80
-* A load balancer routing to port 80 on the container should exist
+- a container `hello-world` with tag `v1` should be running
+- that `hello-world` container should expose port 80
+- a load balancer routing to port 80 on the container should exist
 
-#### Imperative
+For an imperative model, a user would instead define the following steps.
 
-1. Pull the `hello-world` container with tag `v1`
-2. Start the `hello-world` container with port 80 exposed
-3. Create a load balancer
-4. Create a load balancer routing rule pointing to port 80 on the container
+1. Pull the `hello-world` container with tag `v1`.
+2. Start the `hello-world` container with port 80 exposed.
+3. Create a load balancer.
+4. Create a load balancer routing rule pointing to port 80 on the container.
 
-In the Kubernetes declarative model, internal Kubernetes components called [controllers](https://kubernetes.io/docs/concepts/architecture/controller/) handle the details of transitioning an application from the current state to the declared desired state on your behalf. See [Imperative vs Declarative](https://dominik-tornow.medium.com/imperative-vs-declarative-8abc7dcae82e) for a more detailed comparison of the two models.
-
+In the Kubernetes declarative model, internal Kubernetes components called [controllers](https://kubernetes.io/docs/concepts/architecture/controller/) handle the details of transitioning an application from the current state to the declared desired state on your behalf. See the [Imperative vs Declarative blog post](https://dominik-tornow.medium.com/imperative-vs-declarative-8abc7dcae82e) for a more detailed comparison of the two models.
 
 ### Kubernetes objects
 
-The Kubernetes API supports many [object types](https://kubernetes.io/docs/concepts/overview/working-with-objects/kubernetes-objects/) representing the state of component parts of an application. The major resource types that will be used in most (if not all) applications are:
+The Kubernetes API supports many [object types](https://kubernetes.io/docs/concepts/overview/working-with-objects/kubernetes-objects/) representing the state of component parts of an application. The following major resource types are used in most (if not all) applications:
 
 * [`Pod`](https://kubernetes.io/docs/concepts/workloads/pods/) - a group of one or more containers
 * [`Deployment`](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/) - one or more replicas of a `Pod`, and an associated [deployment strategy](https://www.weave.works/blog/kubernetes-deployment-strategies)
@@ -53,7 +57,7 @@ The Kubernetes API supports many [object types](https://kubernetes.io/docs/conce
 
 ### Custom Kubernetes objects
 
-The GOV.UK Kubernetes Platform includes some third party API objects and controllers to allow AWS services to be used through the Kubernetes API:
+The GOV.UK Kubernetes Platform includes the following third party API objects and controllers to allow AWS services to be used through the Kubernetes API:
 
 * [external-secrets](https://external-secrets.io) - stores secrets in [AWS Secrets Manager](https://aws.amazon.com/secrets-manager/), and makes them available to applications as standard Kubernetes `Secret` objects
 * [AWS Load Balancer Controller](https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.3/) - provides and manages AWS Load Balancers to fulfil `Ingress` objects' specifications
@@ -93,11 +97,13 @@ You can use Homebrew to install Kubectl on macOS:
 brew install kubectl
 ```
 
-Test that Kubectl is working:
+Test that Kubectl is working by running:
 
 ```sh
 kubectl version --client
 ```
+
+___What would success look like?___
 
 [Official installation guide](https://kubernetes.io/docs/tasks/tools/install-kubectl-macos/)
 
@@ -115,9 +121,11 @@ Test Helm is working:
 helm version
 ```
 
+___What would success look like?___
+
 [Official installation guide](https://helm.sh/docs/intro/install/)
 
-### Install GDS-CLI and AWS-Vault
+### Install `gds-cli`
 
 Install gds-cli:
 
@@ -131,6 +139,10 @@ Test gds-cli:
 gds --version
 ```
 
+___What would success look like?___
+
+### Install `aws-vault`
+
 Install aws-vault:
 
 ```sh
@@ -143,20 +155,23 @@ Test aws-vault:
 aws-vault --version
 ```
 
-Please refer to the official guide for [gds-cli](https://github.com/alphagov/gds-cli) and [aws-vault](https://github.com/99designs/aws-vault#readme) for more detailed information.
+___What would success look like?___
+
+Please refer to the documentation for [gds-cli](https://github.com/alphagov/gds-cli) and [aws-vault](https://github.com/99designs/aws-vault#readme) for more information.
 
 ## Getting access to the cluster
 
 ### Prerequisites
-To follow this guide you will need to have:
 
-1. [AWS access](https://docs.publishing.service.gov.uk/manual/get-started.html#7-get-aws-access)
-2. gds-cli [installed](https://docs.publishing.service.gov.uk/manual/get-started.html#3-install-gds-command-line-tools) and [set up](https://docs.publishing.service.gov.uk/manual/get-started.html#8-access-aws-for-the-first-time).
+To access the Kubernetes cluster you must have:
+
+- [access to AWS](https://docs.publishing.service.gov.uk/manual/get-started.html#7-get-aws-access)
+- [installed](https://docs.publishing.service.gov.uk/manual/get-started.html#3-install-gds-command-line-tools) and [set up gds-cli](https://docs.publishing.service.gov.uk/manual/get-started.html#8-access-aws-for-the-first-time)
 
 ### Assuming roles and testing access
 
 1. Assume the proper IAM role using [gds-cli](https://github.com/alphagov/gds-cli#usage) by
-exporting the AWS credentials for the GOV.UK environment and role that you wish:
+exporting the AWS credentials for the appropriate GOV.UK environment and role:
 
     ```sh
     eval $(gds aws govuk-<govuk-environment>-<role> -e --art 8h)
@@ -164,32 +179,34 @@ exporting the AWS credentials for the GOV.UK environment and role that you wish:
     ```
 
      where:
-     - `<govuk-environment>` is the the GOV.UK environment that you want to get credentials for. For example, `test`, `integration`
+     - `<govuk-environment>` is the the GOV.UK environment that you want to get credentials (for example, `test` or `integration`)
      - `<role>` is the role mentioned in this [deploying terraform documentation](https://docs.publishing.service.gov.uk/manual/deploying-terraform.html#1-check-that-you-have-sufficient-access)
-     - `art` option is used to request that the AWS credentials last for the requested time.
+     - the `art` option is used to request that the AWS credentials last for the requested time.
 
-    For the user research session , you should use the `eval $(gds aws govuk-integration-admin -e --art 8h)` command since
-    the session is run in the Integration GOV.UK cluster and `admin` role will allow full access.
+    For the user research session , you should use the `eval $(gds aws govuk-integration-admin -e --art 8h)` command since the session is run in the Integration GOV.UK cluster and `admin` role will allow full access.
 
-2. If it's your first time accessing the cluster through Kubectl:
+2. If this is your first time accessing the cluster through Kubectl:
 
     ```sh
     aws eks update-kubeconfig --name govuk
     ```
 
-    This will add the govuk cluster to your Kubectl configuration in `~/.kube/config`
+    This will add the `govuk` cluster to your Kubectl configuration in `~/.kube/config`.
 
-3. To check that you have access, run:
+    If this is not your first time accessing the cluster through Kubectl, then
+
+3. Check that you have access:
 
     ```sh
     kubectl cluster-info
     ```
 
-    If you have access this should return information about the GOV.UK EKS cluster control plane, it should look like this:
+    If you have access, running this command should return information about the GOV.UK EKS cluster control plane. This information should look like this:
 
     ```sh
     Kubernetes control plane is https://{GOVUK_CLUSTER_ADDRESS}.{AWS_REGION}.eks.amazonaws.com
     ```
+    ___If you do not have access...___
 
 ## Interact with the cluster with `kubectl`
 
@@ -260,7 +277,9 @@ With GitHub Actions, we can now automatically build and publish our docker image
 The GitHub Actions workflow CI yaml file can be found within each repository in the following location: `.github/workflows/ci.yaml`
 
 When a user merges a branch to main, the GitHub Action Workflows will be triggered, the defined job within the ci.yaml file will then start.
+
 Within the job there are steps which will checkout the code, build a new Docker image and then push that new Docker image to GOV.UK production AWS Elastic Container Repository.
+
 Each new image will be tagged with merge commit GitHub simple hashing algorithm (SHA).
 
 You can view the status of GitHub Actions CI on `https://github.com/alphagov/<application repo>/actions`. The workflow is named `Build and publish to ECR`.
@@ -276,12 +295,12 @@ See the [documentation on GitHub Actions](https://docs.github.com/en/actions) fo
 The GOV.UK Kubernetes Platform provides an [ArgoCD] instance for continuous
 delivery of applications to the cluster.
 
-ArgoCD is a declarative, GitOps continuous delivery tool for Kubernetes.
-ArgoCD will replace the feature set currently provided by Deploy Jenkins.
+ArgoCD is a declarative, GitOps continuous delivery tool for Kubernetes. ArgoCD will replace the feature set currently provided by Deploy Jenkins.
 
 #### Access the ArgoCD integration instance
 
 NOTE: In future we will use our Google Accounts for Single Sign-On (SSO) to Argo.
+
 Our MVP for user testing uses a shared username and password.
 
 1. Authenticate to the Kubernetes cluster (see [getting access to the cluster])
