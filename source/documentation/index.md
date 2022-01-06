@@ -105,6 +105,10 @@ kubectl version --client
 
 ___What would success look like?___
 
+___Q: Docker Desktop installs an old version of kubectl which causes Homebrew not to symlink its version into place. R: Go ahead and follow Homebrew's instruction (brew link --overwrite kubectl). Docker will work fine with the more up-to-date kubectl, and govuk-docker definitely won't be affected because it doesn't use Docker's k8s features.___
+
+
+
 [Official installation guide](https://kubernetes.io/docs/tasks/tools/install-kubectl-macos/)
 
 ### Install HELM
