@@ -145,6 +145,19 @@ aws-vault --version
 
 Please refer to the official guide for [gds-cli](https://github.com/alphagov/gds-cli) and [aws-vault](https://github.com/99designs/aws-vault#readme) for more detailed information.
 
+### Install Argo CLI
+
+You can install the Argo CLI to manage [Argo Workflows]:
+
+```sh
+brew install argo
+```
+
+or see [documentation](https://github.com/argoproj/argo-workflows/releases) for alternative ways to
+install Argo CLI.
+
+[Argo Workflows]: https://argoproj.github.io/argo-workflows/
+
 ## Getting access to the cluster
 
 ### Prerequisites
@@ -297,6 +310,27 @@ Our MVP for user testing uses a shared username and password.
 [ArgoCD]: https://argo-cd.readthedocs.io/en/stable/
 [getting access to the cluster]: #getting-access-to-the-cluster
 [argo-integration]: https://argo.eks.integration.govuk.digital/
+
+### Argo Workflows
+
+[Argo Workflows] is used in our GOV.UK Kubernetes Platform to provide the ability to
+run tasks in a Directed Acyclic Graph (DAG) similar to what Concourse offered.
+
+#### Access the Argo Workflows integration instance
+
+NOTE: In future we will use our Google Accounts for Single Sign-On (SSO) to Argo.
+Our MVP for user testing uses a bearer token.
+
+1. Authenticate to the Kubernetes cluster (see [getting access to the cluster])
+2. Acquire the bearer token for [Argo Workflows]:
+
+    ```sh
+    argo auth token
+    ```
+
+3. Navigate to [Argo Workflows (Integration)][argo-workflows-integration] and sign in using the
+  bearer token.
+[argo-workflows-integration]: https://argo-workflows.eks.integration.govuk.digital/
 
 ## Access application logs
 
