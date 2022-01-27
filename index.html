@@ -31,7 +31,7 @@
 
     <div class="app-pane">
       <div class="app-pane__header toc-open-disabled">
-        <a href="#content" class="govuk-skip-link">Skip to main content</a>
+        <a href="#content" class="govuk-skip-link" data-module="govuk-skip-link">Skip to main content</a>
 
         <header class="govuk-header app-header" role="banner" data-module="govuk-header">
   <div class="govuk-header__container govuk-header__container--full-width">
@@ -63,9 +63,9 @@
         <strong class="govuk-tag">Alpha</strong>
     </div>
     <div class="govuk-header__content">
-      <button type="button" class="govuk-header__menu-button govuk-js-header-toggle" aria-controls="navigation" aria-label="Show or hide Top Level Navigation">Menu</button>
-      <nav>
-        <ul id="navigation" class="govuk-header__navigation govuk-header__navigation--end" aria-label="Top Level Navigation">
+      <nav class="govuk-header__navigation govuk-header__navigation--end" aria-label="Menu">
+        <button type="button" class="govuk-header__menu-button govuk-js-header-toggle" aria-controls="navigation" aria-label="Show or hide menu">Menu</button>
+        <ul id="navigation" class="govuk-header__navigation-list">
             <li class="govuk-header__navigation-item govuk-header__navigation-item--active">
               <a class="govuk-header__link" href="/">Documentation</a>
             </li>
@@ -139,6 +139,9 @@
           <li>
             <a href="#install-gds-cli-and-aws-vault"><span>Install GDS-CLI and AWS-Vault</span></a>
           </li>
+          <li>
+            <a href="#install-argo-cli"><span>Install Argo CLI</span></a>
+          </li>
         </ul>
       </li>
       <li>
@@ -188,6 +191,14 @@
             <ul>
               <li>
                 <a href="#access-the-argocd-integration-instance"><span>Access the ArgoCD integration instance</span></a>
+              </li>
+            </ul>
+          </li>
+          <li>
+            <a href="#argo-workflows"><span>Argo Workflows</span></a>
+            <ul>
+              <li>
+                <a href="#access-the-argo-workflows-integration-instance"><span>Access the Argo Workflows integration instance</span></a>
               </li>
             </ul>
           </li>
@@ -334,6 +345,11 @@ Content based on https://github.com/ministryofjustice/cloud-platform-user-guide/
 </code></pre></div><p>Test aws-vault:</p>
 <div class="highlight"><pre class="highlight shell" tabindex="0"><code>aws-vault <span class="nt">--version</span>
 </code></pre></div><p>Please refer to the official guide for <a href="https://github.com/alphagov/gds-cli">gds-cli</a> and <a href="https://github.com/99designs/aws-vault#readme">aws-vault</a> for more detailed information.</p>
+<h3 id="install-argo-cli">Install Argo CLI</h3>
+<p>You can install the Argo CLI to manage <a href="https://argoproj.github.io/argo-workflows/">Argo Workflows</a>:</p>
+<div class="highlight"><pre class="highlight shell" tabindex="0"><code>brew <span class="nb">install </span>argo
+</code></pre></div><p>or see <a href="https://github.com/argoproj/argo-workflows/releases">documentation</a> for alternative ways to
+install Argo CLI.</p>
 <h2 id="getting-access-to-the-cluster">Getting access to the cluster</h2>
 <h3 id="prerequisites">Prerequisites</h3>
 <p>To follow this guide you will need to have:</p></p>
@@ -423,6 +439,25 @@ Our MVP for user testing uses a shared username and password.</p></p>
 username <code>admin</code> and the password acquired from the previous step.</p></li>
 </ol>
 
+<h3 id="argo-workflows">Argo Workflows</h3>
+
+<p><a href="https://argoproj.github.io/argo-workflows/">Argo Workflows</a> is used in our GOV.UK Kubernetes Platform to provide the ability to
+run tasks in a Directed Acyclic Graph (DAG) similar to what Concourse offered.</p>
+
+<h4 id="access-the-argo-workflows-integration-instance">Access the Argo Workflows integration instance</h4>
+
+<p>NOTE: In future we will use our Google Accounts for Single Sign-On (SSO) to Argo.
+Our MVP for user testing uses a bearer token.</p>
+
+<ol>
+<li>Authenticate to the Kubernetes cluster (see <a href="#getting-access-to-the-cluster">getting access to the cluster</a>)</li>
+<li><p>Acquire the bearer token for <a href="https://argoproj.github.io/argo-workflows/">Argo Workflows</a>:</p>
+<div class="highlight"><pre class="highlight shell" tabindex="0"><code>argo auth token
+</code></pre></div></li>
+<li><p>Navigate to <a href="https://argo-workflows.eks.integration.govuk.digital/">Argo Workflows (Integration)</a> and sign in using the
+bearer token.</p></li>
+</ol>
+
 <h2 id="access-application-logs">Access application logs</h2>
 
 <p>You can view application logs using <a href="https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#logs"><code>kubectl logs</code></a>.</p>
@@ -476,7 +511,7 @@ resources and nodes aren&rsquo;t underutilized.</li>
           <aside>
               <ul class="contribution-banner">
                 <li><a href="https://github.com/alphagov/govuk-kubernetes-cluster-user-docs/blob/main/source/index.html.md.erb">View source</a></li>
-                <li><a href="https://github.com/alphagov/govuk-kubernetes-cluster-user-docs/issues/new?labels=bug&amp;title=Re:%20'GOV.UK%20Kubernetes%20Cluster%20User%20Documentation'&amp;body=Problem%20with%20'GOV.UK%20Kubernetes%20Cluster%20User%20Documentation'%20(https://govuk-k8s-user-docs.publishing.service.gov.uk/)">Report problem</a></li>
+                <li><a href="https://github.com/alphagov/govuk-kubernetes-cluster-user-docs/issues/new?body=Problem+with+%27GOV.UK+Kubernetes+Cluster+User+Documentation%27+%28https%3A%2F%2Fgovuk-k8s-user-docs.publishing.service.gov.uk%2F%29&amp;labels=bug&amp;title=Re%3A+%27GOV.UK+Kubernetes+Cluster+User+Documentation%27">Report problem</a></li>
                 <li><a href="https://github.com/alphagov/govuk-kubernetes-cluster-user-docs">GitHub Repo</a></li>
               </ul>
           </aside>
