@@ -1,0 +1,5 @@
+---
+applications:
+- name: govuk-kubernetes-cluster-user-docs
+  buildpacks:
+  - ruby_buildpack
