@@ -1,0 +1,81 @@
+---
+title: Set up tools
+weight: 21
+last_reviewed_on: 2022-02-01
+review_in: 6 months
+---
+
+# Set up tools
+
+## Install Kubectl
+
+You can use Homebrew to install Kubectl on macOS:
+
+```sh
+brew install kubectl
+```
+
+Test that Kubectl is working:
+
+```sh
+kubectl version --client
+```
+
+[Official installation guide](https://kubernetes.io/docs/tasks/tools/install-kubectl-macos/)
+
+## Install Helm
+
+You can use Homebrew to install HELM on macOS:
+
+```sh
+brew install helm
+```
+
+Test Helm is working:
+
+```sh
+helm version
+```
+
+[Official installation guide](https://helm.sh/docs/intro/install/)
+
+## Install GDS-CLI and AWS-Vault
+
+Install gds-cli:
+
+```sh
+brew install alphagov/gds/gds-cli
+```
+
+Test gds-cli:
+
+```sh
+gds --version
+```
+
+Install aws-vault:
+
+```sh
+brew install --cask aws-vault
+```
+
+Test aws-vault:
+
+```sh
+aws-vault --version
+```
+
+Please refer to the official guide for [gds-cli](https://github.com/alphagov/gds-cli) and [aws-vault](https://github.com/99designs/aws-vault#readme) for more detailed information.
+
+## Install Argo CLI
+
+You can install the Argo CLI to manage [Argo Workflows]:
+
+```sh
+brew install argo
+```
+
+or see [documentation](https://github.com/argoproj/argo-workflows/releases) for alternative ways to
+install Argo CLI.
+
+[Argo Workflows]: https://argoproj.github.io/argo-workflows/
