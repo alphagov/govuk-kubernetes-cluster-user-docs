@@ -5,23 +5,23 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
-    <title>GOV.UK Kubernetes Platform User Documentation - GOV.UK Kubernetes platform technical documentation</title>
+    <title>Access and view app logs - GOV.UK Kubernetes platform technical documentation</title>
 
     <link href="/stylesheets/manifest.css" rel="stylesheet" />
 
-    <link rel="canonical" href="https://govuk-k8s-user-docs.publishing.service.gov.uk/">
+    <link rel="canonical" href="https://govuk-k8s-user-docs.publishing.service.gov.uk/manage-incident/access-app-logs/">
 
       <meta name="twitter:card" content="summary" />
       <meta name="twitter:domain" content="govuk-k8s-user-docs.publishing.service.gov.uk" />
       <meta name="twitter:image" content="https://govuk-k8s-user-docs.publishing.service.gov.uk/images/govuk-large.png" />
-      <meta name="twitter:title" content="GOV.UK Kubernetes Platform User Documentation - GOV.UK Kubernetes platform technical documentation" />
-      <meta name="twitter:url" content="https://govuk-k8s-user-docs.publishing.service.gov.uk/" />
+      <meta name="twitter:title" content="Access and view app logs - GOV.UK Kubernetes platform technical documentation" />
+      <meta name="twitter:url" content="https://govuk-k8s-user-docs.publishing.service.gov.uk/manage-incident/access-app-logs/" />
 
       <meta property="og:image" content="https://govuk-k8s-user-docs.publishing.service.gov.uk/images/govuk-large.png" />
       <meta property="og:site_name" content="GOV.UK Kubernetes platform technical documentation" />
-      <meta property="og:title" content="GOV.UK Kubernetes Platform User Documentation" />
+      <meta property="og:title" content="Access and view app logs" />
       <meta property="og:type" content="object" />
-      <meta property="og:url" content="https://govuk-k8s-user-docs.publishing.service.gov.uk/" />
+      <meta property="og:url" content="https://govuk-k8s-user-docs.publishing.service.gov.uk/manage-incident/access-app-logs/" />
 
     
   </head>
@@ -66,7 +66,7 @@
       <nav class="govuk-header__navigation govuk-header__navigation--end" aria-label="Menu">
         <button type="button" class="govuk-header__menu-button govuk-js-header-toggle" aria-controls="navigation" aria-label="Show or hide menu">Menu</button>
         <ul id="navigation" class="govuk-header__navigation-list">
-            <li class="govuk-header__navigation-item govuk-header__navigation-item--active">
+            <li class="govuk-header__navigation-item">
               <a class="govuk-header__link" href="/">Documentation</a>
             </li>
         </ul>
@@ -244,26 +244,31 @@
 
         <div class="app-pane__content toc-open-disabled">
           <main id="content" class="technical-documentation" data-module="anchored-headings">
-            <h1 id="gov-uk-kubernetes-platform-user-documentation">GOV.UK Kubernetes platform user documentation</h1>
-<p>The GOV.UK Kubernetes platform is an AWS-hosted <a href="https://kubernetes.io">Kubernetes</a> cluster, using Amazon&rsquo;s <a href="https://aws.amazon.com/eks/">Elastic Kubernetes Service</a>.</p>
-<p>Kubernetes is a portable, extensible, open-source platform for managing containerized workloads and services.</p>
-<p>Kubernetes facilitates both <a href="https://kubernetes.io/docs/tasks/manage-kubernetes-objects/declarative-config/">declarative configuration</a> and automation.</p>
-<p>Kubernetes manages the entire lifecycle of containerised applications and provides mechanisms for:</p>
+            <h1 id="access-and-view-app-logs">Access and view app logs</h1>
+<h2 id="access-application-logs">Access application logs</h2>
+<p>You can view application logs using <a href="https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#logs"><code>kubectl logs</code></a>.</p>
+<h3 id="view-logs-for-an-app">View logs for an app</h3>
+<div class="highlight"><pre class="highlight shell" tabindex="0"><code>kubectl logs <span class="nt">-n</span> apps deploy/&lt;deployment&gt; &lt;container&gt;
+</code></pre></div><p>where:</p>
 
 <ul>
-<li>service discovery and load balancing</li>
-<li>persistent storage orchestration</li>
-<li>automated rollouts and rollbacks</li>
-<li>self-healing deployments</li>
-<li>secrets and config management</li>
+<li><code>&lt;deployment&gt;</code> is the name of the Deployment for the app.</li>
+<li><code>&lt;app&gt;</code> is the name of the container you want to view logs from.</li>
 </ul>
-<p>See the official <a href="https://kubernetes.io/docs/concepts/overview/what-is-kubernetes/">Kubernetes overview documentation</a> for more details.</p>
-<p>Use this technical documentation to find out how to:</p>
+<p>For example:</p>
+<div class="highlight"><pre class="highlight shell" tabindex="0"><code>kubectl logs <span class="nt">-n</span> apps deploy/publisher-web app
+</code></pre></div><h3 id="view-logs-for-a-specific-pod">View logs for a specific pod</h3>
+<div class="highlight"><pre class="highlight shell" tabindex="0"><code>kubectl logs <span class="nt">-n</span> apps &lt;pod&gt; &lt;container&gt;
+</code></pre></div><p>where:</p>
 
 <ul>
-<li>start using the platform</li>
-<li>manage your app on the platform</li>
+<li><code>&lt;pod&gt;</code> is the name of the Pod you want to view logs from.</li>
+<li><code>&lt;container&gt;</code> is the name of the container you want to view logs from.</li>
 </ul>
+<p>For example:</p>
+<div class="highlight"><pre class="highlight plaintext" tabindex="0"><code>kubectl logs -n apps frontend-7bd8c786d-t5x99 frontend
+</code></pre></div><p>We recommend using <a href="https://kubernetes.io/docs/reference/kubectl/cheatsheet/#kubectl-autocomplete">tab completion</a> to avoid the need to copy-paste pod and container names.</p>
+<p>See the <a href="https://kubernetes.io/docs/reference/kubectl/cheatsheet/#interacting-with-running-pods"><code>kubectl</code> Cheat Sheet</a> for more examples.</p>
 
               <div data-module='page-expiry' data-last-reviewed-on="2022-08-01">
     <div class='page-expiry--not-expired'>
@@ -285,8 +290,8 @@
 
           <aside>
               <ul class="contribution-banner">
-                <li><a href="https://github.com/alphagov/govuk-kubernetes-cluster-user-docs/blob/main/source/index.html.md.erb">View source</a></li>
-                <li><a href="https://github.com/alphagov/govuk-kubernetes-cluster-user-docs/issues/new?body=Problem+with+%27GOV.UK+Kubernetes+Platform+User+Documentation%27+%28https%3A%2F%2Fgovuk-k8s-user-docs.publishing.service.gov.uk%2F%29&amp;labels=bug&amp;title=Re%3A+%27GOV.UK+Kubernetes+Platform+User+Documentation%27">Report problem</a></li>
+                <li><a href="https://github.com/alphagov/govuk-kubernetes-cluster-user-docs/blob/main/source/manage-incident/access-app-logs/index.html.md.erb">View source</a></li>
+                <li><a href="https://github.com/alphagov/govuk-kubernetes-cluster-user-docs/issues/new?body=Problem+with+%27Access+and+view+app+logs%27+%28https%3A%2F%2Fgovuk-k8s-user-docs.publishing.service.gov.uk%2Fmanage-incident%2Faccess-app-logs%2F%29&amp;labels=bug&amp;title=Re%3A+%27Access+and+view+app+logs%27">Report problem</a></li>
                 <li><a href="https://github.com/alphagov/govuk-kubernetes-cluster-user-docs">GitHub Repo</a></li>
               </ul>
           </aside>

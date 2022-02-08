@@ -5,23 +5,23 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
-    <title>GOV.UK Kubernetes Platform User Documentation - GOV.UK Kubernetes platform technical documentation</title>
+    <title>Use the platform - GOV.UK Kubernetes platform technical documentation</title>
 
     <link href="/stylesheets/manifest.css" rel="stylesheet" />
 
-    <link rel="canonical" href="https://govuk-k8s-user-docs.publishing.service.gov.uk/">
+    <link rel="canonical" href="https://govuk-k8s-user-docs.publishing.service.gov.uk/get-started/use-platform/">
 
       <meta name="twitter:card" content="summary" />
       <meta name="twitter:domain" content="govuk-k8s-user-docs.publishing.service.gov.uk" />
       <meta name="twitter:image" content="https://govuk-k8s-user-docs.publishing.service.gov.uk/images/govuk-large.png" />
-      <meta name="twitter:title" content="GOV.UK Kubernetes Platform User Documentation - GOV.UK Kubernetes platform technical documentation" />
-      <meta name="twitter:url" content="https://govuk-k8s-user-docs.publishing.service.gov.uk/" />
+      <meta name="twitter:title" content="Use the platform - GOV.UK Kubernetes platform technical documentation" />
+      <meta name="twitter:url" content="https://govuk-k8s-user-docs.publishing.service.gov.uk/get-started/use-platform/" />
 
       <meta property="og:image" content="https://govuk-k8s-user-docs.publishing.service.gov.uk/images/govuk-large.png" />
       <meta property="og:site_name" content="GOV.UK Kubernetes platform technical documentation" />
-      <meta property="og:title" content="GOV.UK Kubernetes Platform User Documentation" />
+      <meta property="og:title" content="Use the platform" />
       <meta property="og:type" content="object" />
-      <meta property="og:url" content="https://govuk-k8s-user-docs.publishing.service.gov.uk/" />
+      <meta property="og:url" content="https://govuk-k8s-user-docs.publishing.service.gov.uk/get-started/use-platform/" />
 
     
   </head>
@@ -66,7 +66,7 @@
       <nav class="govuk-header__navigation govuk-header__navigation--end" aria-label="Menu">
         <button type="button" class="govuk-header__menu-button govuk-js-header-toggle" aria-controls="navigation" aria-label="Show or hide menu">Menu</button>
         <ul id="navigation" class="govuk-header__navigation-list">
-            <li class="govuk-header__navigation-item govuk-header__navigation-item--active">
+            <li class="govuk-header__navigation-item">
               <a class="govuk-header__link" href="/">Documentation</a>
             </li>
         </ul>
@@ -244,27 +244,31 @@
 
         <div class="app-pane__content toc-open-disabled">
           <main id="content" class="technical-documentation" data-module="anchored-headings">
-            <h1 id="gov-uk-kubernetes-platform-user-documentation">GOV.UK Kubernetes platform user documentation</h1>
-<p>The GOV.UK Kubernetes platform is an AWS-hosted <a href="https://kubernetes.io">Kubernetes</a> cluster, using Amazon&rsquo;s <a href="https://aws.amazon.com/eks/">Elastic Kubernetes Service</a>.</p>
-<p>Kubernetes is a portable, extensible, open-source platform for managing containerized workloads and services.</p>
-<p>Kubernetes facilitates both <a href="https://kubernetes.io/docs/tasks/manage-kubernetes-objects/declarative-config/">declarative configuration</a> and automation.</p>
-<p>Kubernetes manages the entire lifecycle of containerised applications and provides mechanisms for:</p>
-
-<ul>
-<li>service discovery and load balancing</li>
-<li>persistent storage orchestration</li>
-<li>automated rollouts and rollbacks</li>
-<li>self-healing deployments</li>
-<li>secrets and config management</li>
-</ul>
-<p>See the official <a href="https://kubernetes.io/docs/concepts/overview/what-is-kubernetes/">Kubernetes overview documentation</a> for more details.</p>
-<p>Use this technical documentation to find out how to:</p>
-
-<ul>
-<li>start using the platform</li>
-<li>manage your app on the platform</li>
-</ul>
-
+            <h1 id="use-the-platform">Use the platform</h1>
+<h2 id="interact-with-the-cluster-with-kubectl">Interact with the cluster with <code>kubectl</code></h2>
+<p>This acts as a quick reference to Kubectl, listing some of the most common operations.</p>
+<p>The examples here only address the most basic approach to these operations. For more options, please refer to the command-line help of <code>kubectl</code> subcommands, which you can access like this:</p>
+<div class="highlight"><pre class="highlight shell" tabindex="0"><code>kubectl get <span class="nt">--help</span>
+</code></pre></div><p>There is also a more detailed <a href="https://kubernetes.io/docs/reference/kubectl/cheatsheet/">cheatsheet</a> in the official Kubernetes documentation.</p>
+<h3 id="inspecting-running-instances-of-an-application">Inspecting running instances of an application</h3>
+<p>To list running Pods:</p>
+<div class="highlight"><pre class="highlight shell" tabindex="0"><code>kubectl <span class="nt">-n</span> &lt;namespace&gt; get pods
+</code></pre></div><p>To view details for a Pod:</p>
+<div class="highlight"><pre class="highlight shell" tabindex="0"><code>kubectl <span class="nt">-n</span> &lt;namespace&gt; describe pod &lt;pod&gt;
+</code></pre></div><h3 id="viewing-logs">Viewing logs</h3>
+<p>To access the logs of a running container:</p>
+<div class="highlight"><pre class="highlight shell" tabindex="0"><code>kubectl <span class="nt">-n</span> &lt;namespace&gt; logs &lt;pod&gt;
+</code></pre></div><h3 id="viewing-kubernetes-events">Viewing Kubernetes events</h3>
+<p>To see Kubernetes events, which can help debugging:</p>
+<div class="highlight"><pre class="highlight shell" tabindex="0"><code>kubectl <span class="nt">-n</span> &lt;namespace&gt; get events
+</code></pre></div><h3 id="container-shell">Container shell</h3>
+<p>You can get a shell inside a running container:</p>
+<div class="highlight"><pre class="highlight shell" tabindex="0"><code>kubectl <span class="nt">-n</span> &lt;namespace&gt; <span class="nb">exec</span> <span class="nt">-it</span> &lt;pod&gt; sh
+</code></pre></div><p>For more information, click <a href="https://kubernetes.io/docs/tasks/debug-application-cluster/get-shell-running-container/">here</a></p>
+<h3 id="pod-port-forwarding">Pod port-forwarding</h3>
+<p>To forward port 5000 on localhost to port 5001 in the Pod:</p>
+<div class="highlight"><pre class="highlight shell" tabindex="0"><code>kubectl <span class="nt">-n</span> &lt;namespace&gt; port-forward &lt;pod&gt; 5000:5001
+</code></pre></div>
               <div data-module='page-expiry' data-last-reviewed-on="2022-08-01">
     <div class='page-expiry--not-expired'>
       This page was last reviewed on 1 February 2022.
@@ -285,8 +289,8 @@
 
           <aside>
               <ul class="contribution-banner">
-                <li><a href="https://github.com/alphagov/govuk-kubernetes-cluster-user-docs/blob/main/source/index.html.md.erb">View source</a></li>
-                <li><a href="https://github.com/alphagov/govuk-kubernetes-cluster-user-docs/issues/new?body=Problem+with+%27GOV.UK+Kubernetes+Platform+User+Documentation%27+%28https%3A%2F%2Fgovuk-k8s-user-docs.publishing.service.gov.uk%2F%29&amp;labels=bug&amp;title=Re%3A+%27GOV.UK+Kubernetes+Platform+User+Documentation%27">Report problem</a></li>
+                <li><a href="https://github.com/alphagov/govuk-kubernetes-cluster-user-docs/blob/main/source/get-started/use-platform/index.html.md.erb">View source</a></li>
+                <li><a href="https://github.com/alphagov/govuk-kubernetes-cluster-user-docs/issues/new?body=Problem+with+%27Use+the+platform%27+%28https%3A%2F%2Fgovuk-k8s-user-docs.publishing.service.gov.uk%2Fget-started%2Fuse-platform%2F%29&amp;labels=bug&amp;title=Re%3A+%27Use+the+platform%27">Report problem</a></li>
                 <li><a href="https://github.com/alphagov/govuk-kubernetes-cluster-user-docs">GitHub Repo</a></li>
               </ul>
           </aside>

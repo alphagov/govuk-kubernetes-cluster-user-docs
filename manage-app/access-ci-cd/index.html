@@ -5,23 +5,23 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
-    <title>GOV.UK Kubernetes Platform User Documentation - GOV.UK Kubernetes platform technical documentation</title>
+    <title>Access CI/CD - GOV.UK Kubernetes platform technical documentation</title>
 
     <link href="/stylesheets/manifest.css" rel="stylesheet" />
 
-    <link rel="canonical" href="https://govuk-k8s-user-docs.publishing.service.gov.uk/">
+    <link rel="canonical" href="https://govuk-k8s-user-docs.publishing.service.gov.uk/manage-app/access-ci-cd/">
 
       <meta name="twitter:card" content="summary" />
       <meta name="twitter:domain" content="govuk-k8s-user-docs.publishing.service.gov.uk" />
       <meta name="twitter:image" content="https://govuk-k8s-user-docs.publishing.service.gov.uk/images/govuk-large.png" />
-      <meta name="twitter:title" content="GOV.UK Kubernetes Platform User Documentation - GOV.UK Kubernetes platform technical documentation" />
-      <meta name="twitter:url" content="https://govuk-k8s-user-docs.publishing.service.gov.uk/" />
+      <meta name="twitter:title" content="Access CI/CD - GOV.UK Kubernetes platform technical documentation" />
+      <meta name="twitter:url" content="https://govuk-k8s-user-docs.publishing.service.gov.uk/manage-app/access-ci-cd/" />
 
       <meta property="og:image" content="https://govuk-k8s-user-docs.publishing.service.gov.uk/images/govuk-large.png" />
       <meta property="og:site_name" content="GOV.UK Kubernetes platform technical documentation" />
-      <meta property="og:title" content="GOV.UK Kubernetes Platform User Documentation" />
+      <meta property="og:title" content="Access CI/CD" />
       <meta property="og:type" content="object" />
-      <meta property="og:url" content="https://govuk-k8s-user-docs.publishing.service.gov.uk/" />
+      <meta property="og:url" content="https://govuk-k8s-user-docs.publishing.service.gov.uk/manage-app/access-ci-cd/" />
 
     
   </head>
@@ -66,7 +66,7 @@
       <nav class="govuk-header__navigation govuk-header__navigation--end" aria-label="Menu">
         <button type="button" class="govuk-header__menu-button govuk-js-header-toggle" aria-controls="navigation" aria-label="Show or hide menu">Menu</button>
         <ul id="navigation" class="govuk-header__navigation-list">
-            <li class="govuk-header__navigation-item govuk-header__navigation-item--active">
+            <li class="govuk-header__navigation-item">
               <a class="govuk-header__link" href="/">Documentation</a>
             </li>
         </ul>
@@ -244,26 +244,49 @@
 
         <div class="app-pane__content toc-open-disabled">
           <main id="content" class="technical-documentation" data-module="anchored-headings">
-            <h1 id="gov-uk-kubernetes-platform-user-documentation">GOV.UK Kubernetes platform user documentation</h1>
-<p>The GOV.UK Kubernetes platform is an AWS-hosted <a href="https://kubernetes.io">Kubernetes</a> cluster, using Amazon&rsquo;s <a href="https://aws.amazon.com/eks/">Elastic Kubernetes Service</a>.</p>
-<p>Kubernetes is a portable, extensible, open-source platform for managing containerized workloads and services.</p>
-<p>Kubernetes facilitates both <a href="https://kubernetes.io/docs/tasks/manage-kubernetes-objects/declarative-config/">declarative configuration</a> and automation.</p>
-<p>Kubernetes manages the entire lifecycle of containerised applications and provides mechanisms for:</p>
+            <h1 id="access-ci-cd-pipelines">Access CI/CD pipelines</h1>
+<h2 id="github-actions-ci">Github actions (CI)</h2>
+<p>With GitHub Actions, we can now automatically build and publish our docker image to our private GOV.UK production AWS Elastic Container Repository.</p>
+<p>The GitHub Actions workflow CI yaml file can be found within each repository in the following location: <code>.github/workflows/ci.yaml</code></p>
+<p>When a user merges a branch to main, the GitHub Action Workflows will be triggered, the defined job within the ci.yaml file will then start.
+Within the job there are steps which will checkout the code, build a new Docker image and then push that new Docker image to GOV.UK production AWS Elastic Container Repository.
+Each new image will be tagged with merge commit GitHub simple hashing algorithm (SHA).</p>
+<p>You can view the status of GitHub Actions CI on <code>https://github.com/alphagov/&lt;application repo&gt;/actions</code>. The workflow is named <code>Build and publish to ECR</code>.</p>
+<h3 id="sensitive-data">Sensitive data</h3>
+<p>AWS credentials are stored as Github Organisation level secrets and have been made available to individual repos. If a new repo requires access to secrets, please <a href="https://gds.slack.com/archives/C013F737737">contact the Replatforming team on Slack</a>.</p>
+<p>See the <a href="https://docs.github.com/en/actions">documentation on GitHub Actions</a> for more information.</p>
+<h2 id="argocd-cd">ArgoCD (CD)</h2>
+<p>The GOV.UK Kubernetes Platform provides an <a href="https://argo-cd.readthedocs.io/en/stable/">ArgoCD</a> instance for continuous
+delivery of applications to the cluster.</p>
+<p>ArgoCD is a declarative, GitOps continuous delivery tool for Kubernetes.
+ArgoCD will replace the feature set currently provided by Deploy Jenkins.</p>
+<h3 id="access-the-argocd-integration-instance">Access the ArgoCD integration instance</h3>
+<p>NOTE: In future we will use our Google Accounts for Single Sign-On (SSO) to Argo.
+Our MVP for user testing uses a shared username and password.</p>
 
-<ul>
-<li>service discovery and load balancing</li>
-<li>persistent storage orchestration</li>
-<li>automated rollouts and rollbacks</li>
-<li>self-healing deployments</li>
-<li>secrets and config management</li>
-</ul>
-<p>See the official <a href="https://kubernetes.io/docs/concepts/overview/what-is-kubernetes/">Kubernetes overview documentation</a> for more details.</p>
-<p>Use this technical documentation to find out how to:</p>
+<ol>
+<li>Authenticate to the Kubernetes cluster (see <a href="#getting-access-to-the-cluster">getting access to the cluster</a>)</li>
+<li><p>Acquire the password for Argo:</p>
+<div class="highlight"><pre class="highlight shell" tabindex="0"><code>kubectl <span class="nt">-n</span> cluster-services get secret argocd-initial-admin-secret <span class="nt">-o</span> <span class="nv">jsonpath</span><span class="o">=</span><span class="s2">"{.data.password}"</span> | <span class="nb">base64</span> <span class="nt">-d</span><span class="p">;</span> <span class="nb">echo</span>
+</code></pre></div></li>
+<li><p>Navigate to <a href="https://argo.eks.integration.govuk.digital/">ArgoCD (Integration)</a> and sign in using the
+username <code>admin</code> and the password acquired from the previous step.</p></li>
+</ol>
+<h2 id="argo-workflows">Argo Workflows</h2>
+<p>[Argo Workflows] is used in our GOV.UK Kubernetes Platform to provide the ability to
+run tasks in a Directed Acyclic Graph (DAG) similar to what Concourse offered.</p>
+<h3 id="access-the-argo-workflows-integration-instance">Access the Argo Workflows integration instance</h3>
+<p>NOTE: In future we will use our Google Accounts for Single Sign-On (SSO) to Argo.
+Our MVP for user testing uses a bearer token.</p>
 
-<ul>
-<li>start using the platform</li>
-<li>manage your app on the platform</li>
-</ul>
+<ol>
+<li>Authenticate to the Kubernetes cluster (see <a href="#getting-access-to-the-cluster">getting access to the cluster</a>)</li>
+<li><p>Acquire the bearer token for [Argo Workflows]:</p>
+<div class="highlight"><pre class="highlight shell" tabindex="0"><code>argo auth token
+</code></pre></div></li>
+<li><p>Navigate to <a href="https://argo-workflows.eks.integration.govuk.digital/">Argo Workflows (Integration)</a> and sign in using the
+bearer token.</p></li>
+</ol>
 
               <div data-module='page-expiry' data-last-reviewed-on="2022-08-01">
     <div class='page-expiry--not-expired'>
@@ -285,8 +308,8 @@
 
           <aside>
               <ul class="contribution-banner">
-                <li><a href="https://github.com/alphagov/govuk-kubernetes-cluster-user-docs/blob/main/source/index.html.md.erb">View source</a></li>
-                <li><a href="https://github.com/alphagov/govuk-kubernetes-cluster-user-docs/issues/new?body=Problem+with+%27GOV.UK+Kubernetes+Platform+User+Documentation%27+%28https%3A%2F%2Fgovuk-k8s-user-docs.publishing.service.gov.uk%2F%29&amp;labels=bug&amp;title=Re%3A+%27GOV.UK+Kubernetes+Platform+User+Documentation%27">Report problem</a></li>
+                <li><a href="https://github.com/alphagov/govuk-kubernetes-cluster-user-docs/blob/main/source/manage-app/access-ci-cd/index.html.md.erb">View source</a></li>
+                <li><a href="https://github.com/alphagov/govuk-kubernetes-cluster-user-docs/issues/new?body=Problem+with+%27Access+CI%2FCD%27+%28https%3A%2F%2Fgovuk-k8s-user-docs.publishing.service.gov.uk%2Fmanage-app%2Faccess-ci-cd%2F%29&amp;labels=bug&amp;title=Re%3A+%27Access+CI%2FCD%27">Report problem</a></li>
                 <li><a href="https://github.com/alphagov/govuk-kubernetes-cluster-user-docs">GitHub Repo</a></li>
               </ul>
           </aside>
