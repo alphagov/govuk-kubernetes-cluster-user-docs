@@ -7,6 +7,27 @@ review_in: 6 months
 
 # Access EKS cluster
 
+You must access the GOV.UK Kubernetes platform [EKS cluster](https://kubernetes.io/docs/concepts/overview/components/) to use the platform.
+
+To access the cluster, you must have:
+
+- [installed gds-cli](https://docs.publishing.service.gov.uk/manual/get-started.html#3-install-gds-command-line-tools)
+- [access to AWS](https://docs.publishing.service.gov.uk/manual/get-started.html#7-get-aws-access)
+- [accessed AWS](https://docs.publishing.service.gov.uk/manual/get-started.html#8-access-aws-for-the-first-time) using `gds-cli`
+
+## Assume a role
+
+An [AWS Identity and Access Management (IAM) role](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles.html) is an IAM identity that has specific permissions.
+
+You must assume one of the following roles to access the cluster:
+
+- admin
+- poweruser
+- read-only
+
+
+
+
 different roles - admin, read only, poweruser
 
 switch between different clusers
@@ -24,12 +45,6 @@ read-only role can read everything except secrets, but cannot change anything, l
 environment will be test, integration, staging, production
 
 
-## Prerequisites
-
-To follow this guide you will need to have:
-
-1. [AWS access](https://docs.publishing.service.gov.uk/manual/get-started.html#7-get-aws-access)
-2. gds-cli [installed](https://docs.publishing.service.gov.uk/manual/get-started.html#3-install-gds-command-line-tools) and [set up](https://docs.publishing.service.gov.uk/manual/get-started.html#8-access-aws-for-the-first-time).
 
 ## Assuming roles and testing access
 
