@@ -15,74 +15,65 @@ To access the cluster, you must have:
 - [access to AWS](https://docs.publishing.service.gov.uk/manual/get-started.html#7-get-aws-access)
 - [accessed AWS](https://docs.publishing.service.gov.uk/manual/get-started.html#8-access-aws-for-the-first-time) using `gds-cli`
 
-## Assume a role
+You must select a role and environment to make sure you gain access to the right cluster.
+
+## Select a role
 
 An [AWS Identity and Access Management (IAM) role](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles.html) is an IAM identity that has specific permissions.
 
-You must assume one of the following roles to access the cluster:
+You must select one of the following roles to access the cluster:
 
 - admin
 - poweruser
 - read-only
 
+The admin role:
 
+- has read-write access to a specific cluster in a specific environment
+- can view everything in that cluster including secrets
 
+The poweruser role:
 
-different roles - admin, read only, poweruser
+- has read-write access to a specific namespace in a specific cluster in a specific environment
+- can view everything in that namespace and excluding secrets
 
-switch between different clusers
+The read-only role:
 
-3 roles, admin has access to everything in the cluster,
-test account, integration account, production account, staging account, every account has access to one cluster
-admin role has access to a specific environment and specific cluster
-poweruser has access to everything only in namespace apps
-each cluster is divided into namespaces, like having different teams in gov.uk
-poweruser is specific to namespace
-poweruser role has access to a specific environment and specific cluster and specific namespace
-poweruser has write access to the app's namespace, and can view everything else except secrets
-read-only role can read everything except secrets, but cannot change anything, limited to specific environment and cluster
+- has read-only access to a specific cluster in a specific environment
+- can view everything in that cluster excluding secrets
 
-environment will be test, integration, staging, production
+1. Open the `gds-cli`.
 
+1. Run the following to export the AWS credentials for the appropriate GOV.UK environment and role:
 
+  ```sh
+  eval $(gds aws govuk-<govuk-environment>-<role> -e --art 8h)
+  export AWS_REGION=eu-west-1
+  ```
+  where:
+  - `<govuk-environment>` is the GOV.UK environment that you want to get credentials for, and will be `test`, `integration`, `staging`, or `production`
+  - `<role>` is the appropriate role, and will be `admin`, `poweruser` or `readonly`
 
-## Assuming roles and testing access
+## Test your access
 
-1. Assume the proper IAM role using [gds-cli](https://github.com/alphagov/gds-cli#usage) by
-exporting the AWS credentials for the GOV.UK environment and role that you wish:
-
-    ```sh
-    eval $(gds aws govuk-<govuk-environment>-<role> -e --art 8h)
-    export AWS_REGION=eu-west-1
-    ```
-
-     where:
-     - `<govuk-environment>` is the the GOV.UK environment that you want to get credentials for. For example, `test`, `integration`
-     - `<role>` is the role mentioned in this [deploying terraform documentation](https://docs.publishing.service.gov.uk/manual/deploying-terraform.html#1-check-that-you-have-sufficient-access)
-     - `art` option is used to request that the AWS credentials last for the requested time.
-
-    For the user research session , you should use the `eval $(gds aws govuk-integration-admin -e --art 8h)` command since
-    the session is run in the Integration GOV.UK cluster and `admin` role will allow full access.
-
-you do not need to specify the cluster, as the cluster is set to the account, so by selecting the role and the environment, you gain access to the right cluster
-once you do command, you get access to aws account with privileges, you can access gov.uk cluster with admin access, you have certain privilege level
-
-2. If it's your first time accessing the cluster through Kubectl:
+1. If it's your first time accessing the cluster through Kubectl, add the `govuk` cluster to your kubectl configuration in `~/.kube/config`:
 
     ```sh
     aws eks update-kubeconfig --name govuk
     ```
 
-    This will add the govuk cluster to your Kubectl configuration in `~/.kube/config`
-
-3. To check that you have access, run:
+1. To check that you have access to the cluster, run:
 
     ```sh
     kubectl cluster-info
     ```
 
-    If you have access this should return information about the GOV.UK EKS cluster control plane, it should look like this:
+    If you have access, you should get information about the GOV.UK EKS cluster control plane, like in the following example:
 
     ```sh
     Kubernetes control plane is https://{GOVUK_CLUSTER_ADDRESS}.{AWS_REGION}.eks.amazonaws.com
     ```
+
+## Switch between different clusters
+
+TBC
