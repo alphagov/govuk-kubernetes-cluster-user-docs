@@ -114,19 +114,19 @@
 <li><a href="/get-started/"><span>Get started</span></a>
 <ul>
   <li>
-    <a href="/get-started/set-up-tools/"><span>Set up tools</span></a>
+    <a href="/get-started/set-up-tools/"><span>Set up tools to use the GOV.UK Kubernetes platform</span></a>
     <ul>
       <li>
-        <a href="/get-started/set-up-tools/#install-kubectl"><span>Install Kubectl</span></a>
+        <a href="/get-started/set-up-tools/#install-kubectl"><span>Install kubectl</span></a>
       </li>
       <li>
         <a href="/get-started/set-up-tools/#install-helm"><span>Install Helm</span></a>
       </li>
       <li>
-        <a href="/get-started/set-up-tools/#install-gds-cli-and-aws-vault"><span>Install GDS-CLI and AWS-Vault</span></a>
+        <a href="/get-started/set-up-tools/#install-argo-cli"><span>Install Argo CLI</span></a>
       </li>
       <li>
-        <a href="/get-started/set-up-tools/#install-argo-cli"><span>Install Argo CLI</span></a>
+        <a href="/get-started/set-up-tools/#install-gds-cli-and-aws-vault"><span>Install gds-cli and aws-vault</span></a>
       </li>
     </ul>
   </li>
@@ -244,34 +244,70 @@
 
         <div class="app-pane__content toc-open-disabled">
           <main id="content" class="technical-documentation" data-module="anchored-headings">
-            <h1 id="set-up-tools">Set up tools</h1>
-<h2 id="install-kubectl">Install Kubectl</h2>
-<p>You can use Homebrew to install Kubectl on macOS:</p>
+            <h1 id="set-up-tools-to-use-the-gov-uk-kubernetes-platform">Set up tools to use the GOV.UK Kubernetes platform</h1>
+<p>You must set up the following tools to use the GOV.UK Kubernetes platform:</p>
+
+<ul>
+<li>kubectl</li>
+<li>Helm</li>
+<li>Argo CLI to manage Argo Workflows</li>
+<li><code>gds-cli</code> and <code>aws-vault</code></li>
+</ul>
+<h2 id="install-kubectl">Install kubectl</h2>
+<p>The <a href="https://kubernetes.io/docs/reference/kubectl/overview/">kubectl command line tool</a> lets you control Kubernetes clusters.</p>
+<p>You should use <a href="https://brew.sh/">Homebrew</a> to install kubectl on your local machine. Run the following in the command line:</p>
 <div class="highlight"><pre class="highlight shell" tabindex="0"><code>brew <span class="nb">install </span>kubectl
-</code></pre></div><p>Test that Kubectl is working:</p>
+</code></pre></div><p>You can test that kubectl is working by running:</p>
 <div class="highlight"><pre class="highlight shell" tabindex="0"><code>kubectl version <span class="nt">--client</span>
-</code></pre></div><p><a href="https://kubernetes.io/docs/tasks/tools/install-kubectl-macos/">Official installation guide</a></p>
+</code></pre></div><p>If kubectl is working, you should get some version number output, like in the following example:</p>
+<div class="highlight"><pre class="highlight plaintext" tabindex="0"><code>Client Version: version.Info{Major:"1", Minor:"22", GitVersion:"v1.22.1", GitCommit:"632ed300f2c34f6d6d15ca4cef3d3c7073412212", GitTreeState:"clean", BuildDate:"2021-08-19T15:38:26Z", GoVersion:"go1.16.6", Compiler:"gc", Platform:"darwin/amd64"}
+</code></pre></div><p>See the <a href="https://kubernetes.io/docs/tasks/tools/install-kubectl-macos/">kubectl installation documentation</a> for information on other ways to install kubectl if you prefer not to use Homebrew, or for troubleshooting.</p>
 <h2 id="install-helm">Install Helm</h2>
-<p>You can use Homebrew to install HELM on macOS:</p>
+<p><a href="https://helm.sh/docs/">Helm</a> is the package manager for Kubernetes.</p>
+<p>You should use <a href="https://brew.sh/">Homebrew</a> to install Helm on your local machine. Run the following in the command line:</p>
 <div class="highlight"><pre class="highlight shell" tabindex="0"><code>brew <span class="nb">install </span>helm
-</code></pre></div><p>Test Helm is working:</p>
+</code></pre></div><p>You can test that Helm is working by running:</p>
 <div class="highlight"><pre class="highlight shell" tabindex="0"><code>helm version
-</code></pre></div><p><a href="https://helm.sh/docs/intro/install/">Official installation guide</a></p>
-<h2 id="install-gds-cli-and-aws-vault">Install GDS-CLI and AWS-Vault</h2>
-<p>Install gds-cli:</p>
-<div class="highlight"><pre class="highlight shell" tabindex="0"><code>brew <span class="nb">install </span>alphagov/gds/gds-cli
-</code></pre></div><p>Test gds-cli:</p>
-<div class="highlight"><pre class="highlight shell" tabindex="0"><code>gds <span class="nt">--version</span>
-</code></pre></div><p>Install aws-vault:</p>
-<div class="highlight"><pre class="highlight shell" tabindex="0"><code>brew <span class="nb">install</span> <span class="nt">--cask</span> aws-vault
-</code></pre></div><p>Test aws-vault:</p>
-<div class="highlight"><pre class="highlight shell" tabindex="0"><code>aws-vault <span class="nt">--version</span>
-</code></pre></div><p>Please refer to the official guide for <a href="https://github.com/alphagov/gds-cli">gds-cli</a> and <a href="https://github.com/99designs/aws-vault#readme">aws-vault</a> for more detailed information.</p>
+</code></pre></div><p>If Helm is working, you should get some version number output, like in the following example:</p>
+<div class="highlight"><pre class="highlight plaintext" tabindex="0"><code>version.BuildInfo{Version:"v3.8.0", GitCommit:"d14138609b01886f544b2025f5000351c9eb092e", GitTreeState:"clean", GoVersion:"go1.17.6"}
+</code></pre></div><p>See the <a href="https://helm.sh/docs/intro/install/">Helm installation documentation</a> for information on other ways to install Helm if you prefer not to use Homebrew, or for troubleshooting.</p>
 <h2 id="install-argo-cli">Install Argo CLI</h2>
-<p>You can install the Argo CLI to manage <a href="https://argoproj.github.io/argo-workflows/">Argo Workflows</a>:</p>
+<p><a href="https://argoproj.github.io/argo-workflows/">Argo Workflows</a> is the workflow engine for Kubernetes.</p>
+<p>You use the Argo CLI to manage Argo Workflows. You should install Argo CLI using Homebrew. Run the following in the command line:</p>
 <div class="highlight"><pre class="highlight shell" tabindex="0"><code>brew <span class="nb">install </span>argo
-</code></pre></div><p>or see <a href="https://github.com/argoproj/argo-workflows/releases">documentation</a> for alternative ways to
-install Argo CLI.</p>
+</code></pre></div><p>You can test that Argo CLI is working by running:</p>
+<div class="highlight"><pre class="highlight shell" tabindex="0"><code>argo version
+</code></pre></div><p>If Argo CLI is working, you should get some version number output, like in the following example:</p>
+<div class="highlight"><pre class="highlight plaintext" tabindex="0"><code>argo: v3.2.8+8de5416.dirty
+  BuildDate: 2022-02-05T05:15:13Z
+  GitCommit: 8de5416ac6b8f5640a8603e374d99a18a04b5c8d
+  GitTreeState: dirty
+  GitTag: v3.2.8
+  GoVersion: go1.17.6
+  Compiler: gc
+  Platform: darwin/amd64
+</code></pre></div><p>See the <a href="https://github.com/argoproj/argo-workflows/releases">Argo Workflows release notes</a> for information on other ways to install Argo CLI if you prefer not to use Homebrew, or for troubleshooting.</p>
+<h2 id="install-gds-cli-and-aws-vault">Install <code>gds-cli</code> and <code>aws-vault</code></h2>
+<p><code>gds-cli</code> is a command line interface (CLI) for GDS users. This CLI makes certain tasks easier such as assuming an AWS Identity Access Management (IAM) role.</p>
+<p><code>aws-vault</code> is a tool to securely store and access AWS credentials in a development environment.</p>
+<h3 id="install-gds-cli">Install gds-cli</h3>
+<p>If you have <a href="https://docs.publishing.service.gov.uk/manual/get-started.html#3-install-gds-command-line-tools">installed the GDS command line tools</a> as part of <a href="https://docs.publishing.service.gov.uk/manual/get-started.html">getting started on GOV.UK</a>, you do not need to install <code>gds-cli</code>.</p>
+<p>If you need to install <code>gds-cli</code>, you should do so using <a href="https://brew.sh/">Homebrew</a>. Run the following in the command line:</p>
+<div class="highlight"><pre class="highlight shell" tabindex="0"><code>brew <span class="nb">install </span>alphagov/gds/gds-cli
+</code></pre></div><p>You can test that <code>gds-cli</code> is working by running:</p>
+<div class="highlight"><pre class="highlight shell" tabindex="0"><code>gds <span class="nt">--version</span>
+</code></pre></div><p>If <code>gds-cli</code> is working, you should get some version number output, like in the following example:</p>
+<div class="highlight"><pre class="highlight plaintext" tabindex="0"><code>gds version v5.13.0
+</code></pre></div><p>See the <a href="https://github.com/alphagov/gds-cli#readme"><code>gds-cli</code> readme</a> for more information on how to use <code>gds-cli</code>.</p>
+<h3 id="install-aws-vault">Install aws-vault</h3>
+<p>If you have <a href="https://docs.publishing.service.gov.uk/manual/get-started.html#3-install-gds-command-line-tools">installed the GDS command line tools</a> as part of <a href="https://docs.publishing.service.gov.uk/manual/get-started.html">getting started on GOV.UK</a>, you do not need to install <code>aws-vault</code>.</p>
+<p>If you need to install <code>aws-vault</code>, you should do so using <a href="https://brew.sh/">Homebrew</a>. Run the following in the command line:</p>
+<div class="highlight"><pre class="highlight shell" tabindex="0"><code>brew <span class="nb">install</span> <span class="nt">--cask</span> aws-vault
+</code></pre></div><p>You can test that <code>aws-vault</code> is working by running:</p>
+<div class="highlight"><pre class="highlight shell" tabindex="0"><code>aws-vault <span class="nt">--version</span>
+</code></pre></div><p>If <code>aws-vault</code> is working, you should get some version number output, like in the following example:</p>
+<div class="highlight"><pre class="highlight plaintext" tabindex="0"><code>v6.2.0
+</code></pre></div><p>See the <a href="https://github.com/99designs/aws-vault#readme"><code>aws-vault</code> README</a> for more information on how to use <code>aws-vault</code>.</p>
 
               <div data-module='page-expiry' data-last-reviewed-on="2022-08-01">
     <div class='page-expiry--not-expired'>
