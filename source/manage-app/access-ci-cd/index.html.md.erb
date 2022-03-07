@@ -5,6 +5,91 @@ last_reviewed_on: 2022-02-01
 review_in: 6 months
 ---
 
+most common use case
+app already set up
+
+deploy apps
+if everything works well, then devs wont have any action to take
+
+deployments
+how deployments work on gov.uk
+once a new image is built and pushed, auto deployed in integration, tests are run, if tests pass, then auto deploy into staging and production
+
+if a deployment fails, this is where you can go and see what failed
+in those circumstances, you would want to access the pipelines
+troubleshoot
+
+how do deployments work?
+
+CI process
+automated process, no manual action needed
+apps within gov.uk have CI enabled
+typically, CI runs a set of tests, linting, builds artifacts (including container) for libraries released to other platforms, containers etc
+gov.uk run CI platform using github actions
+workflow defined within each app repo - see existing docs
+CI tasks differ between apps
+CI run whenever a new branch is created in github and when new commits are added to any of those branches
+Steps within CI will have to be passed before dev csan merge branch to main
+when merging, CI will run again
+If successful, extra bit of CI for main branch, that will...
+Extra step for this platform, separate github action that will auto run after CI
+build and push the container to AWS ECR
+also on a merge of PR into main, other thing that happens is that github actions tag that new commit into the main branch with a release tag
+the release tags are sequential - release_3832
+numbers are incremented with every release into main
+once new release tag, then we build and publish container image, and it gets pushed to ECR
+the image pushed is also tagged with same release number
+CI builds image
+
+if there's an issue e.g. tests fails
+dev wants to see what went wrong
+in github actions, dev should be able to look at CI workflow for previous commit
+github logs will have logs for that run, so dev should be able to see what when run
+dev fixes on local machine and then push and it should pass
+in github actions, you should also be able to rerun the github actions workflow
+
+CD process
+got the built container in ECR, want to deploy
+deployment should be automatic
+CD system should detect a new image with a new release tag
+image is the blueprint from which you make containers
+CD builds containers from image blueprint
+Once there is a new image with a new release tag in ECR
+A tbc process will update the image tag (release_3832) within the gov.uk helm chart value file for integration
+will do that by writing a new commit to the gov.uk helm chart repo - https://github.com/alphagov/govuk-helm-charts/blob/main/charts/argocd-apps/values-integration.yaml
+when that process commits, argocd will detect a change in the configuration, and will deploy the new image tag to kubernetes, and try to sync so the app running in kubernetes will be using the image tag just updated
+if successfully deployed by argocd
+then a tbc process will run smoke tests to check high level intergration of updated app
+if smoke tests are successful, then same or similar process to update the image tag (release_3832) within the gov.uk helm chart value file for staging
+argocd detects config change, deploys new image, updates app
+on successful deploy, triggers smoke tests, if successful, then
+rinse and repeat for production
+nothing happens once smoke tests passed in production
+
+how do we know if success or failure?
+slack channel - #govuk-deploy-alerts - https://gds.slack.com/archives/C01EE7US9R6
+send notifications every time a new app is deployed, and will say if failure
+further detail TBC
+every dev should have access to this slack channel
+
+If failure?
+First, look at argocd logs
+Sign into argocd using your github account wthin the alphagov org
+be able to log into argocd integration environment, using github account that is part of govuk team
+be able to log into argocd production environment, you will need to be a member of govuk production team
+https://docs.publishing.service.gov.uk/manual/rules-for-getting-production-access.html
+argocd integration - https://argo.eks.integration.govuk.digital/
+argocd production - https://argo.eks.production.govuk.digital/
+staging as well
+notification of deployment failure will also say in which environment it failed
+e.g. if failed in staging, go to logs in staging environment
+deployment may fail if smoke test failed
+Sean to check these
+
+
+
+
+
 # Access CI/CD pipelines
 
 ## Github actions (CI)
