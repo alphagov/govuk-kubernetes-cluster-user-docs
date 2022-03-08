@@ -1,9 +1,101 @@
 ---
-title: Access CI/CD
+title: How apps are deployed
 weight: 42
 last_reviewed_on: 2022-02-01
 review_in: 6 months
 ---
+
+# How apps are deployed
+
+When you push an app to the GOV.UK Kubernetes platform, the Continuous Implementation / Continuous Deployment (CI / CD) process automatically deploys the app on the platform by:
+
+- building and pushing an app's Docker image to the GOV.UK AWS elastic container repository (ECR)
+- deploying the app container in GOV.UK AWS ECR
+
+If the app does not deploy successfully, you can access the CI and CD logs to see what went wrong.
+
+## Build and push an app's Docker image to GOV.UK AWS ECR
+
+GOV.UK uses the GitHub Actions CI process to build and push an app's Docker image to the private GOV.UK production AWS elastic container repository (ECR).
+
+This CI process is run automatically when a user:
+
+- creates a new branch in GitHub for an app
+- adds new commits to that branch
+- merges the branch into the main branch
+
+The exact steps in the CI process is specific to each app. This process is defined in the app's GitHub Actions workflow CI yaml file. This file is in the app's repository at `.github/workflows/ci.yaml`.
+
+You can view the status of the GitHub Actions CI process at `https://github.com/alphagov/<application repo>/actions`. The workflow is called __Build and publish to ECR__.
+
+An example CI process would running tests on the app, linting, and building artifacts for libraries released to other platforms.
+
+When a user merges the branch into the main branch on GitHub, GitHub Actions tags that merge commit with a release tag.
+
+Release tags are sequential, and the release numbers are incremented with every merge into the main branch. An example release tag is `release_3832.`
+
+When the merge is complete, GitHub Actions builds and publishes the app Docker image, and pushes that image to AWS ECR. GitHub Actions also tags the image with the same release number.
+
+## Deploy the app container in AWS ECR
+
+Once the app Docker image is in AWS ECR, the Continuous Deployment (CD) process:
+
+- detects this new image from the new release tag
+- builds the app container from the image
+
+___what actually does this? argocd?___
+
+Once the CD process has built the app container, the CD process then updates the image tag within the [GOV.UK Helm chart value file for the integration environment](https://github.com/alphagov/govuk-helm-charts/blob/main/charts/argocd-apps/values-integration.yaml) by writing a new commit to the GOV.UK Helm chart repo.
+
+When [ArgoCD](https://argo-cd.readthedocs.io/en/stable/) detects this change, it deploys the new image tag to Kubernetes. ArgoCD then updates the app running in the Kubernetes integration environment to use the container with the latest image tag.
+
+Once the app is updated to use the latest image tag, ArgoCD runs smoke tests to check that the updated app is working as expected in the integration environment.
+
+___what actually runs smoke tests??___
+
+If the smoke tests pass successfully, ArgoCD repeats this process for the staging environment, and then the production environment.
+
+Join the [#govuk-deploy-alerts Slack channel](https://gds.slack.com/archives/C01EE7US9R6) to get a notification when an app is deployed and whether the deployment succeeded or failed.
+
+If your app deployment failed, you should check the ArgoCD logs to see why.
+
+## Check the ArgoCD logs
+
+You must sign into ArgoCD to view the ArgoCD logs.
+
+The environment you need to sign into depends on where the app deployment failed.
+
+### Check the ArgoCD integration environment
+
+If your app deployment failed in integration, sign into the [ArgoCD integration environment](https://argo.eks.integration.govuk.digital/) using your GitHub account.
+
+To sign into integration, your GitHub account must be part of the [GOV.UK team on alphagov](https://github.com/orgs/alphagov/teams/gov-uk).
+
+### Check the ArgoCD staging environment
+
+If your app deployment failed in integration, sign into the [ArgoCD staging environment](https://argo.eks.staging.govuk.digital/) using your GitHub account.
+
+To sign into staging, your GitHub account must be ??????.
+
+### Check the ArgoCD production environment
+
+If your app deployment failed in production, sign into the [ArgoCD production environment](https://argo.eks.production.govuk.digital/) using your GitHub account.
+
+To sign into production, your GitHub account must be part of the [GOV.UK production team on alphagov](https://github.com/orgs/alphagov/teams/gov-uk-production).
+
+
+
+
+Sean to check these
+
+
+
+
+
+
+
+
+
 
 most common use case
 app already set up
@@ -22,24 +114,29 @@ troubleshoot
 how do deployments work?
 
 CI process
-automated process, no manual action needed
+
 apps within gov.uk have CI enabled
 typically, CI runs a set of tests, linting, builds artifacts (including container) for libraries released to other platforms, containers etc
-gov.uk run CI platform using github actions
+
 workflow defined within each app repo - see existing docs
-CI tasks differ between apps
-CI run whenever a new branch is created in github and when new commits are added to any of those branches
-Steps within CI will have to be passed before dev csan merge branch to main
-when merging, CI will run again
-If successful, extra bit of CI for main branch, that will...
-Extra step for this platform, separate github action that will auto run after CI
-build and push the container to AWS ECR
-also on a merge of PR into main, other thing that happens is that github actions tag that new commit into the main branch with a release tag
-the release tags are sequential - release_3832
-numbers are incremented with every release into main
-once new release tag, then we build and publish container image, and it gets pushed to ECR
-the image pushed is also tagged with same release number
-CI builds image
+
+
+
+
+
+With GitHub Actions, we can now automatically build and publish our docker image to our private GOV.UK production AWS Elastic Container Repository.
+
+The GitHub Actions workflow CI yaml file can be found within each repository in the following location: .github/workflows/ci.yaml
+
+When a user merges a branch to main, the GitHub Action Workflows will be triggered, the defined job within the ci.yaml file will then start.
+
+Within the job there are steps which will checkout the code, build a new Docker image and then push that new Docker image to GOV.UK production AWS ECR.
+
+Each new image will be tagged with merge commit GitHub simple hashing algorithm (SHA).
+
+You can view the status of GitHub Actions CI on https://github.com/alphagov/<application repo>/actions. The workflow is named Build and publish to ECR.
+
+
 
 if there's an issue e.g. tests fails
 dev wants to see what went wrong
