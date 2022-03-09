@@ -28,13 +28,17 @@ The exact steps in the CI process is specific to each app. This process is defin
 
 You can view the status of the GitHub Actions CI process at `https://github.com/alphagov/<application repo>/actions`. The workflow is called __Build and publish to ECR__.
 
-An example CI process would running tests on the app, linting, and building artifacts for libraries released to other platforms.
+An example CI process would be running tests on the app, linting, and building artifacts for libraries released to other platforms.
 
 When a user merges the branch into the main branch on GitHub, GitHub Actions tags that merge commit with a release tag.
 
 Release tags are sequential, and the release numbers are incremented with every merge into the main branch. An example release tag is `release_3832.`
 
-When the merge is complete, GitHub Actions builds and publishes the app Docker image, and pushes that image to AWS ECR. GitHub Actions also tags the image with the same release number.
+When the merge is complete, GitHub Actions:
+
+- builds and publishes the app Docker image
+- pushes the app Docker image to AWS ECR
+- tags the image with the same release tag
 
 ## Deploy the app container in AWS ECR
 
