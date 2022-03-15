@@ -73,3 +73,15 @@ The read-only role:
     ```sh
     Kubernetes control plane is https://{GOVUK_CLUSTER_ADDRESS}.{AWS_REGION}.eks.amazonaws.com
     ```
+
+## Switching clusters
+
+To switch clusters, run the export AWS credentials command in the `gds-cli`, selecting the appropriate GOV.UK environment and role:
+
+```sh
+eval $(gds aws govuk-<govuk-environment>-<role> -e --art 8h)
+export AWS_REGION=eu-west-1
+```
+where:
+- `<govuk-environment>` is the GOV.UK environment that you want to get credentials for, and will be `test`, `integration`, `staging`, or `production`
+- `<role>` is the appropriate role, and will be `admin`, `poweruser` or `readonly`
