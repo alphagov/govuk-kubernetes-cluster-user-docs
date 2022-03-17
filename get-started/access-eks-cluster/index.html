@@ -134,10 +134,13 @@
     <a href="/get-started/access-eks-cluster/"><span>Access EKS cluster</span></a>
     <ul>
       <li>
-        <a href="/get-started/access-eks-cluster/#prerequisites"><span>Prerequisites</span></a>
+        <a href="/get-started/access-eks-cluster/#select-a-role-and-environment"><span>Select a role and environment</span></a>
       </li>
       <li>
-        <a href="/get-started/access-eks-cluster/#assuming-roles-and-testing-access"><span>Assuming roles and testing access</span></a>
+        <a href="/get-started/access-eks-cluster/#test-your-access"><span>Test your access</span></a>
+      </li>
+      <li>
+        <a href="/get-started/access-eks-cluster/#switching-clusters"><span>Switching clusters</span></a>
       </li>
     </ul>
   </li>
@@ -245,38 +248,71 @@
         <div class="app-pane__content toc-open-disabled">
           <main id="content" class="technical-documentation" data-module="anchored-headings">
             <h1 id="access-eks-cluster">Access EKS cluster</h1>
-<h2 id="prerequisites">Prerequisites</h2>
-<p>To follow this guide you will need to have:</p>
-
-<ol>
-<li><a href="https://docs.publishing.service.gov.uk/manual/get-started.html#7-get-aws-access">AWS access</a></li>
-<li>gds-cli <a href="https://docs.publishing.service.gov.uk/manual/get-started.html#3-install-gds-command-line-tools">installed</a> and <a href="https://docs.publishing.service.gov.uk/manual/get-started.html#8-access-aws-for-the-first-time">set up</a>.</li>
-</ol>
-<h2 id="assuming-roles-and-testing-access">Assuming roles and testing access</h2>
-
-<ol>
-<li><p>Assume the proper IAM role using <a href="https://github.com/alphagov/gds-cli#usage">gds-cli</a> by
-exporting the AWS credentials for the GOV.UK environment and role that you wish:</p>
-<div class="highlight"><pre class="highlight shell" tabindex="0"><code><span class="nb">eval</span> <span class="si">$(</span>gds aws govuk-&lt;govuk-environment&gt;-&lt;role&gt; <span class="nt">-e</span> <span class="nt">--art</span> 8h<span class="si">)</span>
-<span class="nb">export </span><span class="nv">AWS_REGION</span><span class="o">=</span>eu-west-1
-</code></pre></div><p>where:</p>
+<p>You must access the GOV.UK Kubernetes platform <a href="https://kubernetes.io/docs/concepts/overview/components/">EKS cluster</a> to use the platform.</p>
+<p>To access the cluster, you must have:</p>
 
 <ul>
-<li><code>&lt;govuk-environment&gt;</code> is the the GOV.UK environment that you want to get credentials for. For example, <code>test</code>, <code>integration</code></li>
-<li><code>&lt;role&gt;</code> is the role mentioned in this <a href="https://docs.publishing.service.gov.uk/manual/deploying-terraform.html#1-check-that-you-have-sufficient-access">deploying terraform documentation</a></li>
-<li><code>art</code> option is used to request that the AWS credentials last for the requested time.</li>
+<li><a href="https://docs.publishing.service.gov.uk/manual/get-started.html#3-install-gds-command-line-tools">installed gds-cli</a></li>
+<li><a href="https://docs.publishing.service.gov.uk/manual/get-started.html#7-get-aws-access">gotten access to AWS</a></li>
+<li><a href="https://docs.publishing.service.gov.uk/manual/get-started.html#8-access-aws-for-the-first-time">accessed AWS</a> using <code>gds-cli</code></li>
 </ul>
-<p>For the user research session , you should use the <code>eval $(gds aws govuk-integration-admin -e --art 8h)</code> command since
-the session is run in the Integration GOV.UK cluster and <code>admin</code> role will allow full access.</p></li>
-<li><p>If it&rsquo;s your first time accessing the cluster through Kubectl:</p>
+<p>You must select a role and environment to make sure you gain access to the right cluster.</p>
+<h2 id="select-a-role-and-environment">Select a role and environment</h2>
+<p>An <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles.html">AWS Identity and Access Management (IAM) role</a> is an IAM identity that has specific permissions.</p>
+<p>You must select one of the following roles to access the cluster:</p>
+
+<ul>
+<li>admin</li>
+<li>poweruser</li>
+<li>read-only</li>
+</ul>
+<p>The admin role:</p>
+
+<ul>
+<li>has read-write access to a specific cluster in a specific environment</li>
+<li>can view everything in that cluster including secrets</li>
+</ul>
+<p>The poweruser role:</p>
+
+<ul>
+<li>has read-write access to a specific namespace in a specific cluster in a specific environment</li>
+<li>can view everything in that namespace excluding secrets</li>
+</ul>
+<p>The read-only role:</p>
+
+<ul>
+<li>has read-only access to a specific cluster in a specific environment</li>
+<li>can view everything in that cluster excluding secrets</li>
+</ul>
+
+<ol>
+<li><p>Open the <code>gds-cli</code>.</p></li>
+<li><p>Run the following to export the AWS credentials for the appropriate GOV.UK environment and role:</p></li>
+</ol>
+<div class="highlight"><pre class="highlight shell" tabindex="0"><code>  <span class="nb">eval</span> <span class="si">$(</span>gds aws govuk-&lt;govuk-environment&gt;-&lt;role&gt; <span class="nt">-e</span> <span class="nt">--art</span> 8h<span class="si">)</span>
+  <span class="nb">export </span><span class="nv">AWS_REGION</span><span class="o">=</span>eu-west-1
+</code></pre></div><p>where:
+  - <code>&lt;govuk-environment&gt;</code> is the GOV.UK environment that you want to get credentials for and will be <code>test</code>, <code>integration</code>, <code>staging</code>, or <code>production</code>
+  - <code>&lt;role&gt;</code> is the appropriate role and will be <code>admin</code>, <code>poweruser</code> or <code>readonly</code></p>
+<h2 id="test-your-access">Test your access</h2>
+
+<ol>
+<li><p>If it&rsquo;s your first time accessing the cluster through kubectl, add the <code>govuk</code> cluster to your kubectl configuration in <code>~/.kube/config</code>:</p>
 <div class="highlight"><pre class="highlight shell" tabindex="0"><code>aws eks update-kubeconfig <span class="nt">--name</span> govuk
-</code></pre></div><p>This will add the govuk cluster to your Kubectl configuration in <code>~/.kube/config</code></p></li>
-<li><p>To check that you have access, run:</p>
+</code></pre></div></li>
+<li><p>To check that you have access to the cluster, run:</p>
 <div class="highlight"><pre class="highlight shell" tabindex="0"><code>kubectl cluster-info
-</code></pre></div><p>If you have access this should return information about the GOV.UK EKS cluster control plane, it should look like this:</p>
+</code></pre></div><p>If you have access, you should get information about the GOV.UK EKS cluster control plane, like in the following example:</p>
 <div class="highlight"><pre class="highlight shell" tabindex="0"><code>Kubernetes control plane is https://<span class="o">{</span>GOVUK_CLUSTER_ADDRESS<span class="o">}</span>.<span class="o">{</span>AWS_REGION<span class="o">}</span>.eks.amazonaws.com
 </code></pre></div></li>
 </ol>
+<h2 id="switching-clusters">Switching clusters</h2>
+<p>To switch clusters, run the export AWS credentials command in the <code>gds-cli</code>, selecting the appropriate GOV.UK environment and role:</p>
+<div class="highlight"><pre class="highlight shell" tabindex="0"><code><span class="nb">eval</span> <span class="si">$(</span>gds aws govuk-&lt;govuk-environment&gt;-&lt;role&gt; <span class="nt">-e</span> <span class="nt">--art</span> 8h<span class="si">)</span>
+<span class="nb">export </span><span class="nv">AWS_REGION</span><span class="o">=</span>eu-west-1
+</code></pre></div><p>where:
+- <code>&lt;govuk-environment&gt;</code> is the GOV.UK environment that you want to get credentials for and will be <code>test</code>, <code>integration</code>, <code>staging</code>, or <code>production</code>
+- <code>&lt;role&gt;</code> is the appropriate role and will be <code>admin</code>, <code>poweruser</code> or <code>readonly</code></p>
 
               <div data-module='page-expiry' data-last-reviewed-on="2022-08-01">
     <div class='page-expiry--not-expired'>
