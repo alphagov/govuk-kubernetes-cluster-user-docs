@@ -7,47 +7,81 @@ review_in: 6 months
 
 # Access EKS cluster
 
-## Prerequisites
+You must access the GOV.UK Kubernetes platform [EKS cluster](https://kubernetes.io/docs/concepts/overview/components/) to use the platform.
 
-To follow this guide you will need to have:
+To access the cluster, you must have:
 
-1. [AWS access](https://docs.publishing.service.gov.uk/manual/get-started.html#7-get-aws-access)
-2. gds-cli [installed](https://docs.publishing.service.gov.uk/manual/get-started.html#3-install-gds-command-line-tools) and [set up](https://docs.publishing.service.gov.uk/manual/get-started.html#8-access-aws-for-the-first-time).
+- [installed gds-cli](https://docs.publishing.service.gov.uk/manual/get-started.html#3-install-gds-command-line-tools)
+- [gotten access to AWS](https://docs.publishing.service.gov.uk/manual/get-started.html#7-get-aws-access)
+- [accessed AWS](https://docs.publishing.service.gov.uk/manual/get-started.html#8-access-aws-for-the-first-time) using `gds-cli`
 
-## Assuming roles and testing access
+You must select a role and environment to make sure you gain access to the right cluster.
 
-1. Assume the proper IAM role using [gds-cli](https://github.com/alphagov/gds-cli#usage) by
-exporting the AWS credentials for the GOV.UK environment and role that you wish:
+## Select a role and environment
 
-    ```sh
-    eval $(gds aws govuk-<govuk-environment>-<role> -e --art 8h)
-    export AWS_REGION=eu-west-1
-    ```
+An [AWS Identity and Access Management (IAM) role](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles.html) is an IAM identity that has specific permissions.
 
-     where:
-     - `<govuk-environment>` is the the GOV.UK environment that you want to get credentials for. For example, `test`, `integration`
-     - `<role>` is the role mentioned in this [deploying terraform documentation](https://docs.publishing.service.gov.uk/manual/deploying-terraform.html#1-check-that-you-have-sufficient-access)
-     - `art` option is used to request that the AWS credentials last for the requested time.
+You must select one of the following roles to access the cluster:
 
-    For the user research session , you should use the `eval $(gds aws govuk-integration-admin -e --art 8h)` command since
-    the session is run in the Integration GOV.UK cluster and `admin` role will allow full access.
+- admin
+- poweruser
+- read-only
 
-2. If it's your first time accessing the cluster through Kubectl:
+The admin role:
+
+- has read-write access to a specific cluster in a specific environment
+- can view everything in that cluster including secrets
+
+The poweruser role:
+
+- has read-write access to a specific namespace in a specific cluster in a specific environment
+- can view everything in that namespace excluding secrets
+
+The read-only role:
+
+- has read-only access to a specific cluster in a specific environment
+- can view everything in that cluster excluding secrets
+
+1. Open the `gds-cli`.
+
+1. Run the following to export the AWS credentials for the appropriate GOV.UK environment and role:
+
+  ```sh
+  eval $(gds aws govuk-<govuk-environment>-<role> -e --art 8h)
+  export AWS_REGION=eu-west-1
+  ```
+  where:
+  - `<govuk-environment>` is the GOV.UK environment that you want to get credentials for and will be `test`, `integration`, `staging`, or `production`
+  - `<role>` is the appropriate role and will be `admin`, `poweruser` or `readonly`
+
+## Test your access
+
+1. If it's your first time accessing the cluster through kubectl, add the `govuk` cluster to your kubectl configuration in `~/.kube/config`:
 
     ```sh
     aws eks update-kubeconfig --name govuk
     ```
 
-    This will add the govuk cluster to your Kubectl configuration in `~/.kube/config`
-
-3. To check that you have access, run:
+1. To check that you have access to the cluster, run:
 
     ```sh
     kubectl cluster-info
     ```
 
-    If you have access this should return information about the GOV.UK EKS cluster control plane, it should look like this:
+    If you have access, you should get information about the GOV.UK EKS cluster control plane, like in the following example:
 
     ```sh
     Kubernetes control plane is https://{GOVUK_CLUSTER_ADDRESS}.{AWS_REGION}.eks.amazonaws.com
     ```
+
+## Switching clusters
+
+To switch clusters, run the export AWS credentials command in the `gds-cli`, selecting the appropriate GOV.UK environment and role:
+
+```sh
+eval $(gds aws govuk-<govuk-environment>-<role> -e --art 8h)
+export AWS_REGION=eu-west-1
+```
+where:
+- `<govuk-environment>` is the GOV.UK environment that you want to get credentials for and will be `test`, `integration`, `staging`, or `production`
+- `<role>` is the appropriate role and will be `admin`, `poweruser` or `readonly`
