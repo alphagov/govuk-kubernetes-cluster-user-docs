@@ -12,7 +12,7 @@ You must access the GOV.UK Kubernetes platform [EKS cluster](https://kubernetes.
 To access the cluster, you must have:
 
 - [installed gds-cli](https://docs.publishing.service.gov.uk/manual/get-started.html#3-install-gds-command-line-tools)
-- [access to AWS](https://docs.publishing.service.gov.uk/manual/get-started.html#7-get-aws-access)
+- [gotten access to AWS](https://docs.publishing.service.gov.uk/manual/get-started.html#7-get-aws-access)
 - [accessed AWS](https://docs.publishing.service.gov.uk/manual/get-started.html#8-access-aws-for-the-first-time) using `gds-cli`
 
 You must select a role and environment to make sure you gain access to the right cluster.
@@ -35,7 +35,7 @@ The admin role:
 The poweruser role:
 
 - has read-write access to a specific namespace in a specific cluster in a specific environment
-- can view everything in that namespace and excluding secrets
+- can view everything in that namespace excluding secrets
 
 The read-only role:
 
@@ -51,12 +51,12 @@ The read-only role:
   export AWS_REGION=eu-west-1
   ```
   where:
-  - `<govuk-environment>` is the GOV.UK environment that you want to get credentials for, and will be `test`, `integration`, `staging`, or `production`
-  - `<role>` is the appropriate role, and will be `admin`, `poweruser` or `readonly`
+  - `<govuk-environment>` is the GOV.UK environment that you want to get credentials for and will be `test`, `integration`, `staging`, or `production`
+  - `<role>` is the appropriate role and will be `admin`, `poweruser` or `readonly`
 
 ## Test your access
 
-1. If it's your first time accessing the cluster through Kubectl, add the `govuk` cluster to your kubectl configuration in `~/.kube/config`:
+1. If it's your first time accessing the cluster through kubectl, add the `govuk` cluster to your kubectl configuration in `~/.kube/config`:
 
     ```sh
     aws eks update-kubeconfig --name govuk
@@ -83,5 +83,5 @@ eval $(gds aws govuk-<govuk-environment>-<role> -e --art 8h)
 export AWS_REGION=eu-west-1
 ```
 where:
-- `<govuk-environment>` is the GOV.UK environment that you want to get credentials for, and will be `test`, `integration`, `staging`, or `production`
-- `<role>` is the appropriate role, and will be `admin`, `poweruser` or `readonly`
+- `<govuk-environment>` is the GOV.UK environment that you want to get credentials for and will be `test`, `integration`, `staging`, or `production`
+- `<role>` is the appropriate role and will be `admin`, `poweruser` or `readonly`
