@@ -80,3 +80,110 @@ You can also try the following courses:
 [Pluralsight k8s course]: https://www.pluralsight.com/courses/kubernetes-getting-started
 [Udacity k8s course]: https://eu.udacity.com/course/scalable-microservices-with-kubernetes--ud615
 [Katacoda kubernetes course]: https://www.katacoda.com/courses/kubernetes
+
+
+
+
+architecture stuff would be for maintainers
+
+eks docs - https://docs.aws.amazon.com/eks/latest/userguide/what-is-eks.html
+
+kubernetes docs - https://kubernetes.io/docs/home/
+
+https://training.linuxfoundation.org/training/introduction-to-kubernetes/ - free reading
+
+should encourage people to go on the training course in their first year
+
+what is different about this implementation?
+
+https://training.linuxfoundation.org/training/kubernetes-for-developers/
+
+put in getting started??
+
+Custom kubernetes resources and controllers for our particular imnplementation
+https://govuk-k8s-user-docs.publishing.service.gov.uk/how-platform-works/#custom-kubernetes-objects
+
+Delete Further Information
+rpelaced by background reading of above links
+
+Delete content under How the platform works
+
+Delete kubernetes objects section
+
+The four things under https://govuk-k8s-user-docs.publishing.service.gov.uk/how-platform-works/#security-constraints-in-the-aws-integration are the interesting custom bits
+
+Maybe can say something about how platform is configured using terraform modules
+these modules exist, look in github repo here
+
+Add storage-driver to the list of four under the sceurity... section
+on the to do list for april - https://trello.com/c/Wz9dRNWA/607-create-gp3-storageclass
+add documentation ticket for milestone 3
+
+
+
+## GOV.UK Kubernetes platform cluster specific add-ons
+
+We use the following cluster add-ons to manage external services like storage and secrets, specific to our implementation of kubernetes
+
+external-secrets
+external-dns
+aws-load-balancer-controller
+cluster-autoscaler
+Dex - https://dexidp.io/
+
+
+external-secrets
+
+Stores secrets in AWS Secrets Manager, and makes them available to applications as standard Kubernetes Secret objects
+add links
+https://github.com/alphagov/govuk-infrastructure/tree/main/terraform/deployments/cluster-services
+
+external-dns
+
+creates dns records in aws route 53 for exposed kubernetes services
+
+aws-load-balancer-controller
+
+it's our ingress controller, it creates and manages AWS Load Balancers based on Ingress objects in the cluster
+
+cluster-autoscaler
+
+adds worker nodes to the cluster when the cluster is running low on capacity to ensure that there's enough capacity for pods to be scheduled
+if there's too much spare capacity, it removes worker nodes
+does this by controlled the aws ec2 auto scaling group for the managed node group
+
+Dex
+
+a federated identity provider which we use to manage single sign on to services in the cluster such as grafana dashboards and argo cd
+connects things that you need to sign into to things that know if you're a authenticated user
+
+
+### Authenticating users to the cluster
+
+Authenticating users to the cluster when interacting with the cluster
+
+AWS auth configmap
+map between aws users and roles and kubernetes users and roles
+https://github.com/alphagov/govuk-infrastructure/blob/main/terraform/deployments/cluster-services/aws_auth_configmap.tf
+Generate the aws-auth ConfigMap, which defines the mapping between AWS IAM roles and k8s RoleBasedAccessControl (one of the permission systems in k8s)
+
+users interacting with the cluser are auth'ed based on the mapping of the iam role to the k8s user
+that mapping is defined in a configmap in the kube system namepsace called aws-auth
+link to https://docs.aws.amazon.com/eks/latest/userguide/add-user-role.html
+
+lists of authorised users are located here:
+https://github.com/alphagov/govuk-aws-data/blob/master/data/infra-security/
+anyone in the github gov.uk team can raise changes
+if you need to change the list of auth'ed users, you do that here
+the mapping is derived from this using terraform
+
+
+
+
+
+how user auth works
+authenticating a user to the cluster when interacting with the cluster
+a configmap which maps aws iam principles to kubernetes
+
+
+add something about the monitoring stack to the documentation tickets
