@@ -7,183 +7,79 @@ review_in: 6 months
 
 # How the platform works
 
-Kubernetes uses the declarative state model. Kubernetes users define their applications in terms of the desired end state.
+The GOV.UK Kubernetes platform is an AWS-hosted [Kubernetes](https://kubernetes.io) cluster, using Amazon's [Elastic Kubernetes Service](https://aws.amazon.com/eks/) (EKS).
 
-This differs from an imperative model, where users define the sequential steps to achieve a running application.
+For information on how Kubernetes works in general, see the:
 
-For example, in a declarative state model, the user defines the following end state:
+- [Kubernetes documentation](https://kubernetes.io/docs/home/)
+- [Amazon EKS documentation](https://docs.aws.amazon.com/eks/latest/userguide/what-is-eks.html)
+- Linux foundation free [introduction to Kubernetes training certification](https://training.linuxfoundation.org/training/introduction-to-kubernetes/)
 
-- container `hello-world` with tag `v1` should be running
-- the `hello-world` container should expose port 80
-- a load balancer routing to port 80 on the container should exist
+Specific to its implementation of Kubernetes, the GOV.UK Kubernetes platform cluster:
 
-Whereas, in an imperative model, the user defines the following sequential steps:
+- uses add-ons to manage storage and secrets
+- authenticates platform cluster users using an `aws-auth` ConfigMap
 
-1. Pull the `hello-world` container with tag `v1`.
-2. Start the `hello-world` container with port 80 exposed.
-3. Create a load balancer.
-4. Create a load balancer routing rule pointing to port 80 on the container.
+## GOV.UK Kubernetes platform cluster add-ons
 
-In the Kubernetes declarative model, internal Kubernetes components called [controllers](https://kubernetes.io/docs/concepts/architecture/controller/) handle the details of transitioning an application from the current state to the declared desired state on your behalf.
+The GOV.UK Kubernetes platform cluster uses the following add-ons in its implementation of Kubernetes:
 
-See [Imperative vs Declarative](https://dominik-tornow.medium.com/imperative-vs-declarative-8abc7dcae82e) for a more detailed comparison of the two models.
+- External secrets
+- External DNS
+- AWS load balancer controller
+- Cluster autoscaler
+- Dex OpenID connect provider
 
-## Kubernetes objects
+### External secrets
 
-The Kubernetes API supports many [object types](https://kubernetes.io/docs/concepts/overview/working-with-objects/kubernetes-objects/) representing the state of component parts of an application.
+The [External-secrets add-on](https://github.com/alphagov/govuk-infrastructure/blob/main/terraform/deployments/cluster-services/external_secrets.tf):
 
-The following major resource types are used in most applications:
+- stores secrets in [AWS Secrets Manager](https://aws.amazon.com/secrets-manager/)
+- makes those secrets available to GOV.UK applications as standard [Kubernetes Secret objects](https://kubernetes.io/docs/concepts/configuration/secret/)
 
-* [`Pod`](https://kubernetes.io/docs/concepts/workloads/pods/) - a group of one or more containers
-* [`Deployment`](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/) - one or more replicas of a `Pod`, and an associated [deployment strategy](https://www.weave.works/blog/kubernetes-deployment-strategies)
-* [`Service`](https://kubernetes.io/docs/concepts/services-networking/service/) - a means of exposing `Pod` or `Deployment` objects as a network service using a [DNS](https://en.wikipedia.org/wiki/Domain_Name_System) name
-* [`Ingress`](https://kubernetes.io/docs/concepts/services-networking/ingress/) - a means of exposing `Service` objects externally via a load balancer, with associated [TLS](https://en.wikipedia.org/wiki/Transport_Layer_Security) certificates and [DNS](https://en.wikipedia.org/wiki/Domain_Name_System) names
-* [`ConfigMap`](https://kubernetes.io/docs/concepts/configuration/configmap/) - a collection of configuration key/value pairs, commonly used to provide environment variables to Pod containers
-* [`Secrets`](https://kubernetes.io/docs/concepts/configuration/secret/) - a collection of sensitive key/value pairs, commonly used to provide environment variables to containers
+See the [External secrets documentation](https://external-secrets.io/) for more information.
 
-## Custom Kubernetes objects
+### External DNS
 
-The GOV.UK Kubernetes platform includes the following third party API objects and controllers to allow AWS services to be used through the Kubernetes API:
+The [External DNS add-on](https://github.com/alphagov/govuk-infrastructure/blob/main/terraform/deployments/cluster-services/external_dns.tf) creates and manages [Domain Name System (DNS)](https://aws.amazon.com/route53/what-is-dns/) records in [AWS Route 53](https://aws.amazon.com/route53/) for [exposed or publicly discoverable Kubernetes services](https://kubernetes.io/docs/tutorials/kubernetes-basics/expose/expose-intro/).
 
-* [external-secrets](https://external-secrets.io) - stores secrets in [AWS Secrets Manager](https://aws.amazon.com/secrets-manager/), and makes them available to applications as standard Kubernetes `Secret` objects
-* [AWS Load Balancer Controller](https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.3/) - provides and manages AWS Load Balancers to fulfil `Ingress` objects' specifications
-* [external-dns](https://github.com/kubernetes-sigs/external-dns) - creates and manages [DNS](https://en.wikipedia.org/wiki/Domain_Name_System) records in [AWS Route 53](https://aws.amazon.com/route53/) to fulfil `Ingress` objects' specifications
+See the [External DNS documentation](https://github.com/kubernetes-sigs/external-dns) for more information.
 
-## Security constraints in the AWS integration
+### AWS load balancer controller
 
-The Kubernetes cluster interacts with AWS services to provide features like DNS, application load balancer (ALB) ingress, and Secret provisioning.
+The [AWS load balancer controller add-on](https://github.com/alphagov/govuk-infrastructure/blob/main/terraform/deployments/cluster-services/aws_lb_controller.tf) creates and manages [AWS load balancers](https://docs.aws.amazon.com/elasticloadbalancing/latest/classic/introduction.html) based on [Kubernetes Ingress objects](https://kubernetes.io/docs/concepts/services-networking/ingress/) in the cluster.
 
-The following operators installed in the cluster integrate with AWS:
+See the [AWS load balancer controller documentation](https://docs.aws.amazon.com/eks/latest/userguide/aws-load-balancer-controller.html) for more information.
 
-* the cluster uses the [external-secrets] operator to access secrets in AWS Secrets Manager and automatically injects the values as Kubernetes Secrets
-* [external-dns] is a Kubernetes addon that configures public DNS servers (in our case AWS Route53) with information about exposed Kubernetes services to make them discoverable
-* the [aws-load-balancer-controller] provisions AWS ALBs for Kubernetes Ingress resources and NLBs for Kubernetes Services.
-* [cluster-autoscaler] manages AWS EC2 Auto Scaling Groups to ensure pods will not fail due to insufficient resources and nodes aren't underutilized.
+### Cluster autoscaler
 
-[external-secrets]: https://github.com/external-secrets/external-secrets
-[external-dns]: https://github.com/kubernetes-sigs/external-dns
-[aws-load-balancer-controller]: https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.3/
-[cluster-autoscaler]: https://github.com/kubernetes/autoscaler/tree/master/cluster-autoscaler
+The [Cluster autoscaler add-on](https://github.com/alphagov/govuk-infrastructure/blob/main/terraform/deployments/cluster-services/cluster_autoscaler.tf) automatically adjusts the size of the Kubernetes cluster by:
 
-## Further information
+- adding [worker nodes](https://kubernetes.io/docs/concepts/architecture/nodes/) to the cluster when the cluster is running low on capacity to make sure there's enough capacity for [Kubernetes to schedule those pods](https://kubernetes.io/docs/concepts/scheduling-eviction/kube-scheduler/)
+- removing worker nodes when the cluster has spare capacity
 
-For a brief introduction to what Kubernetes is all about, read this [comic][k8s-comic] from Google and watch this [Kubernetes concepts video][k8s-video].
+The add-on does this by controlling the [AWS EC2 auto scaling group](https://docs.aws.amazon.com/autoscaling/ec2/userguide/AutoScalingGroup.html) for the [managed node group](https://docs.aws.amazon.com/eks/latest/userguide/managed-node-groups.html).
 
-You can also try the following courses:
+See the [Cluster autoscaler documentation](https://github.com/kubernetes/autoscaler/tree/master/cluster-autoscaler) for more information.
 
-* [Katacoda kubernetes course][] - In-browser, free (registration required), bite-sized Kubernetes lessons.
-* [Pluralsight k8s course][]
-* [Udacity k8s course][]
+### Dex OpenID connect provider
 
-[k8s-comic]: https://cloud.google.com/kubernetes-engine/kubernetes-comic/
-[k8s-video]: https://www.youtube.com/watch?v=IMOZCDhH7do
-[Pluralsight k8s course]: https://www.pluralsight.com/courses/kubernetes-getting-started
-[Udacity k8s course]: https://eu.udacity.com/course/scalable-microservices-with-kubernetes--ud615
-[Katacoda kubernetes course]: https://www.katacoda.com/courses/kubernetes
+The [Dex OpenID connect provider](https://github.com/alphagov/govuk-infrastructure/blob/main/terraform/deployments/cluster-services/dex.tf) is a [federated identity provider](https://en.wikipedia.org/wiki/Federated_identity).
 
+The GOV.UK Kubernetes platform cluster uses Dex to manage single sign-on to services in the cluster such as [Grafana dashboards](https://docs.publishing.service.gov.uk/manual/grafana.html) and [Argo CD](/get-started/access-eks-cluster/#access-eks-cluster).
 
+Dex connects apps that users need to authenticate into to apps that know if the user is authenticated.
 
+See the [Dex OpenID connect provider documentation](https://dexidp.io/docs/) for more information.
 
-architecture stuff would be for maintainers
+### Authenticating platform cluster users using an `aws-auth` ConfigMap
 
-eks docs - https://docs.aws.amazon.com/eks/latest/userguide/what-is-eks.html
+The GOV.UK Kubernetes platform cluster authenticates users using an [`aws-auth` ConfigMap](https://github.com/alphagov/govuk-infrastructure/blob/main/terraform/deployments/cluster-services/aws_auth_configmap.tf) in the kube system [namepsace](https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/).
 
-kubernetes docs - https://kubernetes.io/docs/home/
+The ConfigMap maps a user's AWS IAM role to the equivalent role in the [Kubernetes role-based access control system](https://kubernetes.io/docs/reference/access-authn-authz/rbac/).
 
-https://training.linuxfoundation.org/training/introduction-to-kubernetes/ - free reading
+The list of authenticated users for the different environments in the platform is located in the [`govuk-aws-data/data/infra-security/` GitHub repo on alphagov](https://github.com/alphagov/govuk-aws-data/tree/master/data/infra-security).
 
-should encourage people to go on the training course in their first year
+You must be in the [GOV.UK team on alphagov](https://github.com/orgs/alphagov/teams/gov-uk) to make changes to this list.
 
-what is different about this implementation?
-
-https://training.linuxfoundation.org/training/kubernetes-for-developers/
-
-put in getting started??
-
-Custom kubernetes resources and controllers for our particular imnplementation
-https://govuk-k8s-user-docs.publishing.service.gov.uk/how-platform-works/#custom-kubernetes-objects
-
-Delete Further Information
-rpelaced by background reading of above links
-
-Delete content under How the platform works
-
-Delete kubernetes objects section
-
-The four things under https://govuk-k8s-user-docs.publishing.service.gov.uk/how-platform-works/#security-constraints-in-the-aws-integration are the interesting custom bits
-
-Maybe can say something about how platform is configured using terraform modules
-these modules exist, look in github repo here
-
-Add storage-driver to the list of four under the sceurity... section
-on the to do list for april - https://trello.com/c/Wz9dRNWA/607-create-gp3-storageclass
-add documentation ticket for milestone 3
-
-
-
-## GOV.UK Kubernetes platform cluster specific add-ons
-
-We use the following cluster add-ons to manage external services like storage and secrets, specific to our implementation of kubernetes
-
-external-secrets
-external-dns
-aws-load-balancer-controller
-cluster-autoscaler
-Dex - https://dexidp.io/
-
-
-external-secrets
-
-Stores secrets in AWS Secrets Manager, and makes them available to applications as standard Kubernetes Secret objects
-add links
-https://github.com/alphagov/govuk-infrastructure/tree/main/terraform/deployments/cluster-services
-
-external-dns
-
-creates dns records in aws route 53 for exposed kubernetes services
-
-aws-load-balancer-controller
-
-it's our ingress controller, it creates and manages AWS Load Balancers based on Ingress objects in the cluster
-
-cluster-autoscaler
-
-adds worker nodes to the cluster when the cluster is running low on capacity to ensure that there's enough capacity for pods to be scheduled
-if there's too much spare capacity, it removes worker nodes
-does this by controlled the aws ec2 auto scaling group for the managed node group
-
-Dex
-
-a federated identity provider which we use to manage single sign on to services in the cluster such as grafana dashboards and argo cd
-connects things that you need to sign into to things that know if you're a authenticated user
-
-
-### Authenticating users to the cluster
-
-Authenticating users to the cluster when interacting with the cluster
-
-AWS auth configmap
-map between aws users and roles and kubernetes users and roles
-https://github.com/alphagov/govuk-infrastructure/blob/main/terraform/deployments/cluster-services/aws_auth_configmap.tf
-Generate the aws-auth ConfigMap, which defines the mapping between AWS IAM roles and k8s RoleBasedAccessControl (one of the permission systems in k8s)
-
-users interacting with the cluser are auth'ed based on the mapping of the iam role to the k8s user
-that mapping is defined in a configmap in the kube system namepsace called aws-auth
-link to https://docs.aws.amazon.com/eks/latest/userguide/add-user-role.html
-
-lists of authorised users are located here:
-https://github.com/alphagov/govuk-aws-data/blob/master/data/infra-security/
-anyone in the github gov.uk team can raise changes
-if you need to change the list of auth'ed users, you do that here
-the mapping is derived from this using terraform
-
-
-
-
-
-how user auth works
-authenticating a user to the cluster when interacting with the cluster
-a configmap which maps aws iam principles to kubernetes
-
-
-add something about the monitoring stack to the documentation tickets
+See the [AWS documentation on enabling IAM user and role access to your cluster](https://docs.aws.amazon.com/eks/latest/userguide/add-user-role.html) for more information.
