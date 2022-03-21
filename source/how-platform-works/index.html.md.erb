@@ -55,7 +55,7 @@ For more information, see the [AWS load balancer controller documentation](https
 
 The [Cluster autoscaler add-on](https://github.com/alphagov/govuk-infrastructure/blob/main/terraform/deployments/cluster-services/cluster_autoscaler.tf) automatically adjusts the size of the Kubernetes cluster by:
 
-- adding [worker nodes](https://kubernetes.io/docs/concepts/architecture/nodes/) to the cluster when the cluster is running low on capacity, to make sure there's enough capacity for [Kubernetes to schedule those nodes](https://kubernetes.io/docs/concepts/scheduling-eviction/kube-scheduler/)
+- adding [worker nodes](https://kubernetes.io/docs/concepts/architecture/nodes/) to the cluster when the cluster is running low on capacity, so that Kubernetes can [schedule](https://kubernetes.io/docs/concepts/scheduling-eviction/kube-scheduler/) all of the requested pods.
 - removing worker nodes when the cluster has spare capacity
 
 The add-on adjusts cluster size by controlling the [AWS EC2 auto scaling group](https://docs.aws.amazon.com/autoscaling/ec2/userguide/AutoScalingGroup.html) for the [managed node group](https://docs.aws.amazon.com/eks/latest/userguide/managed-node-groups.html).
