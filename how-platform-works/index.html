@@ -284,7 +284,7 @@
 <p>The <a href="https://github.com/alphagov/govuk-infrastructure/blob/main/terraform/deployments/cluster-services/cluster_autoscaler.tf">Cluster autoscaler add-on</a> automatically adjusts the size of the Kubernetes cluster by:</p>
 
 <ul>
-<li>adding <a href="https://kubernetes.io/docs/concepts/architecture/nodes/">worker nodes</a> to the cluster when the cluster is running low on capacity, to make sure there&rsquo;s enough capacity for <a href="https://kubernetes.io/docs/concepts/scheduling-eviction/kube-scheduler/">Kubernetes to schedule those nodes</a></li>
+<li>adding <a href="https://kubernetes.io/docs/concepts/architecture/nodes/">worker nodes</a> to the cluster when the cluster is running low on capacity, so that Kubernetes can <a href="https://kubernetes.io/docs/concepts/scheduling-eviction/kube-scheduler/">schedule</a> all of the requested pods.</li>
 <li>removing worker nodes when the cluster has spare capacity</li>
 </ul>
 <p>The add-on adjusts cluster size by controlling the <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/AutoScalingGroup.html">AWS EC2 auto scaling group</a> for the <a href="https://docs.aws.amazon.com/eks/latest/userguide/managed-node-groups.html">managed node group</a>.</p>
