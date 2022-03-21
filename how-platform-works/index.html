@@ -225,16 +225,10 @@
     <a href="/how-platform-works/"><span>How the platform works</span></a>
     <ul>
       <li>
-        <a href="/how-platform-works/#kubernetes-objects"><span>Kubernetes objects</span></a>
+        <a href="/how-platform-works/#platform-cluster-add-ons"><span>Platform cluster add-ons</span></a>
       </li>
       <li>
-        <a href="/how-platform-works/#custom-kubernetes-objects"><span>Custom Kubernetes objects</span></a>
-      </li>
-      <li>
-        <a href="/how-platform-works/#security-constraints-in-the-aws-integration"><span>Security constraints in the AWS integration</span></a>
-      </li>
-      <li>
-        <a href="/how-platform-works/#further-information"><span>Further information</span></a>
+        <a href="/how-platform-works/#platform-cluster-user-authentication"><span>Platform cluster user authentication</span></a>
       </li>
     </ul>
   </li>
@@ -248,64 +242,64 @@
         <div class="app-pane__content toc-open-disabled">
           <main id="content" class="technical-documentation" data-module="anchored-headings">
             <h1 id="how-the-platform-works">How the platform works</h1>
-<p>Kubernetes uses the declarative state model. Kubernetes users define their applications in terms of the desired end state.</p>
-<p>This differs from an imperative model, where users define the sequential steps to achieve a running application.</p>
-<p>For example, in a declarative state model, the user defines the following end state:</p>
+<p>The GOV.UK Kubernetes platform is an AWS-hosted <a href="https://kubernetes.io">Kubernetes</a> cluster, using Amazon&rsquo;s <a href="https://aws.amazon.com/eks/">Elastic Kubernetes Service</a> (EKS).</p>
+<p>For information on how Kubernetes works in general, see the:</p>
 
 <ul>
-<li>container <code>hello-world</code> with tag <code>v1</code> should be running</li>
-<li>the <code>hello-world</code> container should expose port 80</li>
-<li>a load balancer routing to port 80 on the container should exist</li>
+<li><a href="https://kubernetes.io/docs/home/">Kubernetes documentation</a></li>
+<li><a href="https://docs.aws.amazon.com/eks/latest/userguide/what-is-eks.html">Amazon EKS documentation</a></li>
+<li>Linux foundation’s free <a href="https://training.linuxfoundation.org/training/introduction-to-kubernetes/">introduction to Kubernetes training certification</a></li>
 </ul>
-<p>Whereas, in an imperative model, the user defines the following sequential steps:</p>
-
-<ol>
-<li>Pull the <code>hello-world</code> container with tag <code>v1</code>.</li>
-<li>Start the <code>hello-world</code> container with port 80 exposed.</li>
-<li>Create a load balancer.</li>
-<li>Create a load balancer routing rule pointing to port 80 on the container.</li>
-</ol>
-<p>In the Kubernetes declarative model, internal Kubernetes components called <a href="https://kubernetes.io/docs/concepts/architecture/controller/">controllers</a> handle the details of transitioning an application from the current state to the declared desired state on your behalf.</p>
-<p>See <a href="https://dominik-tornow.medium.com/imperative-vs-declarative-8abc7dcae82e">Imperative vs Declarative</a> for a more detailed comparison of the two models.</p>
-<h2 id="kubernetes-objects">Kubernetes objects</h2>
-<p>The Kubernetes API supports many <a href="https://kubernetes.io/docs/concepts/overview/working-with-objects/kubernetes-objects/">object types</a> representing the state of component parts of an application.</p>
-<p>The following major resource types are used in most applications:</p>
+<p>Specific to its implementation of Kubernetes, the GOV.UK Kubernetes platform cluster:</p>
 
 <ul>
-<li><a href="https://kubernetes.io/docs/concepts/workloads/pods/"><code>Pod</code></a> - a group of one or more containers</li>
-<li><a href="https://kubernetes.io/docs/concepts/workloads/controllers/deployment/"><code>Deployment</code></a> - one or more replicas of a <code>Pod</code>, and an associated <a href="https://www.weave.works/blog/kubernetes-deployment-strategies">deployment strategy</a></li>
-<li><a href="https://kubernetes.io/docs/concepts/services-networking/service/"><code>Service</code></a> - a means of exposing <code>Pod</code> or <code>Deployment</code> objects as a network service using a <a href="https://en.wikipedia.org/wiki/Domain_Name_System">DNS</a> name</li>
-<li><a href="https://kubernetes.io/docs/concepts/services-networking/ingress/"><code>Ingress</code></a> - a means of exposing <code>Service</code> objects externally via a load balancer, with associated <a href="https://en.wikipedia.org/wiki/Transport_Layer_Security">TLS</a> certificates and <a href="https://en.wikipedia.org/wiki/Domain_Name_System">DNS</a> names</li>
-<li><a href="https://kubernetes.io/docs/concepts/configuration/configmap/"><code>ConfigMap</code></a> - a collection of configuration key/value pairs, commonly used to provide environment variables to Pod containers</li>
-<li><a href="https://kubernetes.io/docs/concepts/configuration/secret/"><code>Secrets</code></a> - a collection of sensitive key/value pairs, commonly used to provide environment variables to containers</li>
+<li>uses add-ons to manage storage and secrets</li>
+<li>authenticates platform cluster users using an <code>aws-auth</code> ConfigMap</li>
 </ul>
-<h2 id="custom-kubernetes-objects">Custom Kubernetes objects</h2>
-<p>The GOV.UK Kubernetes platform includes the following third party API objects and controllers to allow AWS services to be used through the Kubernetes API:</p>
+<h2 id="platform-cluster-add-ons">Platform cluster add-ons</h2>
+<p>The GOV.UK Kubernetes platform cluster uses the following add-ons in its implementation of Kubernetes:</p>
 
 <ul>
-<li><a href="https://external-secrets.io">external-secrets</a> - stores secrets in <a href="https://aws.amazon.com/secrets-manager/">AWS Secrets Manager</a>, and makes them available to applications as standard Kubernetes <code>Secret</code> objects</li>
-<li><a href="https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.3/">AWS Load Balancer Controller</a> - provides and manages AWS Load Balancers to fulfil <code>Ingress</code> objects&rsquo; specifications</li>
-<li><a href="https://github.com/kubernetes-sigs/external-dns">external-dns</a> - creates and manages <a href="https://en.wikipedia.org/wiki/Domain_Name_System">DNS</a> records in <a href="https://aws.amazon.com/route53/">AWS Route 53</a> to fulfil <code>Ingress</code> objects&rsquo; specifications</li>
+<li>External secrets</li>
+<li>ExternalDNS</li>
+<li>AWS load balancer controller</li>
+<li>Cluster autoscaler</li>
+<li>Dex OpenID connect provider</li>
 </ul>
-<h2 id="security-constraints-in-the-aws-integration">Security constraints in the AWS integration</h2>
-<p>The Kubernetes cluster interacts with AWS services to provide features like DNS, application load balancer (ALB) ingress, and Secret provisioning.</p>
-<p>The following operators installed in the cluster integrate with AWS:</p>
+<h3 id="external-secrets">External secrets</h3>
+<p>The <a href="https://github.com/alphagov/govuk-infrastructure/blob/main/terraform/deployments/cluster-services/external_secrets.tf">External-secrets add-on</a>:</p>
 
 <ul>
-<li>the cluster uses the <a href="https://github.com/external-secrets/external-secrets">external-secrets</a> operator to access secrets in AWS Secrets Manager and automatically injects the values as Kubernetes Secrets</li>
-<li><a href="https://github.com/kubernetes-sigs/external-dns">external-dns</a> is a Kubernetes addon that configures public DNS servers (in our case AWS Route53) with information about exposed Kubernetes services to make them discoverable</li>
-<li>the <a href="https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.3/">aws-load-balancer-controller</a> provisions AWS ALBs for Kubernetes Ingress resources and NLBs for Kubernetes Services.</li>
-<li><a href="https://github.com/kubernetes/autoscaler/tree/master/cluster-autoscaler">cluster-autoscaler</a> manages AWS EC2 Auto Scaling Groups to ensure pods will not fail due to insufficient resources and nodes aren&rsquo;t underutilized.</li>
+<li>retrieves secrets from <a href="https://aws.amazon.com/secrets-manager/">AWS Secrets Manager</a></li>
+<li>makes those secrets available to GOV.UK applications as standard <a href="https://kubernetes.io/docs/concepts/configuration/secret/">Kubernetes Secret objects</a></li>
 </ul>
-<h2 id="further-information">Further information</h2>
-<p>For a brief introduction to what Kubernetes is all about, read this <a href="https://cloud.google.com/kubernetes-engine/kubernetes-comic/">comic</a> from Google and watch this <a href="https://www.youtube.com/watch?v=IMOZCDhH7do">Kubernetes concepts video</a>.</p>
-<p>You can also try the following courses:</p>
+<p>For more information, see the <a href="https://external-secrets.io/">External secrets documentation</a>.</p>
+<h3 id="externaldns">ExternalDNS</h3>
+<p>The <a href="https://github.com/alphagov/govuk-infrastructure/blob/main/terraform/deployments/cluster-services/external_dns.tf">ExternalDNS add-on</a> creates and manages <a href="https://aws.amazon.com/route53/what-is-dns/">Domain Name System (DNS)</a> records in <a href="https://aws.amazon.com/route53/">AWS Route 53</a> for <a href="https://kubernetes.io/docs/tutorials/kubernetes-basics/expose/expose-intro/">exposed (publicly discoverable) Kubernetes services</a> in <a href="https://aws.amazon.com/route53/">AWS Route 53</a>.</p>
+<p>For more information, see the <a href="https://github.com/kubernetes-sigs/external-dns">External DNS documentation</a>.</p>
+<h3 id="aws-load-balancer-controller">AWS load balancer controller</h3>
+<p>The <a href="https://github.com/alphagov/govuk-infrastructure/blob/main/terraform/deployments/cluster-services/aws_lb_controller.tf">AWS load balancer controller add-on</a> creates and manages <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/classic/introduction.html">AWS load balancers</a>, based on <a href="https://kubernetes.io/docs/concepts/services-networking/ingress/">Kubernetes Ingress objects</a> in the cluster.</p>
+<p>For more information, see the <a href="https://docs.aws.amazon.com/eks/latest/userguide/aws-load-balancer-controller.html">AWS load balancer controller documentation</a>.</p>
+<h3 id="cluster-autoscaler">Cluster autoscaler</h3>
+<p>The <a href="https://github.com/alphagov/govuk-infrastructure/blob/main/terraform/deployments/cluster-services/cluster_autoscaler.tf">Cluster autoscaler add-on</a> automatically adjusts the size of the Kubernetes cluster by:</p>
 
 <ul>
-<li><a href="https://www.katacoda.com/courses/kubernetes">Katacoda kubernetes course</a> - In-browser, free (registration required), bite-sized Kubernetes lessons.</li>
-<li><a href="https://www.pluralsight.com/courses/kubernetes-getting-started">Pluralsight k8s course</a></li>
-<li><a href="https://eu.udacity.com/course/scalable-microservices-with-kubernetes--ud615">Udacity k8s course</a></li>
+<li>adding <a href="https://kubernetes.io/docs/concepts/architecture/nodes/">worker nodes</a> to the cluster when the cluster is running low on capacity, to make sure there&rsquo;s enough capacity for <a href="https://kubernetes.io/docs/concepts/scheduling-eviction/kube-scheduler/">Kubernetes to schedule those nodes</a></li>
+<li>removing worker nodes when the cluster has spare capacity</li>
 </ul>
+<p>The add-on adjusts cluster size by controlling the <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/AutoScalingGroup.html">AWS EC2 auto scaling group</a> for the <a href="https://docs.aws.amazon.com/eks/latest/userguide/managed-node-groups.html">managed node group</a>.</p>
+<p>For more information, see the <a href="https://github.com/kubernetes/autoscaler/tree/master/cluster-autoscaler">Cluster autoscaler documentation</a>.</p>
+<h3 id="dex-openid-connect-provider">Dex OpenID connect provider</h3>
+<p>The <a href="https://github.com/alphagov/govuk-infrastructure/blob/main/terraform/deployments/cluster-services/dex.tf">Dex OpenID connect provider</a> is a <a href="https://en.wikipedia.org/wiki/Federated_identity">federated identity provider</a>.</p>
+<p>The GOV.UK Kubernetes platform cluster uses Dex to manage single sign-on to services in the cluster, for example, <a href="https://docs.publishing.service.gov.uk/manual/grafana.html">Grafana dashboards</a> and <a href="/get-started/access-eks-cluster/#access-eks-cluster">Argo CD</a>.</p>
+<p>Dex acts as an intermediary between apps that are restricted to authorised users, and apps that know how to verify a user&rsquo;s identity.</p>
+<p>For more information, see the <a href="https://dexidp.io/docs/">Dex OpenID connect provider documentation</a>.</p>
+<h2 id="platform-cluster-user-authentication">Platform cluster user authentication</h2>
+<p>To authenticate users, the GOV.UK Kubernetes platform cluster uses an <a href="https://github.com/alphagov/govuk-infrastructure/blob/main/terraform/deployments/cluster-services/aws_auth_configmap.tf"><code>aws-auth</code> ConfigMap</a> in the <code>kube-system</code> <a href="https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/">namespace</a>.</p>
+<p>The ConfigMap maps a user&rsquo;s AWS Identity Access Management (IAM) role to the equivalent role in the <a href="https://kubernetes.io/docs/reference/access-authn-authz/rbac/">Kubernetes role-based access control system</a>.</p>
+<p>The list of authenticated users for the platform’s different environments is located in the <a href="https://github.com/alphagov/govuk-aws-data/tree/master/data/infra-security"><code>govuk-aws-data/data/infra-security/</code> GitHub repo on alphagov</a>.</p>
+<p>To make changes to this list, you must be in the <a href="https://github.com/orgs/alphagov/teams/gov-uk">GOV.UK team on alphagov</a>.</p>
+<p>For more information, see the <a href="https://docs.aws.amazon.com/eks/latest/userguide/add-user-role.html">AWS documentation on enabling IAM user and role access to your cluster</a>.</p>
 
               <div data-module='page-expiry' data-last-reviewed-on="2022-08-01">
     <div class='page-expiry--not-expired'>
