@@ -20,7 +20,7 @@ Specific to its implementation of Kubernetes, the GOV.UK Kubernetes platform clu
 - uses add-ons to manage storage and secrets
 - authenticates platform cluster users using an `aws-auth` ConfigMap
 
-## GOV.UK Kubernetes platform cluster add-ons
+## Platform cluster add-ons
 
 The GOV.UK Kubernetes platform cluster uses the following add-ons in its implementation of Kubernetes:
 
@@ -34,7 +34,7 @@ The GOV.UK Kubernetes platform cluster uses the following add-ons in its impleme
 
 The [External-secrets add-on](https://github.com/alphagov/govuk-infrastructure/blob/main/terraform/deployments/cluster-services/external_secrets.tf):
 
-- stores secrets in [AWS Secrets Manager](https://aws.amazon.com/secrets-manager/)
+- retrieves secrets from [AWS Secrets Manager](https://aws.amazon.com/secrets-manager/)
 - makes those secrets available to GOV.UK applications as standard [Kubernetes Secret objects](https://kubernetes.io/docs/concepts/configuration/secret/)
 
 See the [External secrets documentation](https://external-secrets.io/) for more information.
@@ -68,13 +68,13 @@ The [Dex OpenID connect provider](https://github.com/alphagov/govuk-infrastructu
 
 The GOV.UK Kubernetes platform cluster uses Dex to manage single sign-on to services in the cluster such as [Grafana dashboards](https://docs.publishing.service.gov.uk/manual/grafana.html) and [Argo CD](/get-started/access-eks-cluster/#access-eks-cluster).
 
-Dex connects apps that users need to authenticate into to apps that know if the user is authenticated.
+Dex acts as an intermediary between apps that are restricted to authorised users and apps that know how to verify a user's identity.
 
 See the [Dex OpenID connect provider documentation](https://dexidp.io/docs/) for more information.
 
-### Authenticating platform cluster users using an `aws-auth` ConfigMap
+## Platform cluster user authentication
 
-The GOV.UK Kubernetes platform cluster authenticates users using an [`aws-auth` ConfigMap](https://github.com/alphagov/govuk-infrastructure/blob/main/terraform/deployments/cluster-services/aws_auth_configmap.tf) in the kube system [namepsace](https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/).
+The GOV.UK Kubernetes platform cluster authenticates users using an [`aws-auth` ConfigMap](https://github.com/alphagov/govuk-infrastructure/blob/main/terraform/deployments/cluster-services/aws_auth_configmap.tf) in the `kube-system` [namespace](https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/).
 
 The ConfigMap maps a user's AWS IAM role to the equivalent role in the [Kubernetes role-based access control system](https://kubernetes.io/docs/reference/access-authn-authz/rbac/).
 
