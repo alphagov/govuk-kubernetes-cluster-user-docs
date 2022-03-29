@@ -9,8 +9,10 @@ review_in: 6 months
 
 When you push an app to the GOV.UK Kubernetes platform, the Continuous Implementation / Continuous Deployment (CI / CD) process automatically deploys the app on the platform by:
 
-- building and pushing an app's Docker image to the GOV.UK AWS elastic container repository (ECR)
-- deploying the app container in GOV.UK AWS ECR
+- building and pushing an app's Docker image to the GOV.UK AWS Elastic Container Repository (ECR)
+- deploying the app container in GOV.UK AWS Elastic Kubernetes Service (EKS)
+
+___Is it ECR or EKS????___
 
 If the app does not deploy successfully, you can access the CI and CD logs to see what went wrong.
 
@@ -40,7 +42,7 @@ When the merge is complete, GitHub Actions:
 - pushes the app Docker image to AWS ECR
 - tags the image with the same release tag
 
-## Deploy the app container in AWS ECR
+## Deploy the app container in AWS EKS
 
 [Argo CD](https://argo-cd.readthedocs.io/en/stable/) is a continuous deployment (CD) tool for Kubernetes. GOV.UK uses Argo CD to run its CD process for the GOV.UK Kubernetes platform.
 
