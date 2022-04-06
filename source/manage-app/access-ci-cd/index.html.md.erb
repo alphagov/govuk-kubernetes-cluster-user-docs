@@ -7,63 +7,65 @@ review_in: 6 months
 
 # How apps are deployed
 
-We deploy a GOV.UK app to the GOV.UK Kubernetes platform as a set of [Kubernetes resources](https://kubernetes.io/docs/concepts/cluster-administration/manage-deployment/).
+We deploy a GOV.UK app to the GOV.UK Kubernetes platform as a set of [Kubernetes resources](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-A Kubernetes resource is a piece of configuration that tells Kubernetes how to run a GOV.UK app in the Kubernetes cluster.
+Examples of resources include a deployment, a service, or an ingress. A [deployment](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/) resource is responsible for creating Pods that run the underlying app containers.
 
 We manage these Kubernetes resources using [Helm](https://helm.sh/), more specifically [Helm charts](https://helm.sh/docs/topics/charts/).
 
-Helm charts define a group of Kubernetes resources. We use Helm charts to deploy GOV.UK apps to the GOV.UK Kubernetes platform as a set of Kubernetes resources.
+Kubernetes resources are grouped and described using Helm charts. We use Helm charts to deploy GOV.UK apps to the GOV.UK Kubernetes platform as a set of Kubernetes resources.
 
 We define and store GOV.UK app Helm charts in the [`govuk-helm-charts` repo](https://github.com/alphagov/govuk-helm-charts).
 
-## How ArgoCD works
+We use [ArgoCD](https://argo-cd.readthedocs.io/en/stable/) to automate the deployment of our Helm charts.
 
-We use [ArgoCD](https://argo-cd.readthedocs.io/en/stable/) to manage the app deployment.
+ArgoCD continuously monitors Kubernetes and the `govuk-helm-charts` repo to make sure they stay in sync. The `govuk-helm-charts` repo is the source of truth.
 
-ArgoCD continuously monitors Kubernetes and the `govuk-helm-charts` repo to make sure they stay in sync.
+An [Argo Application](https://argo-cd.readthedocs.io/en/stable/operator-manual/declarative-setup/#applications) represents a deployed Helm chart in a particular environment. We define an Argo Application for each of the GOV.UK apps.
 
-ArgoCD uses Argo applications to represent each of the GOV.UK apps.
+Each of these Argo Applications are created and managed by a parent Argo Application. This is known as an [App of Apps](https://argo-cd.readthedocs.io/en/stable/operator-manual/declarative-setup/#app-of-apps).
 
-These Argo apps represent the Helm chart and associated Kubernetes resources for the GOV.UK apps.
-
-Each of these Argo apps is managed by another Argo app in a nested structure.
-
-When ArgoCD updates Kubernetes resources, ArgoCD uses Helm to apply any changes and deploy the Helm charts.
+In the `govuk-helm-charts` repo, the [`argocd-apps` Helm chart](https://github.com/alphagov/govuk-helm-charts/tree/main/charts/argocd-apps) defines the Argo Application that defines our other Argo Applications.
 
 ## Deploying a new release of a GOV.UK app
 
-The following content states what happens when a user deploys a new release of a GOV.UK app on the GOV.UK Kubernetes platform.
+A release is a tagged commit that represents a deployable version of the code for an app. Typically, the continuous integration (CI) pipeline will build a container image for that release and tag the image with the associated Git commit simple hashing algorithm (SHA).
 
-This specific example is what happens when you update an [image tag](https://helm.sh/docs/topics/charts/#tags-and-condition-fields-in-dependencies) in a Helm chart in the `govuk-helm-charts` repo.
+When you deploy a new release, you update the [image tag reference](https://github.com/alphagov/govuk-helm-charts/tree/main/charts/argocd-apps/image-tags) in the `govuk-helm-charts` repo.
 
-ArgoCD logs the difference between the image tag in the repo and the equivalent image tag in the Helm chart deployment resource in the Kubernetes cluster.
+ArgoCD detects this change in configuration and triggers a [sync operation](https://argo-cd.readthedocs.io/en/release-1.8/user-guide/sync-waves/) for the associated Argo Applications.
 
-ArgoCD updates the image tag in the cluster's deployment resource.
+During the sync operation, ArgoCD updates the Kubernetes deployment with the new image tag.
 
-This update triggers [Kubernetes to deploy the updated GOV.UK app](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#updating-a-deployment).
+Kubernetes then co-ordinates the deployment by creating new application containers using the new image tag and cleans up the old containers.
 
-Once Kubernetes deploys the app, ArgoCD runs a [post sync hook](https://argo-cd.readthedocs.io/en/stable/user-guide/resource_hooks/) to run [smokey tests](https://github.com/alphagov/smokey) for the app.
+
+___________
+"Database migrations occur as a [Kubernetes Job](https://github.com/alphagov/govuk-helm-charts/blob/main/charts/govuk-rails-app/templates/dbmigration-job.yaml) is created as part of the Helm chart deployment.
+
+We do not guarantee the database migrations will occur before the new containers access the database. As best practice database migrations should be forward and backwards compatible by one version.
+
+Assets are pre-compiled and uploaded to S3 as a Kubernetes Job. This occurs as a PreSync hook which runs the Job before the main Sync operation that updates the application containers.
+___________
+
+
+After the Sync operation, ArgoCD triggers the [post-sync Argo Workflow](https://github.com/alphagov/govuk-helm-charts/blob/main/charts/argo-workflows/templates/post-sync-workflow.yaml) to run [smokey tests](https://github.com/alphagov/smokey) for the app.
 
 ## Continuous deployment of a new release of a GOV.UK app
 
-The Continuous Deployment (CD) process is an automatic deployment process, and is triggered by a new release of a GOV.UK app.
+The Continuous Deployment (CD) process is an automatic deployment process, and is triggered by a new release of a GOV.UK app. For example, when we merge a pull request.
 
-A release is a tagged commit that represents a deployable version of the code for a GOV.UK app.
+A new release is automatically generated by our Continuous Integration (CI) pipeline when a new successful commit is added to the main branch. CI builds the new image and pushes that new image to AWS Elastic Container Repository (ECR).
 
-When a user creates a new release, the Continuous Integration (CI) tool, currently GitHub Actions, builds the new image and pushes that new image to AWS elastic container repository (ECR).
+CI then updates the image tag value for Integration in the [govuk-helm-charts repo](https://github.com/alphagov/govuk-helm-charts/tree/main/charts/argocd-apps/image-tags/integration) for the new release.
 
-CI then updates the image tag value in the [govuk-helm-charts repo integration folder](https://github.com/alphagov/govuk-helm-charts/tree/main/charts/argocd-apps/image-tags/integration) for the new release.
+ArgoCD automatically deploys the new release to the Integration environment and then runs the  smokey tests for the app in integration.
 
-ArgoCD notices that the image tag is now different, and automatically deploys the new release to the [integration environment](https://github.com/alphagov/govuk-helm-charts/tree/main/charts/argocd-apps/image-tags/integration). This triggers smokey tests for the app.
+If the smokey tests are successful in integration, the post-sync Argo Workflow will continue and [update the image tag](https://github.com/alphagov/govuk-helm-charts/blob/main/charts/argo-workflows/templates/update-image-tag.yaml) for the next environment. ArgoCD deploys the release to the staging environment and runs smokey tests in staging.
 
-If the smokey tests are successful in integration, this triggers an ArgoCD workflow to update the image tag for the next environment. ArgoCD promotes the release to the [staging environment](https://github.com/alphagov/govuk-helm-charts/tree/main/charts/argocd-apps/image-tags/staging), which triggers further smokey tests.
+If the smokey tests are successful in staging, the post-sync Argo Workflow will continue and [update the image tag](https://github.com/alphagov/govuk-helm-charts/blob/main/charts/argo-workflows/templates/update-image-tag.yaml) for the next environment. ArgoCD deploys the release to the production environment and runs the smokey test in production.
 
-If the smokey tests are successful in staging, ArgoCD promotes the release to the [production environment](https://github.com/alphagov/govuk-helm-charts/tree/main/charts/argocd-apps/image-tags/production), which triggers further smokey tests.
-
-If the smokey tests are successful in production, then ArgoCD deploys the release.
-
-When ArgoCD updates the image tag value, it creates and merges a branch into the main branch for the `govuk-helm-charts` repo without any review.
+When the [post-sync Argo Workflow](https://github.com/alphagov/govuk-helm-charts/blob/main/charts/argo-workflows/templates/update-image-tag.yaml) updates the image tag value, it creates and merges a branch into the main branch for the `govuk-helm-charts` repo without raising a pull request.
 
 Join the [#govuk-deploy-alerts Slack channel](https://gds.slack.com/archives/C01EE7US9R6) to get a notification when an app is deployed and whether the deployment succeeded or failed.
 
