@@ -31,23 +31,19 @@ In the `govuk-helm-charts` repo, the [`argocd-apps` Helm chart](https://github.c
 
 A release is a tagged commit that represents a deployable version of the code for an app. Typically, the continuous integration (CI) pipeline will build a container image for that release and tag the image with the associated Git commit simple hashing algorithm (SHA).
 
-When you deploy a new release, you update the [image tag reference](https://github.com/alphagov/govuk-helm-charts/tree/main/charts/argocd-apps/image-tags) in the `govuk-helm-charts` repo.
+The deployment process is as follows.
 
-ArgoCD detects this change in configuration and triggers a [sync operation](https://argo-cd.readthedocs.io/en/release-1.8/user-guide/sync-waves/) for the associated Argo Applications.
+1. When you deploy a new release, you update the [image tag reference](https://github.com/alphagov/govuk-helm-charts/tree/main/charts/argocd-apps/image-tags) in the `govuk-helm-charts` repo.
 
-During the sync operation, ArgoCD updates the Kubernetes deployment with the new image tag.
+1. An ArgoCD PreSync hook pre-compiles the assets and uploads them to S3 as a Kubernetes Job. This PreSync hook occurs before the main Sync operation that updates the application containers.
 
-Kubernetes then co-ordinates the deployment by creating new application containers using the new image tag and cleans up the old containers.
+1. ArgoCD migrates the database as part of a [Kubernetes Job](https://github.com/alphagov/govuk-helm-charts/blob/main/charts/govuk-rails-app/templates/dbmigration-job.yaml) as part of the Helm chart deployment.
 
+1. ArgoCD detects the change in configuration and triggers a [sync operation](https://argo-cd.readthedocs.io/en/release-1.8/user-guide/sync-waves/) for the associated Argo Applications. During the sync operation, ArgoCD updates the Kubernetes deployment with the new image tag.
 
-___________
-"Database migrations occur as a [Kubernetes Job](https://github.com/alphagov/govuk-helm-charts/blob/main/charts/govuk-rails-app/templates/dbmigration-job.yaml) is created as part of the Helm chart deployment.
+1. Kubernetes then co-ordinates the deployment by creating new application containers using the new image tag and cleans up the old containers.
 
 We do not guarantee the database migrations will occur before the new containers access the database. As best practice database migrations should be forward and backwards compatible by one version.
-
-Assets are pre-compiled and uploaded to S3 as a Kubernetes Job. This occurs as a PreSync hook which runs the Job before the main Sync operation that updates the application containers.
-___________
-
 
 After the Sync operation, ArgoCD triggers the [post-sync Argo Workflow](https://github.com/alphagov/govuk-helm-charts/blob/main/charts/argo-workflows/templates/post-sync-workflow.yaml) to run [smokey tests](https://github.com/alphagov/smokey) for the app.
 
