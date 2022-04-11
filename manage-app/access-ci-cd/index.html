@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
-    <title>Access CI/CD - GOV.UK Kubernetes platform technical documentation</title>
+    <title>How apps are deployed - GOV.UK Kubernetes platform technical documentation</title>
 
     <link href="/stylesheets/manifest.css" rel="stylesheet" />
 
@@ -14,12 +14,12 @@
       <meta name="twitter:card" content="summary" />
       <meta name="twitter:domain" content="govuk-k8s-user-docs.publishing.service.gov.uk" />
       <meta name="twitter:image" content="https://govuk-k8s-user-docs.publishing.service.gov.uk/images/govuk-large.png" />
-      <meta name="twitter:title" content="Access CI/CD - GOV.UK Kubernetes platform technical documentation" />
+      <meta name="twitter:title" content="How apps are deployed - GOV.UK Kubernetes platform technical documentation" />
       <meta name="twitter:url" content="https://govuk-k8s-user-docs.publishing.service.gov.uk/manage-app/access-ci-cd/" />
 
       <meta property="og:image" content="https://govuk-k8s-user-docs.publishing.service.gov.uk/images/govuk-large.png" />
       <meta property="og:site_name" content="GOV.UK Kubernetes platform technical documentation" />
-      <meta property="og:title" content="Access CI/CD" />
+      <meta property="og:title" content="How apps are deployed" />
       <meta property="og:type" content="object" />
       <meta property="og:url" content="https://govuk-k8s-user-docs.publishing.service.gov.uk/manage-app/access-ci-cd/" />
 
@@ -173,16 +173,16 @@
     <a href="/manage-app/manage-state/"><span>Manage state in your app</span></a>
   </li>
   <li>
-    <a href="/manage-app/access-ci-cd/"><span>Access CI/CD pipelines</span></a>
+    <a href="/manage-app/access-ci-cd/"><span>How apps are deployed</span></a>
     <ul>
       <li>
-        <a href="/manage-app/access-ci-cd/#github-actions-ci"><span>Github actions (CI)</span></a>
+        <a href="/manage-app/access-ci-cd/#deploying-a-release-of-a-gov-uk-app"><span>Deploying a release of a GOV.UK app</span></a>
       </li>
       <li>
-        <a href="/manage-app/access-ci-cd/#argocd-cd"><span>ArgoCD (CD)</span></a>
+        <a href="/manage-app/access-ci-cd/#continuous-deployment-of-a-release-of-a-gov-uk-app"><span>Continuous deployment of a release of a GOV.UK app</span></a>
       </li>
       <li>
-        <a href="/manage-app/access-ci-cd/#argo-workflows"><span>Argo Workflows</span></a>
+        <a href="/manage-app/access-ci-cd/#check-the-argo-cd-logs"><span>Check the Argo CD logs</span></a>
       </li>
     </ul>
   </li>
@@ -241,49 +241,48 @@
 
         <div class="app-pane__content toc-open-disabled">
           <main id="content" class="technical-documentation" data-module="anchored-headings">
-            <h1 id="access-ci-cd-pipelines">Access CI/CD pipelines</h1>
-<h2 id="github-actions-ci">Github actions (CI)</h2>
-<p>With GitHub Actions, we can now automatically build and publish our docker image to our private GOV.UK production AWS Elastic Container Repository.</p>
-<p>The GitHub Actions workflow CI yaml file can be found within each repository in the following location: <code>.github/workflows/ci.yaml</code></p>
-<p>When a user merges a branch to main, the GitHub Action Workflows will be triggered, the defined job within the ci.yaml file will then start.
-Within the job there are steps which will checkout the code, build a new Docker image and then push that new Docker image to GOV.UK production AWS Elastic Container Repository.
-Each new image will be tagged with merge commit GitHub simple hashing algorithm (SHA).</p>
-<p>You can view the status of GitHub Actions CI on <code>https://github.com/alphagov/&lt;application repo&gt;/actions</code>. The workflow is named <code>Build and publish to ECR</code>.</p>
-<h3 id="sensitive-data">Sensitive data</h3>
-<p>AWS credentials are stored as Github Organisation level secrets and have been made available to individual repos. If a new repo requires access to secrets, please <a href="https://gds.slack.com/archives/C013F737737">contact the Replatforming team on Slack</a>.</p>
-<p>See the <a href="https://docs.github.com/en/actions">documentation on GitHub Actions</a> for more information.</p>
-<h2 id="argocd-cd">ArgoCD (CD)</h2>
-<p>The GOV.UK Kubernetes Platform provides an <a href="https://argo-cd.readthedocs.io/en/stable/">ArgoCD</a> instance for continuous
-delivery of applications to the cluster.</p>
-<p>ArgoCD is a declarative, GitOps continuous delivery tool for Kubernetes.
-ArgoCD will replace the feature set currently provided by Deploy Jenkins.</p>
-<h3 id="access-the-argocd-integration-instance">Access the ArgoCD integration instance</h3>
-<p>NOTE: In future we will use our Google Accounts for Single Sign-On (SSO) to Argo.
-Our MVP for user testing uses a shared username and password.</p>
+            <h1 id="how-apps-are-deployed">How apps are deployed</h1>
+<p>We deploy a GOV.UK app to the GOV.UK Kubernetes platform as a set of <a href="https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/">Kubernetes resources</a>.</p>
+<p>Examples of resources include a deployment, a service, or an ingress. A <a href="https://kubernetes.io/docs/concepts/workloads/controllers/deployment/">deployment</a> resource creates Pods that run the underlying app containers.</p>
+<p><a href="https://helm.sh/docs/topics/charts/">Helm charts</a> group and describe Kubernetes resources. We define and store GOV.UK app Helm charts in the <a href="https://github.com/alphagov/govuk-helm-charts"><code>govuk-helm-charts</code> repo</a>.</p>
+<p>We use <a href="https://argo-cd.readthedocs.io/en/stable/">Argo CD</a> to automate the deployment of our Helm charts.</p>
+<p>Argo CD does not use the Helm tool to interact with the Kubernetes cluster. Argo CD instead uses the Helm template to generate a set of resource configurations and applies the changes to the cluster directly.</p>
+<p>Argo CD continuously monitors Kubernetes and the <code>govuk-helm-charts</code> repo to make sure they stay in sync. The <code>govuk-helm-charts</code> repo is the source of truth.</p>
+<p>An <a href="https://argo-cd.readthedocs.io/en/stable/operator-manual/declarative-setup/#applications">Argo Application</a> represents a deployed Helm chart in a particular environment. We define an Argo Application for each of the GOV.UK apps.</p>
+<p>Each of these Argo Applications are created and managed by a parent Argo Application. This is known as an <a href="https://argo-cd.readthedocs.io/en/stable/operator-manual/declarative-setup/#app-of-apps">App of Apps</a>.</p>
+<p>In the <code>govuk-helm-charts</code> repo, the <a href="https://github.com/alphagov/govuk-helm-charts/tree/main/charts/argocd-apps"><code>argocd-apps</code> Helm chart</a> defines the Argo Application that defines our other Argo Applications.</p>
+<h2 id="deploying-a-release-of-a-gov-uk-app">Deploying a release of a GOV.UK app</h2>
+<p>A release is a tagged commit that represents a deployable version of the code for an app. Typically, the continuous integration (CI) pipeline will build a container image for that release and tag the image with the associated Git commit simple hashing algorithm (SHA).</p>
+<p>The deployment process is as follows.</p>
 
 <ol>
-<li>Authenticate to the Kubernetes cluster (see <a href="#getting-access-to-the-cluster">getting access to the cluster</a>)</li>
-<li><p>Acquire the password for Argo:</p>
-<div class="highlight"><pre class="highlight shell" tabindex="0"><code>kubectl <span class="nt">-n</span> cluster-services get secret argocd-initial-admin-secret <span class="nt">-o</span> <span class="nv">jsonpath</span><span class="o">=</span><span class="s2">"{.data.password}"</span> | <span class="nb">base64</span> <span class="nt">-d</span><span class="p">;</span> <span class="nb">echo</span>
-</code></pre></div></li>
-<li><p>Navigate to <a href="https://argo.eks.integration.govuk.digital/">ArgoCD (Integration)</a> and sign in using the
-username <code>admin</code> and the password acquired from the previous step.</p></li>
+<li><p>To deploy a release, you update the <a href="https://github.com/alphagov/govuk-helm-charts/tree/main/charts/argocd-apps/image-tags">image tag reference</a> in the <code>govuk-helm-charts</code> repo.</p></li>
+<li><p>An <a href="https://argo-cd.readthedocs.io/en/stable/user-guide/resource_hooks/">Argo CD PreSync hook</a> pre-compiles the assets and uploads them to S3 as a Kubernetes Job. This PreSync hook occurs before the main <a href="https://argo-cd.readthedocs.io/en/stable/user-guide/sync-options/">Sync operation</a> that updates the application containers.</p></li>
+<li><p>A <a href="https://github.com/alphagov/govuk-helm-charts/blob/main/charts/govuk-rails-app/templates/dbmigration-job.yaml">Kubernetes Job</a> runs database migration as part of the Sync operation.</p>
+<p>We do not guarantee the database migrations will occur before the new containers access the database. As best practice database migrations should be forward and backwards compatible by one version.</p></li>
+<li><p>Argo CD updates the Kubernetes deployment with the new image tag. Kubernetes then co-ordinates the deployment by creating new application containers using the new image tag and cleans up the old containers.</p></li>
 </ol>
-<h2 id="argo-workflows">Argo Workflows</h2>
-<p>[Argo Workflows] is used in our GOV.UK Kubernetes Platform to provide the ability to
-run tasks in a Directed Acyclic Graph (DAG) similar to what Concourse offered.</p>
-<h3 id="access-the-argo-workflows-integration-instance">Access the Argo Workflows integration instance</h3>
-<p>NOTE: In future we will use our Google Accounts for Single Sign-On (SSO) to Argo.
-Our MVP for user testing uses a bearer token.</p>
-
-<ol>
-<li>Authenticate to the Kubernetes cluster (see <a href="#getting-access-to-the-cluster">getting access to the cluster</a>)</li>
-<li><p>Acquire the bearer token for [Argo Workflows]:</p>
-<div class="highlight"><pre class="highlight shell" tabindex="0"><code>argo auth token
-</code></pre></div></li>
-<li><p>Navigate to <a href="https://argo-workflows.eks.integration.govuk.digital/">Argo Workflows (Integration)</a> and sign in using the
-bearer token.</p></li>
-</ol>
+<p>After the Sync operation, Argo CD triggers the <a href="https://github.com/alphagov/govuk-helm-charts/blob/main/charts/argo-workflows/templates/post-sync-workflow.yaml">post-sync Argo Workflow</a> to run <a href="https://github.com/alphagov/smokey">smokey tests</a> for the app.</p>
+<h2 id="continuous-deployment-of-a-release-of-a-gov-uk-app">Continuous deployment of a release of a GOV.UK app</h2>
+<p>The continuous deployment (CD) process is an automatic deployment process. A release of a GOV.UK app triggers the CD process, for example when we merge a pull request.</p>
+<p>A new release is automatically generated by our continuous integration (CI) pipeline when a user or process adds a new successful commit to the main branch. CI builds the new image and pushes that new image to AWS Elastic Container Repository (ECR).</p>
+<p>CI then updates the image tag value for integration in the <a href="https://github.com/alphagov/govuk-helm-charts/tree/main/charts/argocd-apps/image-tags/integration">govuk-helm-charts repo</a> for the new release.</p>
+<p>Argo CD automatically deploys the new release to the integration environment and then runs the smokey tests for the app in integration.</p>
+<p>If the smokey tests are successful in integration, the post-sync Argo Workflow will continue and <a href="https://github.com/alphagov/govuk-helm-charts/blob/main/charts/argo-workflows/templates/update-image-tag.yaml">update the image tag</a> for the next environment. Argo CD deploys the release to the staging environment and runs smokey tests in staging.</p>
+<p>If the smokey tests are successful in staging, the post-sync Argo Workflow will continue and <a href="https://github.com/alphagov/govuk-helm-charts/blob/main/charts/argo-workflows/templates/update-image-tag.yaml">update the image tag</a> for the next environment. Argo CD deploys the release to the production environment and runs the smokey test in production.</p>
+<p>When the <a href="https://github.com/alphagov/govuk-helm-charts/blob/main/charts/argo-workflows/templates/update-image-tag.yaml">post-sync Argo Workflow</a> updates the image tag value, it creates and merges a branch into the main branch for the <code>govuk-helm-charts</code> repo without raising a pull request.</p>
+<p>Join the <a href="https://gds.slack.com/archives/C01EE7US9R6">#govuk-deploy-alerts Slack channel</a> to get a notification when an app is deployed and whether the deployment succeeded or failed.</p>
+<p>If your app deployment failed, you should check the Argo CD logs to see why.</p>
+<h2 id="check-the-argo-cd-logs">Check the Argo CD logs</h2>
+<p>You must sign into Argo CD to view the Argo CD logs.</p>
+<p>The environment you need to sign into depends on where the app deployment failed.</p>
+<h3 id="check-the-argo-cd-integration-environment">Check the Argo CD integration environment</h3>
+<p>If your app deployment failed in integration, sign into the <a href="https://argo.eks.integration.govuk.digital/">Argo CD integration environment</a> using your GitHub account.</p>
+<p>To sign into integration, your GitHub account must be part of the <a href="https://github.com/orgs/alphagov/teams/gov-uk">GOV.UK team on alphagov</a>.</p>
+<h3 id="check-the-argo-cd-staging-and-production-environments">Check the Argo CD staging and production environments</h3>
+<p>If your app deployment failed in staging or production, sign into the <a href="https://argo.eks.staging.govuk.digital/">Argo CD staging environment</a> or <a href="https://argo.eks.production.govuk.digital/">Argo CD production environment</a> using your GitHub account.</p>
+<p>To sign into staging or production, your GitHub account must be part of the <a href="https://github.com/orgs/alphagov/teams/gov-uk-production">GOV.UK production team on alphagov</a>.</p>
+<p>See the <a href="https://docs.publishing.service.gov.uk/manual/rules-for-getting-production-access.html">documentation on getting production access</a> for more information.</p>
 
               <div data-module='page-expiry' data-last-reviewed-on="2022-08-01">
     <div class='page-expiry--not-expired'>
@@ -306,7 +305,7 @@ bearer token.</p></li>
           <aside>
               <ul class="contribution-banner">
                 <li><a href="https://github.com/alphagov/govuk-kubernetes-cluster-user-docs/blob/main/source/manage-app/access-ci-cd/index.html.md.erb">View source</a></li>
-                <li><a href="https://github.com/alphagov/govuk-kubernetes-cluster-user-docs/issues/new?body=Problem+with+%27Access+CI%2FCD%27+%28https%3A%2F%2Fgovuk-k8s-user-docs.publishing.service.gov.uk%2Fmanage-app%2Faccess-ci-cd%2F%29&amp;labels=bug&amp;title=Re%3A+%27Access+CI%2FCD%27">Report problem</a></li>
+                <li><a href="https://github.com/alphagov/govuk-kubernetes-cluster-user-docs/issues/new?body=Problem+with+%27How+apps+are+deployed%27+%28https%3A%2F%2Fgovuk-k8s-user-docs.publishing.service.gov.uk%2Fmanage-app%2Faccess-ci-cd%2F%29&amp;labels=bug&amp;title=Re%3A+%27How+apps+are+deployed%27">Report problem</a></li>
                 <li><a href="https://github.com/alphagov/govuk-kubernetes-cluster-user-docs">GitHub Repo</a></li>
               </ul>
           </aside>
