@@ -1,74 +1,84 @@
 ---
-title: Access CI/CD
+title: How apps are deployed
 weight: 42
 last_reviewed_on: 2022-02-01
 review_in: 6 months
 ---
 
-# Access CI/CD pipelines
+# How apps are deployed
 
-## Github actions (CI)
+We deploy a GOV.UK app to the GOV.UK Kubernetes platform as a set of [Kubernetes resources](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-With GitHub Actions, we can now automatically build and publish our docker image to our private GOV.UK production AWS Elastic Container Repository.
+Examples of resources include a deployment, a service, or an ingress. A [deployment](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/) resource creates Pods that run the underlying app containers.
 
-The GitHub Actions workflow CI yaml file can be found within each repository in the following location: `.github/workflows/ci.yaml`
+[Helm charts](https://helm.sh/docs/topics/charts/) group and describe Kubernetes resources. We define and store GOV.UK app Helm charts in the [`govuk-helm-charts` repo](https://github.com/alphagov/govuk-helm-charts).
 
-When a user merges a branch to main, the GitHub Action Workflows will be triggered, the defined job within the ci.yaml file will then start.
-Within the job there are steps which will checkout the code, build a new Docker image and then push that new Docker image to GOV.UK production AWS Elastic Container Repository.
-Each new image will be tagged with merge commit GitHub simple hashing algorithm (SHA).
+We use [Argo CD](https://argo-cd.readthedocs.io/en/stable/) to automate the deployment of our Helm charts.
 
-You can view the status of GitHub Actions CI on `https://github.com/alphagov/<application repo>/actions`. The workflow is named `Build and publish to ECR`.
+Argo CD does not use the Helm tool to interact with the Kubernetes cluster. Argo CD instead uses the Helm template to generate a set of resource configurations and applies the changes to the cluster directly.
 
-### Sensitive data
+Argo CD continuously monitors Kubernetes and the `govuk-helm-charts` repo to make sure they stay in sync. The `govuk-helm-charts` repo is the source of truth.
 
-AWS credentials are stored as Github Organisation level secrets and have been made available to individual repos. If a new repo requires access to secrets, please [contact the Replatforming team on Slack](https://gds.slack.com/archives/C013F737737).
+An [Argo Application](https://argo-cd.readthedocs.io/en/stable/operator-manual/declarative-setup/#applications) represents a deployed Helm chart in a particular environment. We define an Argo Application for each of the GOV.UK apps.
 
-See the [documentation on GitHub Actions](https://docs.github.com/en/actions) for more information.
+Each of these Argo Applications are created and managed by a parent Argo Application. This is known as an [App of Apps](https://argo-cd.readthedocs.io/en/stable/operator-manual/declarative-setup/#app-of-apps).
 
-## ArgoCD (CD)
+In the `govuk-helm-charts` repo, the [`argocd-apps` Helm chart](https://github.com/alphagov/govuk-helm-charts/tree/main/charts/argocd-apps) defines the Argo Application that defines our other Argo Applications.
 
-The GOV.UK Kubernetes Platform provides an [ArgoCD] instance for continuous
-delivery of applications to the cluster.
+## Deploying a release of a GOV.UK app
 
-ArgoCD is a declarative, GitOps continuous delivery tool for Kubernetes.
-ArgoCD will replace the feature set currently provided by Deploy Jenkins.
+A release is a tagged commit that represents a deployable version of the code for an app. Typically, the continuous integration (CI) pipeline will build a container image for that release and tag the image with the associated Git commit simple hashing algorithm (SHA).
 
-### Access the ArgoCD integration instance
+The deployment process is as follows.
 
-NOTE: In future we will use our Google Accounts for Single Sign-On (SSO) to Argo.
-Our MVP for user testing uses a shared username and password.
+1. To deploy a release, you update the [image tag reference](https://github.com/alphagov/govuk-helm-charts/tree/main/charts/argocd-apps/image-tags) in the `govuk-helm-charts` repo.
 
-1. Authenticate to the Kubernetes cluster (see [getting access to the cluster])
-2. Acquire the password for Argo:
+1. An [Argo CD PreSync hook](https://argo-cd.readthedocs.io/en/stable/user-guide/resource_hooks/) pre-compiles the assets and uploads them to S3 as a Kubernetes Job. This PreSync hook occurs before the main [Sync operation](https://argo-cd.readthedocs.io/en/stable/user-guide/sync-options/) that updates the application containers.
 
-    ```sh
-    kubectl -n cluster-services get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo
-    ```
+1. A [Kubernetes Job](https://github.com/alphagov/govuk-helm-charts/blob/main/charts/govuk-rails-app/templates/dbmigration-job.yaml) runs database migration as part of the Sync operation.
 
-3. Navigate to [ArgoCD (Integration)][argo-integration] and sign in using the
-  username `admin` and the password acquired from the previous step.
+     We do not guarantee the database migrations will occur before the new containers access the database. As best practice database migrations should be forward and backwards compatible by one version.
 
-[ArgoCD]: https://argo-cd.readthedocs.io/en/stable/
-[getting access to the cluster]: #getting-access-to-the-cluster
-[argo-integration]: https://argo.eks.integration.govuk.digital/
+1. Argo CD updates the Kubernetes deployment with the new image tag. Kubernetes then co-ordinates the deployment by creating new application containers using the new image tag and cleans up the old containers.
 
-## Argo Workflows
+After the Sync operation, Argo CD triggers the [post-sync Argo Workflow](https://github.com/alphagov/govuk-helm-charts/blob/main/charts/argo-workflows/templates/post-sync-workflow.yaml) to run [smokey tests](https://github.com/alphagov/smokey) for the app.
 
-[Argo Workflows] is used in our GOV.UK Kubernetes Platform to provide the ability to
-run tasks in a Directed Acyclic Graph (DAG) similar to what Concourse offered.
+## Continuous deployment of a release of a GOV.UK app
 
-### Access the Argo Workflows integration instance
+The continuous deployment (CD) process is an automatic deployment process. A release of a GOV.UK app triggers the CD process, for example when we merge a pull request.
 
-NOTE: In future we will use our Google Accounts for Single Sign-On (SSO) to Argo.
-Our MVP for user testing uses a bearer token.
+A new release is automatically generated by our continuous integration (CI) pipeline when a user or process adds a new successful commit to the main branch. CI builds the new image and pushes that new image to AWS Elastic Container Repository (ECR).
 
-1. Authenticate to the Kubernetes cluster (see [getting access to the cluster])
-2. Acquire the bearer token for [Argo Workflows]:
+CI then updates the image tag value for integration in the [govuk-helm-charts repo](https://github.com/alphagov/govuk-helm-charts/tree/main/charts/argocd-apps/image-tags/integration) for the new release.
 
-    ```sh
-    argo auth token
-    ```
+Argo CD automatically deploys the new release to the integration environment and then runs the smokey tests for the app in integration.
 
-3. Navigate to [Argo Workflows (Integration)][argo-workflows-integration] and sign in using the
-  bearer token.
-[argo-workflows-integration]: https://argo-workflows.eks.integration.govuk.digital/
+If the smokey tests are successful in integration, the post-sync Argo Workflow will continue and [update the image tag](https://github.com/alphagov/govuk-helm-charts/blob/main/charts/argo-workflows/templates/update-image-tag.yaml) for the next environment. Argo CD deploys the release to the staging environment and runs smokey tests in staging.
+
+If the smokey tests are successful in staging, the post-sync Argo Workflow will continue and [update the image tag](https://github.com/alphagov/govuk-helm-charts/blob/main/charts/argo-workflows/templates/update-image-tag.yaml) for the next environment. Argo CD deploys the release to the production environment and runs the smokey test in production.
+
+When the [post-sync Argo Workflow](https://github.com/alphagov/govuk-helm-charts/blob/main/charts/argo-workflows/templates/update-image-tag.yaml) updates the image tag value, it creates and merges a branch into the main branch for the `govuk-helm-charts` repo without raising a pull request.
+
+Join the [#govuk-deploy-alerts Slack channel](https://gds.slack.com/archives/C01EE7US9R6) to get a notification when an app is deployed and whether the deployment succeeded or failed.
+
+If your app deployment failed, you should check the Argo CD logs to see why.
+
+## Check the Argo CD logs
+
+You must sign into Argo CD to view the Argo CD logs.
+
+The environment you need to sign into depends on where the app deployment failed.
+
+### Check the Argo CD integration environment
+
+If your app deployment failed in integration, sign into the [Argo CD integration environment](https://argo.eks.integration.govuk.digital/) using your GitHub account.
+
+To sign into integration, your GitHub account must be part of the [GOV.UK team on alphagov](https://github.com/orgs/alphagov/teams/gov-uk).
+
+### Check the Argo CD staging and production environments
+
+If your app deployment failed in staging or production, sign into the [Argo CD staging environment](https://argo.eks.staging.govuk.digital/) or [Argo CD production environment](https://argo.eks.production.govuk.digital/) using your GitHub account.
+
+To sign into staging or production, your GitHub account must be part of the [GOV.UK production team on alphagov](https://github.com/orgs/alphagov/teams/gov-uk-production).
+
+See the [documentation on getting production access](https://docs.publishing.service.gov.uk/manual/rules-for-getting-production-access.html) for more information.
