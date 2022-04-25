@@ -144,14 +144,6 @@
       </li>
     </ul>
   </li>
-  <li>
-    <a href="/get-started/use-platform/"><span>Use the platform</span></a>
-    <ul>
-      <li>
-        <a href="/get-started/use-platform/#interact-with-the-cluster-with-kubectl"><span>Interact with the cluster with kubectl</span></a>
-      </li>
-    </ul>
-  </li>
 </ul>
 </li>
 <li><a href="/add-app-to-platform/"><span>Add your app to the platform</span></a>
@@ -169,6 +161,32 @@
 </li>
 <li><a href="/manage-app/"><span>Manage your app</span></a>
 <ul>
+  <li>
+    <a href="/manage-app/get-app-info/"><span>Get information about your app</span></a>
+    <ul>
+      <li>
+        <a href="/manage-app/get-app-info/#get-a-list-of-all-deployed-apps-in-a-namespace"><span>Get a list of all deployed apps in a namespace</span></a>
+      </li>
+      <li>
+        <a href="/manage-app/get-app-info/#describe-an-app-deployment"><span>Describe an app deployment</span></a>
+      </li>
+      <li>
+        <a href="/manage-app/get-app-info/#list-all-pods-in-an-app"><span>List all pods in an app</span></a>
+      </li>
+      <li>
+        <a href="/manage-app/get-app-info/#describe-a-pod"><span>Describe a pod</span></a>
+      </li>
+      <li>
+        <a href="/manage-app/get-app-info/#view-app-logs"><span>View app logs</span></a>
+      </li>
+      <li>
+        <a href="/manage-app/get-app-info/#view-kubernetes-events"><span>View Kubernetes events</span></a>
+      </li>
+      <li>
+        <a href="/manage-app/get-app-info/#further-information"><span>Further information</span></a>
+      </li>
+    </ul>
+  </li>
   <li>
     <a href="/manage-app/manage-state/"><span>Manage state in your app</span></a>
   </li>
@@ -210,12 +228,12 @@
 <ul>
   <li>
     <a href="/manage-incident/debug-app/"><span>Debug your app</span></a>
-  </li>
-  <li>
-    <a href="/manage-incident/access-app-logs/"><span>Access and view app logs</span></a>
     <ul>
       <li>
-        <a href="/manage-incident/access-app-logs/#access-application-logs"><span>Access application logs</span></a>
+        <a href="/manage-incident/debug-app/#create-a-shell-inside-a-running-container"><span>Create a shell inside a running container</span></a>
+      </li>
+      <li>
+        <a href="/manage-incident/debug-app/#port-forward-to-a-pod"><span>Port-forward to a pod</span></a>
       </li>
     </ul>
   </li>
@@ -242,6 +260,18 @@
         <div class="app-pane__content toc-open-disabled">
           <main id="content" class="technical-documentation" data-module="anchored-headings">
             <h1 id="debug-your-app">Debug your app</h1>
+<h2 id="create-a-shell-inside-a-running-container">Create a shell inside a running container</h2>
+<p>If you cannot diagnose an issue by looking at the app logs, you can create a shell to run commands inside a running app container.</p>
+<p>Run the following in the command line:</p>
+<div class="highlight"><pre class="highlight shell" tabindex="0"><code>kubectl <span class="nt">-n</span> &lt;namespace&gt; <span class="nb">exec</span> <span class="nt">-it</span> &lt;pod&gt; sh <span class="nt">-c</span> &lt;container&gt;
+</code></pre></div><p>If you do not specify the container, the command creates a shell inside the first container in the app manifest.</p>
+<p>For more information, see the <a href="https://kubernetes.io/docs/tasks/debug-application-cluster/get-shell-running-container/">Kubernetes documentation on get a shell to a running container</a>.</p>
+<h2 id="port-forward-to-a-pod">Port-forward to a pod</h2>
+<p>You can make a port available on your local machine to send commands direct to the app from your local machine.</p>
+<p>This command works on a pod level rather than a container level, as everything in a pod has the same IP address.</p>
+<p>For example, too forward port <code>5000</code> on <code>localhost</code> to port <code>5001</code> in a pod, run:</p>
+<div class="highlight"><pre class="highlight shell" tabindex="0"><code>kubectl <span class="nt">-n</span> &lt;namespace&gt; port-forward &lt;pod&gt; 5000:5001
+</code></pre></div><p>You can find the pod port in the app configuration.</p>
 
               <div data-module='page-expiry' data-last-reviewed-on="2022-08-01">
     <div class='page-expiry--not-expired'>
