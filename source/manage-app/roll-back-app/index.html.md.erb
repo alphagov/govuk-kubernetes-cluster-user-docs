@@ -6,3 +6,59 @@ review_in: 6 months
 ---
 
 # Roll back your app
+
+you've deployed an app, and you want to revert to an older version of the app because
+
+it's a bad release, with errors to users
+
+2 ways
+
+1 method is to manually deploy an odler version of the app - only works for integration env deployment
+
+go to the github repo for your app
+
+go to releases (rhs)
+
+find the release number for the older version you want to roll back to
+
+make note of the tag number
+
+select actions
+
+select deploy under workflows
+
+select run workflow to manually deploy a commit of the older version of the app
+
+enter the release tag you want to manually deploy
+
+then select run workflow
+
+manually running will auto build the image for the older release and deploy it
+
+2nd way
+
+if github actions isnt working
+
+go to app repo
+
+go to release tags, and select the abbreviate commit hash of the older version
+
+copy the full commit SHA on the right hand side at the top
+
+got to https://github.com/alphagov/govuk-helm-charts
+
+charts > argocdapps > image tags - https://github.com/alphagov/govuk-helm-charts/tree/main/charts/argocd-apps/image-tags
+
+select environemnt you want to roll back, most of the time would be production, however you can roll back to say staging if you want to diagnose the issue before deploying the oloder version to production
+
+find the app you want to roll back
+
+replace the commit hash in the file with the commit hash you want to roll back to
+
+create a PR and merge that change into main
+
+once that is merged in, argocd auto deploys, link to relevant docs
+
+you can only roll back to previous commits on the main branch
+
+you can only roll back to commits that relate to a release number / tag, not commits that are inbetween releases
