@@ -1,18 +1,17 @@
 ---
-title: Release new version of your app
+title: How a new version of an app is released
 weight: 45
-last_reviewed_on: 2022-02-01
+last_reviewed_on: 2022-05-12
 review_in: 6 months
 ---
 
-# Release new version of your app
+# How a new version of an app is released
 
-what are releases and when do they occur
+A new release of an app automatically occurs when:
 
-automatic process
+- a user adds a new merge commit to the main branch of an app
+- that app successfully passes all [pre-release tests](/manage-app/access-ci-cd/#continuous-deployment-of-a-release-of-a-gov-uk-app)
 
-occurs every time a new merge commit is added to the main branch of an app and successfully passes all status checks
+Argo CD automatically adds a [release tag](https://github.com/alphagov/govuk-helm-charts/tags) to that merge commit. The release tag is a number, incremented by one from the number of the previous release tag.
 
-we automaticaly add a release tag to that commit. release tag is an incremented number from previous
-
-currently happens in jenkins in legacy infrastructure 
+This process currently happens in Jenkins. This is legacy infrastructure.
