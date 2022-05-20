@@ -6,3 +6,94 @@ review_in: 6 months
 ---
 
 # Scale your app
+
+If user demand increases, you must scale your app to keep up with user demand. That is, you must increase the resources available to your app.
+
+You can increase the:
+
+- number of instances
+- amount of memory
+- number of CPU cores
+- number of requests to the CPU ___??????___
+
+You can either:
+
+- permanently scale an app
+- have an app automatically scale up and down depending on user demand
+
+## Permanently scale an app
+
+To permanently scale an app, change your app's `values.yaml` file in the [`charts` folder in the `govuk-helm-charts` repo](https://github.com/alphagov/govuk-helm-charts/blob/main/charts/), and then commit that change.
+
+Check the [Value definitions documentation](LINK) to know what values to change and why.
+
+When you merge the pull request, the changed file will be [automatically built and deployed by the CD pipeline](LINK).
+
+## Scale an app automatically depending on user demand
+
+TBC
+
+## Value definitions
+
+
+
+
+
+
+also have choice to say when load starts to pick up, you can scale instances to xyz
+
+once it's scaled out to 10, was is the trigger to scale back to three
+
+set numbers in git
+
+to permanently increase the number of instances, we would commit into git changing the number of instances
+
+https://github.com/alphagov/govuk-helm-charts/blob/main/charts/asset-manager/values.yaml#L50
+
+all apps live in https://github.com/alphagov/govuk-helm-charts/tree/main/charts
+
+make a change, then merge the commit, then auto build and deploy (integration -> staging etc)
+
+there are multiple things to scale, see following:
+
+replicaCount: 2
+
+
+
+workerEnabled: false
+workerReplicaCount: 2
+
+appResources:
+  limits:
+    cpu: 1
+    memory: 1Gi
+  requests:
+    cpu: 500m
+    memory: 512Mi
+
+workerResources:
+  limits:
+    cpu: 1
+    memory: 1Gi
+  requests:
+    cpu: 500m
+    memory: 512Mi
+
+jobResources:
+  limits:
+    cpu: 1
+    memory: 1Gi
+  requests:
+    cpu: 500m
+    memory: 512Mi
+
+nginxResources:
+  limits:
+    cpu: 1
+    memory: 1Gi
+  requests:
+    cpu: 500m
+    memory: 512Mi
+
+
+others as well
