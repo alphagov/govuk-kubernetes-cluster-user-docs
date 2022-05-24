@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
-    <title>Release new version of your app - GOV.UK Kubernetes platform technical documentation</title>
+    <title>How a new version of an app is released - GOV.UK Kubernetes platform technical documentation</title>
 
     <link href="/stylesheets/manifest.css" rel="stylesheet" />
 
@@ -14,12 +14,12 @@
       <meta name="twitter:card" content="summary" />
       <meta name="twitter:domain" content="govuk-k8s-user-docs.publishing.service.gov.uk" />
       <meta name="twitter:image" content="https://govuk-k8s-user-docs.publishing.service.gov.uk/images/govuk-large.png" />
-      <meta name="twitter:title" content="Release new version of your app - GOV.UK Kubernetes platform technical documentation" />
+      <meta name="twitter:title" content="How a new version of an app is released - GOV.UK Kubernetes platform technical documentation" />
       <meta name="twitter:url" content="https://govuk-k8s-user-docs.publishing.service.gov.uk/manage-app/release-new-version/" />
 
       <meta property="og:image" content="https://govuk-k8s-user-docs.publishing.service.gov.uk/images/govuk-large.png" />
       <meta property="og:site_name" content="GOV.UK Kubernetes platform technical documentation" />
-      <meta property="og:title" content="Release new version of your app" />
+      <meta property="og:title" content="How a new version of an app is released" />
       <meta property="og:type" content="object" />
       <meta property="og:url" content="https://govuk-k8s-user-docs.publishing.service.gov.uk/manage-app/release-new-version/" />
 
@@ -211,7 +211,7 @@
     <a href="/manage-app/scale-app/"><span>Scale your app</span></a>
   </li>
   <li>
-    <a href="/manage-app/release-new-version/"><span>Release new version of your app</span></a>
+    <a href="/manage-app/release-new-version/"><span>How a new version of an app is released</span></a>
   </li>
   <li>
     <a href="/manage-app/roll-back-app/"><span>Roll back your app</span></a>
@@ -259,19 +259,26 @@
 
         <div class="app-pane__content toc-open-disabled">
           <main id="content" class="technical-documentation" data-module="anchored-headings">
-            <h1 id="release-new-version-of-your-app">Release new version of your app</h1>
+            <h1 id="how-a-new-version-of-an-app-is-released">How a new version of an app is released</h1>
+<p>A new release of an app automatically occurs when:</p>
 
-              <div data-module='page-expiry' data-last-reviewed-on="2022-08-01">
+<ul>
+<li>a user adds a new merge commit to the main branch of an app</li>
+<li>that app successfully passes all <a href="/manage-app/access-ci-cd/#continuous-deployment-of-a-release-of-a-gov-uk-app">pre-release tests</a></li>
+</ul>
+<p>Jenkins automatically adds a Git tag with the release number to that merge commit. The release tag is a number, incremented by one from the number of the previous release tag.</p>
+
+              <div data-module='page-expiry' data-last-reviewed-on="2022-11-12">
     <div class='page-expiry--not-expired'>
-      This page was last reviewed on 1 February 2022.
+      This page was last reviewed on 12 May 2022.
 
-        It needs to be reviewed again on 1 August 2022
+        It needs to be reviewed again on 12 November 2022
         by the page owner <a href="https://gds.slack.com/messages/govuk-replatforming">#govuk-replatforming</a>
         .
     </div>
 
     <div class='page-expiry--expired'>
-      This page was set to be reviewed before 1 August 2022
+      This page was set to be reviewed before 12 November 2022
        by the page owner <a href="https://gds.slack.com/messages/govuk-replatforming">#govuk-replatforming</a>.
       This might mean the content is out of date.
     </div>
@@ -282,7 +289,7 @@
           <aside>
               <ul class="contribution-banner">
                 <li><a href="https://github.com/alphagov/govuk-kubernetes-cluster-user-docs/blob/main/source/manage-app/release-new-version/index.html.md.erb">View source</a></li>
-                <li><a href="https://github.com/alphagov/govuk-kubernetes-cluster-user-docs/issues/new?body=Problem+with+%27Release+new+version+of+your+app%27+%28https%3A%2F%2Fgovuk-k8s-user-docs.publishing.service.gov.uk%2Fmanage-app%2Frelease-new-version%2F%29&amp;labels=bug&amp;title=Re%3A+%27Release+new+version+of+your+app%27">Report problem</a></li>
+                <li><a href="https://github.com/alphagov/govuk-kubernetes-cluster-user-docs/issues/new?body=Problem+with+%27How+a+new+version+of+an+app+is+released%27+%28https%3A%2F%2Fgovuk-k8s-user-docs.publishing.service.gov.uk%2Fmanage-app%2Frelease-new-version%2F%29&amp;labels=bug&amp;title=Re%3A+%27How+a+new+version+of+an+app+is+released%27">Report problem</a></li>
                 <li><a href="https://github.com/alphagov/govuk-kubernetes-cluster-user-docs">GitHub Repo</a></li>
               </ul>
           </aside>
