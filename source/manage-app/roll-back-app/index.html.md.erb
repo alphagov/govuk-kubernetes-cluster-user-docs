@@ -16,7 +16,7 @@ You can roll back your app by:
 
 1. Get the full commit simple hashing algorithm (SHA) associated with the older release you want to roll back to.
 
-    There are multiple ways to do this. For example, if you are using the GitHub UI:
+    There are multiple ways to do this. For example, if you are using the GitHub user interface:
     - go to your app's repo
     - go to __Releases__ > __Tags__ and select the abbreviated SHA, for example `bc0b0b0`
     - copy the full SHA, for example `bc0b0b0c980f867b293cd40157c6da3a29186680`
@@ -39,11 +39,13 @@ This rollback method only works for the integration environment.
 
 1. Go to __Actions__ and select __Workflows__ > __Deploy__.
 
-1. Select _Run workflow__ and enter the release number that you want to roll back to.
+1. Select __Run workflow__ and enter the release number that you want to roll back to.
 
-1. Select _Run workflow__ to manually deploy the older version of the app.
+1. Select __Run workflow__ to manually deploy the older version of the app.
 
 Argo CD will then:
 
 - automatically build the image for the older version of the app
 - deploy that version of the app
+
+Check the [#govuk-deploy-alerts Slack channel](https://gds.slack.com/archives/C01EE7US9R6) for a notification when the older version of the app is successfully deployed.
