@@ -215,6 +215,14 @@
   </li>
   <li>
     <a href="/manage-app/roll-back-app/"><span>Roll back your app</span></a>
+    <ul>
+      <li>
+        <a href="/manage-app/roll-back-app/#updating-the-image-tag-to-an-older-release"><span>Updating the image tag to an older release</span></a>
+      </li>
+      <li>
+        <a href="/manage-app/roll-back-app/#triggering-the-deploy-github-action-to-deploy-an-older-release"><span>Triggering the deploy GitHub Action to deploy an older release</span></a>
+      </li>
+    </ul>
   </li>
   <li>
     <a href="/manage-app/set-permissions/"><span>Set access permissions for your app</span></a>
@@ -260,6 +268,45 @@
         <div class="app-pane__content toc-open-disabled">
           <main id="content" class="technical-documentation" data-module="anchored-headings">
             <h1 id="roll-back-your-app">Roll back your app</h1>
+<p>You can roll back your app by:</p>
+
+<ul>
+<li>updating the image tag to an older release in the <code>govuk-helm-charts</code> repo</li>
+<li>triggering the deploy GitHub Action to deploy an older release - this only works in the integration environment</li>
+</ul>
+<h2 id="updating-the-image-tag-to-an-older-release">Updating the image tag to an older release</h2>
+
+<ol>
+<li><p>Get the full commit simple hashing algorithm (SHA) associated with the older release you want to roll back to.</p>
+<p>There are multiple ways to do this. For example, if you are using the GitHub user interface:</p>
+
+<ul>
+<li>go to your app&rsquo;s repo</li>
+<li>go to <strong>Releases</strong> &gt; <strong>Tags</strong> and select the abbreviated SHA, for example <code>bc0b0b0</code></li>
+<li>copy the full SHA, for example <code>bc0b0b0c980f867b293cd40157c6da3a29186680</code></li>
+</ul></li>
+<li><p>Go to the <a href="https://github.com/alphagov/govuk-helm-charts/tree/main/charts/argocd-apps/image-tags"><code>image-tags</code> folder in the <code>govuk-helm-charts</code> repo</a>.</p></li>
+<li><p>Replace the contents of the relevant image tag file with the full commit SHA of the release you want to roll back to.</p></li>
+<li><p>Create a pull request and merge the change into the main branch.</p></li>
+</ol>
+<p>Once you have merged your pull request, <a href="/manage-app/access-ci-cd/#deploying-a-release-of-a-gov-uk-app">Argo CD automatically deploys the older version of the app to production</a>.</p>
+<h2 id="triggering-the-deploy-github-action-to-deploy-an-older-release">Triggering the deploy GitHub Action to deploy an older release</h2>
+<p>This rollback method only works for the integration environment.</p>
+
+<ol>
+<li><p>Go to your app&rsquo;s repo and select <strong>Releases</strong>.</p></li>
+<li><p>Find the release number for the version of the app you want to roll back to.</p></li>
+<li><p>Go to <strong>Actions</strong> and select <strong>Workflows</strong> &gt; <strong>Deploy</strong>.</p></li>
+<li><p>Select <strong>Run workflow</strong> and enter the release number that you want to roll back to.</p></li>
+<li><p>Select <strong>Run workflow</strong> to manually deploy the older version of the app.</p></li>
+</ol>
+<p>Argo CD will then:</p>
+
+<ul>
+<li>automatically build the image for the older version of the app</li>
+<li>deploy that version of the app</li>
+</ul>
+<p>Check the <a href="https://gds.slack.com/archives/C01EE7US9R6">#govuk-deploy-alerts Slack channel</a> for a notification when the older version of the app is successfully deployed.</p>
 
               <div data-module='page-expiry' data-last-reviewed-on="2022-08-01">
     <div class='page-expiry--not-expired'>
