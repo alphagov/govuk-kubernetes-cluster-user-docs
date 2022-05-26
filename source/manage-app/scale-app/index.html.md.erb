@@ -7,93 +7,47 @@ review_in: 6 months
 
 # Scale your app
 
-If user demand increases, you must scale your app to keep up with user demand. That is, you must increase the resources available to your app.
+If user demand on your app increases, you must increase the resources available to your app, also known as scaling your app.
 
-You can increase the:
+## Scaling your app
 
-- number of instances
-- amount of memory
-- number of CPU cores
-- number of requests to the CPU ___??????___
+To scale an app, change your app's `values.yaml` file in the [`charts` folder in the `govuk-helm-charts` repo](https://github.com/alphagov/govuk-helm-charts/blob/main/charts/), and then commit that change.
 
-You can either:
+When you merge the pull request, the changed file will be [automatically built and deployed by the CD pipeline](https://govuk-k8s-user-docs.publishing.service.gov.uk/manage-app/access-ci-cd/#deploying-a-release-of-a-gov-uk-app).
 
-- permanently scale an app
-- have an app automatically scale up and down depending on user demand
+[Check what you can scale](#what-you-can-scale) to know what values to change and why.
 
-## Permanently scale an app
+You should be aware of how your app interacts with other apps, and what effect scaling your app would have on the other apps.
 
-To permanently scale an app, change your app's `values.yaml` file in the [`charts` folder in the `govuk-helm-charts` repo](https://github.com/alphagov/govuk-helm-charts/blob/main/charts/), and then commit that change.
+For example, if you greatly increase your frontend app's number of instances or pods, you may need to increase the number of instances of any backend apps that support your frontend as well.
 
-Check the [Value definitions documentation](LINK) to know what values to change and why.
+## Scaling platform resources
 
-When you merge the pull request, the changed file will be [automatically built and deployed by the CD pipeline](LINK).
+If you increase the resources available to your app, this will increase the load on the virtual machines (VMs) that the platform runs on.
 
-## Scale an app automatically depending on user demand
+You should be aware of this increased load on the platform, and look out for any [Argo CD deployment notifications or alerts](https://argocd-notifications.readthedocs.io/en/stable/).
 
-TBC
+You can [email the GOV.UK Replatforming team](mailto:govuk-replatforming-team@digital.cabinet-office.gov.uk) to discuss how scaling your app's resources affects the platform, and whether you need to scale the platform resources as well.
 
-## Value definitions
+## What you can scale
 
+You can scale the following replicas:
 
+- `replicaCount`, that is the number of running instances or pods of your app
+- `workerReplicaCount`, that is SOMETHING
 
+You can also scale the following resources:
 
+- number of VM CPU cores
+- amount of VM memory
+- number of requests that can be sent to the VM CPU cores
+- amount of VM memory that can be allocated to handling requests
 
+You can scale these resources for the following resource categories:
 
-also have choice to say when load starts to pick up, you can scale instances to xyz
+- `appResources`, that is the resources that your app uses
+- `workerResources`, that is the reosurces that your worker nodes use
+- `jobResources`, that is the resources that your jobs use
+- `nginxResources`, that is the resources that the NGINX load balancer uses
 
-once it's scaled out to 10, was is the trigger to scale back to three
-
-set numbers in git
-
-to permanently increase the number of instances, we would commit into git changing the number of instances
-
-https://github.com/alphagov/govuk-helm-charts/blob/main/charts/asset-manager/values.yaml#L50
-
-all apps live in https://github.com/alphagov/govuk-helm-charts/tree/main/charts
-
-make a change, then merge the commit, then auto build and deploy (integration -> staging etc)
-
-there are multiple things to scale, see following:
-
-replicaCount: 2
-
-
-
-workerEnabled: false
-workerReplicaCount: 2
-
-appResources:
-  limits:
-    cpu: 1
-    memory: 1Gi
-  requests:
-    cpu: 500m
-    memory: 512Mi
-
-workerResources:
-  limits:
-    cpu: 1
-    memory: 1Gi
-  requests:
-    cpu: 500m
-    memory: 512Mi
-
-jobResources:
-  limits:
-    cpu: 1
-    memory: 1Gi
-  requests:
-    cpu: 500m
-    memory: 512Mi
-
-nginxResources:
-  limits:
-    cpu: 1
-    memory: 1Gi
-  requests:
-    cpu: 500m
-    memory: 512Mi
-
-
-others as well
+Most of the time, you should scale the `appResources`.
