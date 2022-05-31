@@ -291,6 +291,7 @@
 <li>AWS load balancer controller</li>
 <li>Cluster autoscaler</li>
 <li>Dex OpenID connect provider</li>
+<li>AWS EBS CSI driver</li>
 </ul>
 <h3 id="external-secrets">External secrets</h3>
 <p>The <a href="https://github.com/alphagov/govuk-infrastructure/blob/main/terraform/deployments/cluster-services/external_secrets.tf">External-secrets add-on</a>:</p>
@@ -320,6 +321,9 @@
 <p>The GOV.UK Kubernetes platform cluster uses Dex to manage single sign-on to services in the cluster, for example, <a href="https://docs.publishing.service.gov.uk/manual/grafana.html">Grafana dashboards</a> and <a href="/get-started/access-eks-cluster/#access-eks-cluster">Argo CD</a>.</p>
 <p>Dex acts as an intermediary between apps that are restricted to authorised users, and apps that know how to verify a user&rsquo;s identity.</p>
 <p>For more information, see the <a href="https://dexidp.io/docs/">Dex OpenID connect provider documentation</a>.</p>
+<h3 id="aws-ebs-csi-driver">AWS EBS CSI Driver</h3>
+<p>The <a href="https://github.com/alphagov/govuk-infrastructure/blob/main/terraform/deployments/cluster-services/aws_ebs_csi_driver.tf">AWS Elastic Block Store (EBS) Container Storage Interface (CSI) driver</a> allows Amazon EKS clusters to manage the lifecycle of Amazon EBS volumes for persistent volumes.</p>
+<p>For more information, see the <a href="https://docs.aws.amazon.com/eks/latest/userguide/ebs-csi.html">Amazon EBS CSI driver documentation</a>.</p>
 <h2 id="platform-cluster-user-authentication">Platform cluster user authentication</h2>
 <p>To authenticate users, the GOV.UK Kubernetes platform cluster uses an <a href="https://github.com/alphagov/govuk-infrastructure/blob/main/terraform/deployments/cluster-services/aws_auth_configmap.tf"><code>aws-auth</code> ConfigMap</a> in the <code>kube-system</code> <a href="https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/">namespace</a>.</p>
 <p>The ConfigMap maps a user&rsquo;s AWS Identity Access Management (IAM) role to the equivalent role in the <a href="https://kubernetes.io/docs/reference/access-authn-authz/rbac/">Kubernetes role-based access control system</a>.</p>
