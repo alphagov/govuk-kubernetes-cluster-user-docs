@@ -29,6 +29,7 @@ The GOV.UK Kubernetes platform cluster uses the following add-ons in its impleme
 - AWS load balancer controller
 - Cluster autoscaler
 - Dex OpenID connect provider
+- AWS EBS CSI driver
 
 ### External secrets
 
@@ -71,6 +72,12 @@ The GOV.UK Kubernetes platform cluster uses Dex to manage single sign-on to serv
 Dex acts as an intermediary between apps that are restricted to authorised users, and apps that know how to verify a user's identity.
 
 For more information, see the [Dex OpenID connect provider documentation](https://dexidp.io/docs/).
+
+### AWS EBS CSI Driver
+
+The [AWS Elastic Block Store (EBS) Container Storage Interface (CSI) driver](https://github.com/alphagov/govuk-infrastructure/blob/main/terraform/deployments/cluster-services/aws_ebs_csi_driver.tf) allows Amazon EKS clusters to manage the lifecycle of Amazon EBS volumes for persistent volumes.
+
+For more information, see the [Amazon EBS CSI driver documentation](https://docs.aws.amazon.com/eks/latest/userguide/ebs-csi.html).
 
 ## Platform cluster user authentication
 
