@@ -19,7 +19,7 @@ When you merge the pull request, the changed file will be [automatically built a
 
 You should be aware of how your app interacts with other apps, and what effect scaling your app would have on the other apps.
 
-For example, if you greatly increase your frontend app's number of instances or pods, you may need to increase the number of instances of any backend apps that support your frontend as well.
+For example, if you increase your frontend app's number of instances or pods, you may need to increase the number of instances of any backend apps that support your frontend as well.
 
 ## Scaling platform resources
 
@@ -34,20 +34,22 @@ You can [email the GOV.UK Replatforming team](mailto:govuk-replatforming-team@di
 You can scale the following replicas:
 
 - `replicaCount`, that is the number of running instances or pods of your app
-- `workerReplicaCount`, that is SOMETHING
+- `workerReplicaCount`, this is the number of worker instances, if enabled, that run alongside your app within the pod (optional as it does not apply to all apps)
 
 You can also scale the following resources:
 
-- number of VM CPU cores
-- amount of VM memory
-- number of requests that can be sent to the VM CPU cores
-- amount of VM memory that can be allocated to handling requests
+- number of virtual CPU cores
+- amount of virtual memory
+- number of requests that can be sent to the virtual CPU cores
+- amount of virtual memory that can be allocated to handling requests
+
+For more information on these resources, see the [Kubernetes documentation on pod and container resource management requests and limits] (https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/#requests-and-limits).
 
 You can scale these resources for the following resource categories:
 
-- `appResources`, that is the resources that your app uses
-- `workerResources`, that is the reosurces that your worker nodes use
-- `jobResources`, that is the resources that your jobs use
-- `nginxResources`, that is the resources that the NGINX load balancer uses
+- `appResources`, the resources that your app uses
+- `workerResources`, if enabled, the resources that your worker nodes use
+- `jobResources`, if enabled, the resources that your jobs use to upload assets
+- `nginxResources`, the resources that the NGINX proxy uses
 
-Most of the time, you should scale the `appResources`.
+Most of the time, you should only need to scale the `appResources`, but you may need to scale the other resources as well.
