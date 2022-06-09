@@ -320,19 +320,35 @@
 <li><p>If it&rsquo;s your first time accessing the cluster through kubectl, add the <code>govuk</code> cluster to your kubectl configuration in <code>~/.kube/config</code>:</p>
 <div class="highlight"><pre class="highlight shell" tabindex="0"><code>aws eks update-kubeconfig <span class="nt">--name</span> govuk
 </code></pre></div></li>
+<li><p>To make it easier to switch between clusters, namespaces or users, edit your kubectl configuration (usually located at <code>~/.kube/config</code>) and rename the new context with a more human readable context name.</p>
+<p>To do this, edit the <code>name</code> field of the last context in the kubectl configuration. For example, you can set the <code>name</code> to <code>&lt;govuk-environment&gt;</code>.</p>
+<p>See the <a href="https://kubernetes.io/docs/tasks/access-application-cluster/configure-access-multiple-clusters/">Kubernetes documentation on configuring access to multiple clusters</a> for more information.</p></li>
 <li><p>To check that you have access to the cluster, run:</p>
-<div class="highlight"><pre class="highlight shell" tabindex="0"><code>kubectl cluster-info
+<div class="highlight"><pre class="highlight shell" tabindex="0"><code>kubectl config use-context &lt;govuk-environment&gt;
+kubectl cluster-info
 </code></pre></div><p>If you have access, you should get information about the GOV.UK EKS cluster control plane, like in the following example:</p>
 <div class="highlight"><pre class="highlight shell" tabindex="0"><code>Kubernetes control plane is https://<span class="o">{</span>GOVUK_CLUSTER_ADDRESS<span class="o">}</span>.<span class="o">{</span>AWS_REGION<span class="o">}</span>.eks.amazonaws.com
 </code></pre></div></li>
 </ol>
 <h2 id="switching-clusters">Switching clusters</h2>
-<p>To switch clusters, run the export AWS credentials command in the <code>gds-cli</code>, selecting the appropriate GOV.UK environment and role:</p>
-<div class="highlight"><pre class="highlight shell" tabindex="0"><code><span class="nb">eval</span> <span class="si">$(</span>gds aws govuk-&lt;govuk-environment&gt;-&lt;role&gt; <span class="nt">-e</span> <span class="nt">--art</span> 8h<span class="si">)</span>
-<span class="nb">export </span><span class="nv">AWS_REGION</span><span class="o">=</span>eu-west-1
-</code></pre></div><p>where:
-- <code>&lt;govuk-environment&gt;</code> is the GOV.UK environment that you want to get credentials for and will be <code>test</code>, <code>integration</code>, <code>staging</code>, or <code>production</code>
-- <code>&lt;role&gt;</code> is the appropriate role and will be <code>admin</code>, <code>poweruser</code> or <code>readonly</code></p>
+<p>To switch clusters:</p>
+
+<ol>
+<li><p>Run the export AWS credentials command in the <code>gds-cli</code>, selecting the appropriate GOV.UK environment and role:</p>
+<div class="highlight"><pre class="highlight shell" tabindex="0"><code> <span class="nb">eval</span> <span class="si">$(</span>gds aws govuk-&lt;govuk-environment&gt;-&lt;role&gt; <span class="nt">-e</span> <span class="nt">--art</span> 8h<span class="si">)</span>
+ <span class="nb">export </span><span class="nv">AWS_REGION</span><span class="o">=</span>eu-west-1
+</code></pre></div><p>where:</p>
+
+<ul>
+<li><code>&lt;govuk-environment&gt;</code> is the GOV.UK environment that you want to get credentials for and will be <code>test</code>, <code>integration</code>, <code>staging</code>, or <code>production</code></li>
+<li><code>&lt;role&gt;</code> is the appropriate role and will be <code>admin</code>, <code>poweruser</code> or <code>readonly</code></li>
+</ul></li>
+<li><p>Switch to the correct kubectl context:</p>
+<div class="highlight"><pre class="highlight shell" tabindex="0"><code> kubectl config use-context &lt;govuk-environment&gt;
+</code></pre></div><p>You can get a list of context by running:</p>
+<div class="highlight"><pre class="highlight shell" tabindex="0"><code> kubectl config get-contexts
+</code></pre></div></li>
+</ol>
 
               <div data-module='page-expiry' data-last-reviewed-on="2022-08-01">
     <div class='page-expiry--not-expired'>
