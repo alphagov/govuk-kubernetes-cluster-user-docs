@@ -62,9 +62,16 @@ The read-only role:
     aws eks update-kubeconfig --name govuk
     ```
 
+1. To make it easier to switch between clusters, namespaces or users, edit your kubectl configuration (usually located at `~/.kube/config`) and rename the new context with a more human readable context name.
+
+    To do this, edit the `name` field of the last context in the kubectl configuration. For example, you can set the `name` to `<govuk-environment>`.
+
+    See the [Kubernetes documentation on configuring access to multiple clusters](https://kubernetes.io/docs/tasks/access-application-cluster/configure-access-multiple-clusters/) for more information.
+
 1. To check that you have access to the cluster, run:
 
     ```sh
+    kubectl config use-context <govuk-environment>
     kubectl cluster-info
     ```
 
@@ -76,12 +83,26 @@ The read-only role:
 
 ## Switching clusters
 
-To switch clusters, run the export AWS credentials command in the `gds-cli`, selecting the appropriate GOV.UK environment and role:
+To switch clusters:
 
-```sh
-eval $(gds aws govuk-<govuk-environment>-<role> -e --art 8h)
-export AWS_REGION=eu-west-1
-```
-where:
-- `<govuk-environment>` is the GOV.UK environment that you want to get credentials for and will be `test`, `integration`, `staging`, or `production`
-- `<role>` is the appropriate role and will be `admin`, `poweruser` or `readonly`
+1. Run the export AWS credentials command in the `gds-cli`, selecting the appropriate GOV.UK environment and role:
+
+     ```sh
+     eval $(gds aws govuk-<govuk-environment>-<role> -e --art 8h)
+     export AWS_REGION=eu-west-1
+     ```
+    where:
+    - `<govuk-environment>` is the GOV.UK environment that you want to get credentials for and will be `test`, `integration`, `staging`, or `production`
+    - `<role>` is the appropriate role and will be `admin`, `poweruser` or `readonly`
+
+1. Switch to the correct kubectl context:
+
+     ```sh
+     kubectl config use-context <govuk-environment>
+     ```
+
+    You can get a list of context by running:
+
+     ```sh
+     kubectl config get-contexts
+     ```
