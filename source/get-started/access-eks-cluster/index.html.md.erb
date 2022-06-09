@@ -62,9 +62,11 @@ The read-only role:
     aws eks update-kubeconfig --name govuk
     ```
 
-1. For ease of switching between clusters/namespaces/users, it may be useful to edit your kubectl configuration (usually located at `~/.kube/config`) and
-   re-name the new context added with a more human readable context name. This is done by editing the `name` field of the last context in kubectl configuration.
-   E.g. set the name to `<govuk-environment>`. Further information about how to set kubectl context is available [here](https://kubernetes.io/docs/tasks/access-application-cluster/configure-access-multiple-clusters/)
+1. To make it easier to switch between clusters, namespaces or users, edit your kubectl configuration (usually located at `~/.kube/config`) and rename the new context with a more human readable context name.
+
+    To do this, edit the `name` field of the last context in the kubectl configuration. For example, you can set the `name` to `<govuk-environment>`.
+
+    See the [Kubernetes documentation on configuring access to multiple clusters](https://kubernetes.io/docs/tasks/access-application-cluster/configure-access-multiple-clusters/) for more information.
 
 1. To check that you have access to the cluster, run:
 
@@ -83,7 +85,7 @@ The read-only role:
 
 To switch clusters:
 
-1. run the export AWS credentials command in the `gds-cli`, selecting the appropriate GOV.UK environment and role:
+1. Run the export AWS credentials command in the `gds-cli`, selecting the appropriate GOV.UK environment and role:
 
      ```sh
      eval $(gds aws govuk-<govuk-environment>-<role> -e --art 8h)
@@ -93,7 +95,7 @@ To switch clusters:
     - `<govuk-environment>` is the GOV.UK environment that you want to get credentials for and will be `test`, `integration`, `staging`, or `production`
     - `<role>` is the appropriate role and will be `admin`, `poweruser` or `readonly`
 
-1. switch to the correct kubectl context:
+1. Switch to the correct kubectl context:
 
      ```sh
      kubectl config use-context <govuk-environment>
