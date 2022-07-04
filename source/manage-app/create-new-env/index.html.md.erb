@@ -35,9 +35,12 @@ GOV.UK Kubernetes platform [secrets](https://kubernetes.io/docs/concepts/configu
 
 You must create secrets for the new environment before creating the enviroment itself. You do this by copying an existing environment's secrets in the AWS Secrets Manager.
 
-To copy the secrets, [run the `copy_sm_secrets.py` script](https://gist.github.com/theseanything/1bb8add0077d3a2f5d979c12c6b9f140) in your command line.
+To copy the secrets, [run the `copy_sm_secrets.py` transfer script](https://gist.github.com/theseanything/1bb8add0077d3a2f5d979c12c6b9f140) in your command line.
 
-__When copying the existing env's secrets, does the user specify the env to use as a source, or is it always the same env? If the user specifies, how? If it's always the same env, which env is it?__
+When running this script, you specify the following AWS-CLI profile names:
+
+- `--src-profile`, that is the existing environment to copy the secrets from
+- `--dst-profile`, that is the new environment to copy the secrets to
 
 You can change the copied secrets for the new environment using the AWS console.
 
@@ -109,9 +112,9 @@ The [`cluster-infrastructure` module](https://github.com/alphagov/govuk-infrastr
 
 ### 3. Delete the aws-auth configmap
 
-One of the AWS-managed EKS addons creates a default `aws-auth` configmap, which does not work with the GOV.UK Kubernetes configuration. You must delete the configmap for the new environment to work.
+Creating the AWS resources for the EKS cluster also creates a default `aws-auth` configmap.
 
-__which addon?__
+This configmap does not work with the GOV.UK Kubernetes configuration. You must delete the configmap for the new environment to work.
 
 Run the following to delete the `aws-auth` configmap:
 
