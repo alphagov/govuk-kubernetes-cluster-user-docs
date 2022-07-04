@@ -13,6 +13,14 @@ You create a new environment to, for example, work on new functionality or resou
 
 You do not / cannot / must not create a new staging or integration environment because __REASONS__.
 
+To create a new test or production environment, you must:
+
+- complete the prerequisites
+- create the external secrets
+- create a new empty environment
+- deploy the Terraform modules
+- create the Signon API token
+
 ## Before you start
 
 Before creating a new test or production environment, you must:
@@ -34,7 +42,7 @@ create the external secrets for the new env
 
 different methods for each one - to come back to
 
-## Create the empty environment
+## Create a new empty environment
 
 `ENV=test` - __do i need to define this first????__
 
@@ -44,12 +52,11 @@ different methods for each one - to come back to
     gds aws govuk-${ENV?}-admin -- terraform init -backend-config=${ENV?}.backend -reconfigure -upgrade
     ```
 
-1. Update your AWS account to match the Terraform state file and create the empty environment:
+1. Update your AWS account to match the Terraform state file and create the new empty environment:
 
     ```
     gds aws govuk-${ENV?}-admin -- terraform apply -var-file ../variables/common.tfvars -var-file ../variables/${ENV?}/common.tfvars
     ```
-
 
 ## Deploy the Terraform modules
 
@@ -57,9 +64,14 @@ Deploy the root Terraform modules in the following order.
 
 ### 1. Deploy the `ecr` module
 
-The xxx does yyy.
+The AWS elastic container registry (ECR) stores container images for the GOV.UK Kubernetes platform.
 
-Deploy the [`ecr` module](https://github.com/alphagov/govuk-infrastructure/tree/main/terraform/deployments/ecr):
+The [`ecr` module](https://github.com/alphagov/govuk-infrastructure/tree/main/terraform/deployments/ecr) creates the ECR. __The entire ECR? An instance of it for GOV.UK K8s?__ The ECR is hosted in the GOV.UK production AWS account.
+
+Run the following to deploy the `ecr` module:
+
+__anywhere in particular on your local machine?__
+__why arent we using the test code???__
 
 ```
 gds aws govuk-production-admin -- \
@@ -69,13 +81,13 @@ gds aws govuk-production-admin -- \
   terraform apply -var-file ../variables/production/ecr.tfvars
 ```
 
-### Deploy the [`cluster-infrastructure` module](https://github.com/alphagov/govuk-infrastructure/tree/main/terraform/deployments/cluster-infrastructure):
+### 2. Deploy the `cluster-infrastructure` module
 
-The xxx does yyy.
+The [`cluster-infrastructure` module](https://github.com/alphagov/govuk-infrastructure/tree/main/terraform/deployments/cluster-infrastructure) creates the AWS resources for the GOV.UK Kubernetes platform [Elastic Kubernetes Service(EKS) cluster](https://kubernetes.io/docs/concepts/overview/components/).
 
 1. In the command line, go to `govuk-infrastructure/terraform/deployments/cluster-infrastructure/` on your local machine.
 
-1. Run the following to create the AWS resources for the cluster:
+1. Run the following to create the AWS resources for the EKS cluster:
 
     ```
     gds aws govuk-production-admin -- \
@@ -85,7 +97,7 @@ The xxx does yyy.
       terraform apply
     ```
 
-### Delete the `aws-auth` configmap
+### 3. Delete the `aws-auth` configmap
 
 __Do I need to do this now? It doesnt fit in with this section__
 
@@ -97,9 +109,9 @@ Run the following to delete the `aws-auth` configmap
 gds aws govuk-${ENV?}-admin -- aws eks update-kubeconfig --name govuk && kubectl -n kube-system delete cm aws-auth
 ```
 
-### Deploy the `govuk-publishing-infrastructure` module
+### 4. Deploy the `govuk-publishing-infrastructure` module
 
-The `govuk-publishing-infrastructure` module creates AWS resources for the GOV.UK apps where we are not yet able to manage those resources using Kubernetes.
+The `govuk-publishing-infrastructure` module creates and manages AWS resources for the GOV.UK apps where we are not yet able to manage those resources using Kubernetes.
 
 1. In the command line, go to `govuk-infrastructure/terraform/deployments/govuk-publishing-infrastructure/` on your local machine.
 
@@ -113,9 +125,9 @@ The `govuk-publishing-infrastructure` module creates AWS resources for the GOV.U
       terraform apply
     ```
 
-### Deploy the `cluster-services`module
+### 5. Deploy the `cluster-services`module
 
-The [`cluster-services` module](https://github.com/alphagov/govuk-infrastructure/blob/main/terraform/deployments/cluster-services) deploys the base services into the cluster.
+The [`cluster-services` module](https://github.com/alphagov/govuk-infrastructure/blob/main/terraform/deployments/cluster-services) deploys the base services __what are "base" services?__ into the cluster.
 
 1. In the command line, go to `govuk-infrastructure/terraform/deployments/cluster-services/` on your local machine.
 
@@ -138,3 +150,7 @@ kubectl -n apps create secret generic signon-auth-token --from-literal=token=$(o
 ```
 
 This allows Signon-resources to create or export tokens from Signon.
+
+You have successfully created a new test or production environment on the GOV.UK Kubernetes platform.
+
+__how do I know it's a success?__ 
