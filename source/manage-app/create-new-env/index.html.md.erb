@@ -29,15 +29,15 @@ Before creating a new environment, you must:
 - [install Terraform](https://www.terraform.io/downloads)
 - [install the `gds-cli`](https://docs.publishing.service.gov.uk/manual/get-started.html#4-install-gds-command-line-tools), which you should have done already as part of [getting started on GOV.UK](https://docs.publishing.service.gov.uk/manual/get-started.html)
 
-## Create secrets for the new enviroment
+## Create secrets for the new environment
 
-GOV.UK Kubernetes platform [secrets](https://kubernetes.io/docs/concepts/configuration/secret/) are stored and managed in the [AWS Secrets Manager](https://aws.amazon.com/secrets-manager/).
+The [AWS Secrets Manager](https://aws.amazon.com/secrets-manager/) stores and manages GOV.UK Kubernetes platform [secrets](https://kubernetes.io/docs/concepts/configuration/secret/).
 
-You must create secrets for the new environment before creating the enviroment itself. You do this by copying an existing environment's secrets in the AWS Secrets Manager.
+You must create secrets for the new environment before creating the environment itself. You do this by copying an existing environment's secrets in the AWS Secrets Manager.
 
 To copy the secrets, [run the `copy_sm_secrets.py` transfer script](https://gist.github.com/theseanything/1bb8add0077d3a2f5d979c12c6b9f140) in your command line.
 
-When running this script, you specify the following AWS-CLI profile names:
+When running this script, specify the following AWS-CLI profile names:
 
 - `--src-profile`, that is the existing environment to copy the secrets from
 - `--dst-profile`, that is the new environment to copy the secrets to
@@ -76,7 +76,7 @@ Deploy the root Terraform modules in the following order.
 
 The [AWS elastic container registry (ECR)](https://docs.aws.amazon.com/AmazonECR/latest/userguide/what-is-ecr.html) stores [container images](https://kubernetes.io/docs/concepts/containers/images/) for the GOV.UK Kubernetes platform.
 
-The [`ecr` module](https://github.com/alphagov/govuk-infrastructure/tree/main/terraform/deployments/ecr) creates the ECR for the new enviroment.
+The [`ecr` module](https://github.com/alphagov/govuk-infrastructure/tree/main/terraform/deployments/ecr) creates the ECR for the new environment.
 
 1. In the command line, go to the `govuk-infrastructure/terraform/deployments/ecr/` folder on your local machine.
 
@@ -89,7 +89,7 @@ The [`ecr` module](https://github.com/alphagov/govuk-infrastructure/tree/main/te
     gds aws govuk-<ENVIRONMENT>-admin -- \
       terraform apply -var-file ../variables/<ENVIRONMENT>/ecr.tfvars
     ```
-    `<ENVIRONMENT>` is the enviroment type you defined in the earlier step.
+    `<ENVIRONMENT>` is the environment type you defined in the earlier step.
 
 If you are creating an integration or staging environment, you must [contact the GOV.UK replatforming team on Slack](https://gds.slack.com/archives/C013F737737) to discuss the impact of deploying the `ecr` module.
 
@@ -108,7 +108,7 @@ The [`cluster-infrastructure` module](https://github.com/alphagov/govuk-infrastr
     gds aws govuk-<ENVIRONMENT>-admin -- \
       terraform apply
     ```
-    `<ENVIRONMENT>` is the enviroment type you defined in the earlier step.
+    `<ENVIRONMENT>` is the environment type you defined in the earlier step.
 
 ### 3. Delete the aws-auth configmap
 
@@ -137,7 +137,7 @@ The [`govuk-publishing-infrastructure` module](https://github.com/alphagov/govuk
     gds aws govuk-<ENVIRONMENT>-admin -- \
       terraform apply
     ```
-    `<ENVIRONMENT>` is the enviroment type you defined in the earlier step.
+    `<ENVIRONMENT>` is the environment type you defined in the earlier step.
 
 ### 5. Deploy the cluster-services module
 
@@ -154,7 +154,7 @@ The [`cluster-services` module](https://github.com/alphagov/govuk-infrastructure
     gds aws govuk-<ENVIRONMENT>-admin -- \
       terraform apply
     ```
-    `<ENVIRONMENT>` is the enviroment type you defined in the earlier step.
+    `<ENVIRONMENT>` is the environment type you defined in the earlier step.
 
 ## Create the Signon API token
 
