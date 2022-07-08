@@ -1,0 +1,188 @@
+---
+title: Create a new environment
+weight: 49
+last_reviewed_on: 2022-07-01
+review_in: 6 months
+---
+
+# Create a new environment
+
+You can create a new test, staging, integration or production environment on the GOV.UK Kubernetes platform.
+
+You create a new environment to, for example, work on new functionality or resources for the platform.
+
+To create a new environment, you must:
+
+- complete the prerequisites
+- create secrets for the new environment
+- create a new empty environment
+- deploy the Terraform modules
+- create the Signon API token
+- check the environment is working
+
+## Complete the prerequisites
+
+Before creating a new environment, you must:
+
+- [set up the tools needed to use the GOV.UK Kubernetes platform](/get-started/set-up-tools/#set-up-tools-to-use-the-gov-uk-kubernetes-platform)
+- [request a new AWS account](https://gds-request-an-aws-account.cloudapps.digital/)
+- [install the AWS-CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
+- [install Terraform](https://www.terraform.io/downloads)
+- [install the `gds-cli`](https://docs.publishing.service.gov.uk/manual/get-started.html#4-install-gds-command-line-tools), which you should have done already as part of [getting started on GOV.UK](https://docs.publishing.service.gov.uk/manual/get-started.html)
+
+## Create secrets for the new environment
+
+The [AWS Secrets Manager](https://aws.amazon.com/secrets-manager/) stores and manages GOV.UK Kubernetes platform [secrets](https://kubernetes.io/docs/concepts/configuration/secret/).
+
+You must create secrets for the new environment before creating the environment itself. You do this by copying an existing environment's secrets in the AWS Secrets Manager.
+
+To copy the secrets, [run the `copy_sm_secrets.py` transfer script](https://gist.github.com/theseanything/1bb8add0077d3a2f5d979c12c6b9f140) in your command line.
+
+When running this script, specify the following AWS-CLI profile names:
+
+- `--src-profile`, that is the existing environment to copy the secrets from
+- `--dst-profile`, that is the new environment to copy the secrets to
+
+You can change the copied secrets for the new environment using the AWS console.
+
+1. [Sign in to the AWS console](https://console.aws.amazon.com/) for the new environment.
+1. Search for and select the __Secrets Manager__.
+1. Make sure you are in the [`eu-west-2` region](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html).
+1. Select the secret you want to change.
+1. Change the secret, then select __Save__.
+
+## Create a new empty environment
+
+1. Run `export ENV=<ENVIRONMENT>` in the command line to define the type of environment you’re creating.
+
+    `<ENVIRONMENT>` can be `test`, `staging`, `integration` or `production`.
+
+1. Create the Terraform state file and store it in an S3 bucket in your new AWS account:
+
+    ```
+    gds aws govuk-${ENV?}-admin -- terraform init -backend-config=${ENV?}.backend -reconfigure -upgrade
+    ```
+
+1. Update your AWS account to match the Terraform state file and create the new environment:
+
+    ```
+    gds aws govuk-${ENV?}-admin -- terraform apply -var-file ../variables/common.tfvars -var-file ../variables/${ENV?}/common.tfvars
+    ```
+
+## Deploy the Terraform modules
+
+Deploy the root Terraform modules in the following order.
+
+### 1. Deploy the `ecr` module
+
+The [AWS elastic container registry (ECR)](https://docs.aws.amazon.com/AmazonECR/latest/userguide/what-is-ecr.html) stores [container images](https://kubernetes.io/docs/concepts/containers/images/) for the GOV.UK Kubernetes platform.
+
+The [`ecr` module](https://github.com/alphagov/govuk-infrastructure/tree/main/terraform/deployments/ecr) creates the ECR for the new environment.
+
+1. In the command line, go to the `govuk-infrastructure/terraform/deployments/ecr/` folder on your local machine.
+
+1. Run the following to deploy the `ecr` module:
+
+    ```
+    gds aws govuk-<ENVIRONMENT>-admin -- \
+      terraform init -backend-config <ENVIRONMENT>.backend -reconfigure -upgrade
+
+    gds aws govuk-<ENVIRONMENT>-admin -- \
+      terraform apply -var-file ../variables/<ENVIRONMENT>/ecr.tfvars
+    ```
+    `<ENVIRONMENT>` is the environment type you defined in the earlier step.
+
+If you’re creating an integration or staging environment, you must [contact the GOV.UK replatforming team on Slack](https://gds.slack.com/archives/C013F737737) to discuss the impact of deploying the `ecr` module.
+
+### 2. Deploy the `cluster-infrastructure` module
+
+The [`cluster-infrastructure` module](https://github.com/alphagov/govuk-infrastructure/tree/main/terraform/deployments/cluster-infrastructure) creates the AWS resources for the GOV.UK Kubernetes platform [Elastic Kubernetes Service (EKS) cluster](https://kubernetes.io/docs/concepts/overview/components/).
+
+1. In the command line, go to `govuk-infrastructure/terraform/deployments/cluster-infrastructure/` on your local machine.
+
+1. Run the following to create the AWS resources for the EKS cluster:
+
+    ```
+    gds aws govuk-<ENVIRONMENT>-admin -- \
+      terraform init -backend-config <ENVIRONMENT>.backend -reconfigure -upgrade
+
+    gds aws govuk-<ENVIRONMENT>-admin -- \
+      terraform apply
+    ```
+    `<ENVIRONMENT>` is the environment type you defined in the earlier step.
+
+#### Delete the `aws-auth` configmap
+
+Creating the AWS resources for the EKS cluster also creates a default `aws-auth` configmap.
+
+This configmap does not work with the GOV.UK Kubernetes configuration. You must delete the configmap for the new environment to work.
+
+Run the following to delete the `aws-auth` configmap:
+
+```
+gds aws govuk-${ENV?}-admin -- aws eks update-kubeconfig --name govuk && kubectl -n kube-system delete cm aws-auth
+```
+
+### 3. Deploy the `govuk-publishing-infrastructure` module
+
+The [`govuk-publishing-infrastructure` module](https://github.com/alphagov/govuk-infrastructure/tree/main/terraform/deployments/govuk-publishing-infrastructure) creates and manages AWS resources for the GOV.UK apps where we are not yet able to manage those resources using Kubernetes.
+
+1. In the command line, go to `govuk-infrastructure/terraform/deployments/govuk-publishing-infrastructure/` on your local machine.
+
+1. Run the following to deploy the `govuk-publishing-infrastructure` module:
+
+    ```
+    gds aws govuk-<ENVIRONMENT>-admin -- \
+      terraform init -backend-config <ENVIRONMENT>.backend -reconfigure -upgrade
+
+    gds aws govuk-<ENVIRONMENT>-admin -- \
+      terraform apply
+    ```
+    `<ENVIRONMENT>` is the environment type you defined in the earlier step.
+
+### 4. Deploy the `cluster-services` module
+
+The [`cluster-services` module](https://github.com/alphagov/govuk-infrastructure/blob/main/terraform/deployments/cluster-services) deploys the [services that enable GOV.UK](https://github.com/alphagov/govuk-infrastructure/tree/main/terraform/deployments/cluster-services) into the cluster.
+
+1. In the command line, go to `govuk-infrastructure/terraform/deployments/cluster-services/` on your local machine.
+
+1. Run the following to deploy the `cluster-services` module:
+
+    ```
+    gds aws govuk-<ENVIRONMENT>-admin -- \
+      terraform init -backend-config <ENVIRONMENT>.backend -reconfigure -upgrade
+
+    gds aws govuk-<ENVIRONMENT>-admin -- \
+      terraform apply
+    ```
+    `<ENVIRONMENT>` is the environment type you defined in the earlier step.
+
+## Create the Signon API token
+
+[Signon](https://github.com/alphagov/signon) is an OAuth2-based single sign-on provider for GDS services.
+
+Run the following to create the [Signon API token](https://github.com/alphagov/govuk-infrastructure/blob/main/docs/signon-secrets.md) as a Kubernetes secret:
+
+```
+kubectl -n apps create secret generic signon-auth-token --from-literal=token=$(openssl rand -base64 40)
+```
+
+This allows Signon resources to create or export tokens from Signon.
+
+## Check the environment is working
+
+You should now have successfully created a new environment on the GOV.UK Kubernetes platform.
+
+To check the environment is working, go to the new environment URL endpoint at `“https://www.eks.<ENVIRONMENT>.govuk.digital`. For example, the endpoint for a new production environment is `https://www.eks.production.govuk.digital`.
+
+You must be in the office or on the VPN to access this endpoint.
+
+If the environment URL endpoint is not behaving as expected or shows an error, [contact the GOV.UK replatforming team on Slack](https://gds.slack.com/archives/C013F737737).
+
+## Supporting information
+
+When you create the new environment, the process will also create an instance of the [Kubescape tool](https://github.com/armosec/kubescape) to track vulnerabilities and other metrics.
+
+See the [Kubescape user hub](https://hub.armosec.io/docs/welcome-to-kubescape-user-hub) for more information.
+
+See also the [Kubernetes conceptual overview documentation](https://kubernetes.io/docs/concepts/overview/what-is-kubernetes/) for more information on Kubernetes overall.
