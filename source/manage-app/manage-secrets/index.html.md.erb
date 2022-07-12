@@ -1,8 +1,212 @@
 ---
 title: Manage secrets in your app
 weight: 48
-last_reviewed_on: 2022-02-01
+last_reviewed_on: 2022-07-12
 review_in: 6 months
 ---
 
 # Manage secrets in your app
+
+You can add new secrets to your app on the GOV.UK Kubernetes platform.
+
+To do this, you must:
+
+- complete the prerequisites
+- create a new secret for your app
+- create the secret in AWS Secrets Manager
+- define the secret as an environment value within the app
+
+## Complete the prerequisites
+
+To add new secrets to your app, you must have access to the AWS Secrets Manager.
+
+[Contact the GOV.UK replatforming team on Slack](https://gds.slack.com/archives/C013F737737) to get access to the AWS Secrets Manager.
+
+## Create a new secret for your app
+
+1. Go to the [`external-secrets` folder in the `govuk-helm-charts` repo](https://github.com/alphagov/govuk-helm-charts/tree/main/charts/govuk-apps-conf/templates/external-secrets).
+
+1. Select your app's folder, or create the folder if necessary.
+
+1. Create a new `.yaml` file with a descriptive name.
+
+1. Enter the secret into the file, using the following format:
+
+    ___Does the content differ here depending on the type of secret?___
+
+    ```
+    apiVersion: external-secrets.io/v1beta1
+    kind: ExternalSecret
+    metadata:
+      name: <APPNAME>
+      labels:
+        {{- include "govuk-apps-conf.labels" . | nindent 4 }}
+      annotations:
+        kubernetes.io/description: >
+          <DESCRIPTION>
+    spec:
+      refreshInterval: {{ .Values.externalSecrets.refreshInterval }}
+      secretStoreRef:
+        name: aws-secretsmanager
+        kind: ClusterSecretStore
+      target:
+        name: <APPNAME>
+      dataFrom:
+        - extract:
+            key: govuk/<APPNAME>/<SECRETNAME>
+    ```
+    Where:
+    - <APPNAME> is the name of the app
+    - <DESCRIPTION> is a description of the secret
+    - <SECRETNAME> is the name of the secret
+
+1. Save the `.yaml` file and merge the change.
+
+## Create the secret in AWS Secrets Manager
+
+1. [Sign into the AWS Secrets Manager](https://console.aws.amazon.com/console/home?nc2=h_ct&src=header-signin).
+
+    Make sure you are signing into the environment you want to create the secret in.
+
+1. Select __Store a new secret__.
+
+___Where do you enter the <AWSSECRETNAME>???___
+
+1. Select the secret type and enter the required information.
+
+    If you selected __Other type of secret__, enter the secret __Key__ and __Value__.
+
+    If you selected any of the other options, enter the __Username__ and __Password__, and select the database to connect to.
+
+1.  Save the secret.
+
+## Define the secret as an environment value within the app
+
+1. Go to the [`argocd-apps` folder in the `govuk-helm-charts` repo](https://github.com/alphagov/govuk-helm-charts/tree/main/charts/argocd-apps).
+
+1. Select the `values-<ENVIRONMENT>.yaml` file that you want. For example, select the `values-integration.yaml` for the integration environment.
+
+1. Find the app that you are adding a secret to, or create the app if necessary.
+
+1. Enter the secret into the file, using the following format:
+
+    ```
+    - name: <SECRETNAME>
+            valueFrom:
+              secretKeyRef:
+                name: <AWSSECRETNAME>
+                key: <TBC>
+    ```
+
+    The <SECRETNAME> in this file must match the <SECRETNAME> in the `.yaml` file in the [`external-secrets` folder in the `govuk-helm-charts` repo](https://github.com/alphagov/govuk-helm-charts/tree/main/charts/govuk-apps-conf/templates/external-secrets).
+
+    The <KEY> must match the __Key__ in the AWS Secrets Manager secret.
+
+    For example, to create a secret called `ELECTIONS_API_KEY` that relates to the `frontend-elections-api` secret in the AWS Secrets Manager:
+
+    ```
+    - name: ELECTIONS_API_KEY
+            valueFrom:
+              secretKeyRef:
+                name: frontend-elections-api
+                key: key
+    ```
+
+
+
+
+
+
+As a...developer working on an app (e.g. frontend app)
+I want to...make use of a new environment secret within the app
+So I can...store sensitive data and be able to pull that sensitive data into the app when the app runs
+
+Where we define Kubernetes external secrets:
+https://github.com/alphagov/govuk-helm-charts/tree/main/charts/govuk-apps-conf
+
+3 steps
+- add new secret object
+- create secret in secrets manager
+- define in values file
+
+User wants to add a new secret
+e.g. secret X
+
+create a new secret object
+
+Go to https://github.com/alphagov/govuk-helm-charts/tree/main/charts/govuk-apps-conf/templates/external-secrets
+If app doesnt exist, add the name of the app in a new folder
+If app already exists, go into folder
+create a new yaml file, named X.yaml
+make it a descriptive appropriate name, but no restrictions
+copy an existing secret and complete following parameters
+name
+description
+target
+dataFrom
+  govuk/<yourapp>/<secretname>
+    no spaces in secret name
+
+govuk/frontend/elections-api
+
+if no secret exists in aws secret manager, then app container will fail
+
+create the secret object in the repo
+
+you must have permission to go into secrets manager
+
+go into the correct AWS account for the correct environment
+
+Sign into aws secrets manager
+
+Select Store a new secret
+
+Choose secret type - Other type of secret, enter key and value
+All other secrets, username, password, database to connect to, dont worry about Encryption key
+
+
+Define secret within App as an ENV value
+https://github.com/alphagov/govuk-helm-charts/tree/main/charts/argocd-apps
+depending on ENV (example integration)
+https://github.com/alphagov/govuk-helm-charts/blob/main/charts/argocd-apps/values-integration.yaml
+values-integration.yaml
+<https://github.com/alphagov/govuk-helm-charts|alphagov/govuk-helm-charts>alphagov/govuk-helm-charts | Added by GitHub
+Example secret defined within App values - (frontend-elections-api secret)
+https://github.com/alphagov/govuk-helm-charts/blob/c7dcbf9528f48a8222edfa92007f8c924da86b4c/charts/argocd-apps/values-integration.yaml#L433
+values-integration.yaml
+      - name: ELECTIONS_API_KEY
+
+Secreat names must match between two yaml files
+name is app name
+
+must make sure the key in the yaml file and the key in AWSSM match, it is case sensitive
+
+Some context:
+Where we define Kubernetes external secrets:
+https://github.com/alphagov/govuk-helm-charts/tree/main/charts/govuk-apps-conf
+Creation of Kubernetes secrets object (App specific)
+https://github.com/alphagov/govuk-helm-charts/tree/main/charts/govuk-apps-conf/templates/external-secrets
+Example Secret:
+https://github.com/alphagov/govuk-helm-charts/blob/main/charts/govuk-apps-conf/templates/external-secrets/frontend/elections-api.yaml
+Corresponding secret in AWS Secrets manager - this is the manual step
+https://eu-west-1.console.aws.amazon.com/secretsmanager/secret?name=govuk%2Ffrontend%2Felections-api&region=eu-west-1
+
+
+if application uses shared documentdb cluster, we have already sotred a secret
+copy an existing secret object - docdb
+change name
+shared string         MONGODB_URI: '{{ $.Files.Get "externalsecrets-templates/mongo-conn-string.tpl" | trim }}/<>nameofdatabase'
+https://github.com/alphagov/govuk-helm-charts/blob/c7dcbf9528f48a8222edfa92007f8c924da86b4c/charts/govuk-apps-conf/templates/external-secrets/asset-manager/docdb.yaml#L20
+
+
+
+
+Nadeem
+  2:39 PM
+DATABASE: (slightly different way to store within govuk-app-conf)
+example:
+https://github.com/alphagov/govuk-helm-charts/blob/main/charts/govuk-apps-conf/templates/external-secrets/asset-manager/docdb.yaml
+DB string formatting links to a template:
+https://github.com/alphagov/govuk-helm-charts/tree/main/charts/govuk-apps-conf/externalsecrets-templates (edited)
+docdb.yaml
+<https://github.com/alphagov/govuk-helm-charts|alphagov/govuk-helm-charts>alphagov/govuk-helm-charts | Added by GitHub
