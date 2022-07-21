@@ -86,20 +86,24 @@ To add new secrets to your app, you must have access to the [AWS Secrets Manager
 
 ## Create the secret in AWS Secrets Manager
 
-How you create a secret depends on the type of secret you are creating.
+Before you create a secret in AWS Secrets Manager, you must check if there is a pre-existing shared secret that you can use.
 
-You can create:
+1. [Sign into the AWS Secrets Manager](https://console.aws.amazon.com/console/home?nc2=h_ct&src=header-signin).
 
-- an [AWS managed shared database](https://aws.amazon.com/getting-started/hands-on/move-to-managed/) secret
-- a non-database key / value secret
+    Make sure you are signing into the environment you want to create the secret in.
 
-### Create an AWS managed shared database secret
+1. Enter `govuk/common` into the __Search__ field to search for shared secrets. We name shared secrets using a `govuk/common/<SECRETNAME>` format.
 
-How you create an AWS managed shared database secret depends on whether the secret already exists in AWS Secrets Manager.
+1. Check the pre-existing shared secrets to see if you can use one of them.
 
-#### Create a new AWS managed shared database secret
+If you can use one of the pre-existing shared secrets, then you do not need to create a new secret in AWS Secrets Manager.
 
-If the secret does not already exist in AWS Secrets Manager, you must create a new secret.
+If you need to create a secret, you can create 2 types of secret:
+
+- an [AWS managed database](https://aws.amazon.com/getting-started/hands-on/move-to-managed/) secret
+- a non-database secret
+
+### Create an AWS managed database secret
 
 1. [Sign into the AWS Secrets Manager](https://console.aws.amazon.com/console/home?nc2=h_ct&src=header-signin).
 
@@ -115,29 +119,7 @@ If the secret does not already exist in AWS Secrets Manager, you must create a n
 
 1. Review the secret and then select __Store__.
 
-#### SOMETHING AN EXISTING AWS managed shared database secret
-
-
-
-**Shared AWS database:**
-For pre exisiing managed databses,
-secret manager entry may already exist,
-containing the master user and password may already exist.
-
-You can then just use the shared secret as shown in below example,
-do remember to enter modify the path to DB.
-[Example entry](https://github.com/alphagov/govuk-helm-charts/blob/main/charts/govuk-apps-conf/templates/external-secrets/asset-manager/docdb.yaml)
----
-Common secrets which will be shared should be named govuk/common/<nameofsecret>.
-
-
-
-If you selected any of the other options, enter the __Username__ and __Password__, and select the database to connect to.
-
-if you are using a shared db / amazon managed db, the password will already exist.  you must put the correct path to yourdatabase
-
-
-### Create a non-database key / value secret
+### Create a non-database secret
 
 1. [Sign into the AWS Secrets Manager](https://console.aws.amazon.com/console/home?nc2=h_ct&src=header-signin).
 
@@ -158,6 +140,43 @@ if you are using a shared db / amazon managed db, the password will already exis
 1. Make sure __Automatic rotation__ is not enabled and select __Next__.
 
 1. Review the secret and then select __Store__.
+
+
+
+
+
+
+
+
+### Create a database secret
+
+
+
+#### SOMETHING AN EXISTING AWS managed shared database secret
+
+search for
+govuk/common in the secrets manager
+
+to find shared common secrets
+
+if already existing, you dont have to create a new secret, you need to point your SM to the secret location
+
+
+**Shared AWS database:**
+For pre exisiing managed databses,
+secret manager entry may already exist,
+containing the master user and password may already exist.
+
+You can then just use the shared secret as shown in below example,
+do remember to enter modify the path to DB.
+[Example entry](https://github.com/alphagov/govuk-helm-charts/blob/main/charts/govuk-apps-conf/templates/external-secrets/asset-manager/docdb.yaml)
+---
+Common secrets which will be shared should be named govuk/common/<nameofsecret>.
+
+
+
+
+
 
 ## Define the secret as an environment value within the app
 
