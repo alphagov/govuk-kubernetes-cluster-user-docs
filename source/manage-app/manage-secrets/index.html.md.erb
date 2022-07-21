@@ -1,11 +1,11 @@
 ---
-title: Manage secrets in your app
+title: Add secrets to your app
 weight: 48
 last_reviewed_on: 2022-07-12
 review_in: 6 months
 ---
 
-# Manage secrets in your app
+# Add secrets to your app
 
 You can add new secrets to your app on the GOV.UK Kubernetes platform.
 
@@ -95,9 +95,46 @@ You can create:
 
 ### Create an AWS managed shared database secret
 
+How you create an AWS managed shared database secret depends on whether the secret already exists in AWS Secrets Manager.
+
+#### Create a new AWS managed shared database secret
+
+If the secret does not already exist in AWS Secrets Manager, you must create a new secret.
+
+1. [Sign into the AWS Secrets Manager](https://console.aws.amazon.com/console/home?nc2=h_ct&src=header-signin).
+
+    Make sure you are signing into the environment you want to create the secret in.
+
+1. Select __Store a new secret__.
+
+1. Select the appropriate secret type, for example __Credentials for Amazon RDS database__.
+
+1. Enter the __Username__ and __Password__ for the database and select __Next__.
+
+1. Select the database that you want to connect to and select __Next__.
+
+1. Review the secret and then select __Store__.
+
+#### SOMETHING AN EXISTING AWS managed shared database secret
+
+
+
+**Shared AWS database:**
+For pre exisiing managed databses,
+secret manager entry may already exist,
+containing the master user and password may already exist.
+
+You can then just use the shared secret as shown in below example,
+do remember to enter modify the path to DB.
+[Example entry](https://github.com/alphagov/govuk-helm-charts/blob/main/charts/govuk-apps-conf/templates/external-secrets/asset-manager/docdb.yaml)
+---
+Common secrets which will be shared should be named govuk/common/<nameofsecret>.
+
+
+
 If you selected any of the other options, enter the __Username__ and __Password__, and select the database to connect to.
 
-if you are usuing a shared db / amazon managed db, the password will already exist.  you must put the correct path to yourdatabase
+if you are using a shared db / amazon managed db, the password will already exist.  you must put the correct path to yourdatabase
 
 
 ### Create a non-database key / value secret
@@ -108,13 +145,13 @@ if you are usuing a shared db / amazon managed db, the password will already exi
 
 1. Select __Store a new secret__.
 
-1. Select the secret type and enter the secret __Key__ and __Value__, and then select __Next__.
+1. Select the __Other type of secret__ secret type, enter the secret __Key__ and __Value__, and then select __Next__.
     - __Key__ is a unique identifier for the secret
     - __Value__ is the secret you want to store
 
 1. Enter the __Secret name__. You should also enter a __Description__.
 
-    Make sure the description is consistent with the <DESCRIPTION> in the `.yaml` file you created in the previous step.
+    Make sure the description is consistent with the `<DESCRIPTION>` in the `.yaml` file you created in the previous step.
 
 1. Add a __Tag__. Enter `added-manually` into the __Key__ field, and `true` into the __Value__ field, and select __Next__.
 
@@ -128,7 +165,7 @@ if you are usuing a shared db / amazon managed db, the password will already exi
 
 1. Select the `values-<ENVIRONMENT>.yaml` file that you want. For example, select the `values-integration.yaml` for the integration environment.
 
-1. Find the app that you are adding a secret to, or create the app if necessary.
+1. In this `.yaml` file, find the app that you are adding a secret to, or create the app if necessary.
 
 1. Enter the secret into the file, using the following format:
 
