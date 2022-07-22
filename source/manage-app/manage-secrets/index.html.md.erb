@@ -7,7 +7,7 @@ review_in: 6 months
 
 # Add secrets to your app
 
-You can add new secrets to your app on the GOV.UK Kubernetes platform.
+You can add new [secrets](https://kubernetes.io/docs/concepts/configuration/secret/) to your app on the GOV.UK Kubernetes platform.
 
 To do this, you must:
 
@@ -22,7 +22,7 @@ To add new secrets to your app, you must have access to the [AWS Secrets Manager
 
 [Contact the GOV.UK replatforming team on Slack](https://gds.slack.com/archives/C013F737737) to get access to the AWS Secrets Manager.
 
-## Create a new secret for your app
+## Creating a new secret for your app
 
 1. Go to the [`external-secrets` folder in the `govuk-helm-charts` repo](https://github.com/alphagov/govuk-helm-charts/tree/main/charts/govuk-apps-conf/templates/external-secrets).
 
@@ -84,26 +84,30 @@ To add new secrets to your app, you must have access to the [AWS Secrets Manager
 
 1. Save the `.yaml` file and merge the change.
 
-## Create the secret in AWS Secrets Manager
+## Creating the secret in AWS Secrets Manager
 
 Before you create a secret in AWS Secrets Manager, you must check if there is a pre-existing shared secret that you can use.
+
+### Checking if the secret already exists
+
+See this [`docdb.yaml` file in the `govuk-helm-charts` repo](https://github.com/alphagov/govuk-helm-charts/blob/main/charts/govuk-apps-conf/templates/external-secrets/asset-manager/docdb.yaml) for an example shared secret.
 
 1. [Sign into the AWS Secrets Manager](https://console.aws.amazon.com/console/home?nc2=h_ct&src=header-signin).
 
     Make sure you are signing into the environment you want to create the secret in.
 
-1. Enter `govuk/common` into the __Search__ field to search for shared secrets. We name shared secrets using a `govuk/common/<SECRETNAME>` format.
+1. Enter `govuk/common` into the __Search__ field to search for shared secrets. Shared secrets use a `govuk/common/<SECRETNAME>` naming format.
 
 1. Check the pre-existing shared secrets to see if you can use one of them.
 
-If you can use one of the pre-existing shared secrets, then you do not need to create a new secret in AWS Secrets Manager.
+If you can use one of the pre-existing shared secrets, then you do not need to create a new secret in AWS Secrets Manager. Next you must [define the secret as an environment value within the app](#define-the-secret-as-an-environment-value-within-the-app).
 
-If you need to create a secret, you can create 2 types of secret:
+If you need to create a new secret in AWS Secrets Manager, you can create 2 types of secret:
 
 - an [AWS managed database](https://aws.amazon.com/getting-started/hands-on/move-to-managed/) secret
 - a non-database secret
 
-### Create an AWS managed database secret
+### Creating an AWS managed database secret
 
 1. [Sign into the AWS Secrets Manager](https://console.aws.amazon.com/console/home?nc2=h_ct&src=header-signin).
 
@@ -115,11 +119,11 @@ If you need to create a secret, you can create 2 types of secret:
 
 1. Enter the __Username__ and __Password__ for the database and select __Next__.
 
-1. Select the database that you want to connect to and select __Next__.
+1. Select the database that you want to connect to and select __Next__. [Contact the GOV.UK replatforming team on Slack](https://gds.slack.com/archives/C013F737737) if you are not sure which database you should connect to.
 
 1. Review the secret and then select __Store__.
 
-### Create a non-database secret
+### Creating a non-database secret
 
 1. [Sign into the AWS Secrets Manager](https://console.aws.amazon.com/console/home?nc2=h_ct&src=header-signin).
 
@@ -141,44 +145,7 @@ If you need to create a secret, you can create 2 types of secret:
 
 1. Review the secret and then select __Store__.
 
-
-
-
-
-
-
-
-### Create a database secret
-
-
-
-#### SOMETHING AN EXISTING AWS managed shared database secret
-
-search for
-govuk/common in the secrets manager
-
-to find shared common secrets
-
-if already existing, you dont have to create a new secret, you need to point your SM to the secret location
-
-
-**Shared AWS database:**
-For pre exisiing managed databses,
-secret manager entry may already exist,
-containing the master user and password may already exist.
-
-You can then just use the shared secret as shown in below example,
-do remember to enter modify the path to DB.
-[Example entry](https://github.com/alphagov/govuk-helm-charts/blob/main/charts/govuk-apps-conf/templates/external-secrets/asset-manager/docdb.yaml)
----
-Common secrets which will be shared should be named govuk/common/<nameofsecret>.
-
-
-
-
-
-
-## Define the secret as an environment value within the app
+## Defining the secret as an environment value within the app
 
 1. Go to the [`argocd-apps` folder in the `govuk-helm-charts` repo](https://github.com/alphagov/govuk-helm-charts/tree/main/charts/argocd-apps).
 
