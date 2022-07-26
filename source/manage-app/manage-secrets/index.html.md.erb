@@ -11,16 +11,10 @@ You can add new [secrets](https://kubernetes.io/docs/concepts/configuration/secr
 
 To do this, you must:
 
-- get access to the AWS Secrets Manager
+- [have access to AWS](https://docs.publishing.service.gov.uk/manual/get-started.html#8-get-aws-access)
 - create a new secret for your app
 - create the secret in AWS Secrets Manager
 - define the secret as an environment value within the app
-
-## Get access to the AWS Secrets Manager
-
-To add new secrets to your app, you must have access to the [AWS Secrets Manager](https://aws.amazon.com/secrets-manager/).
-
-[Contact the GOV.UK replatforming team on Slack](https://gds.slack.com/archives/C013F737737) to get access to the AWS Secrets Manager.
 
 ## Creating a new secret for your app
 
@@ -29,6 +23,11 @@ To add new secrets to your app, you must have access to the [AWS Secrets Manager
 1. Select your app's folder, or create the folder if necessary.
 
 1. Create a new `.yaml` file with a descriptive name.
+
+    You should follow the same naming conventions as existing `.yaml` files:
+    - use lowercase
+    - put hyphens between words
+    - do not include the app name
 
 1. Enter the secret into the file, using the following format:
 
@@ -53,10 +52,9 @@ To add new secrets to your app, you must have access to the [AWS Secrets Manager
         - extract:
             key: govuk/<APPNAME>/<SECRETNAME>
     ```
-    Where:
-    - `<APPNAME>` is the name of the app
-    - `<SECRETNAME>` is the name of the secret
-    - `<DESCRIPTION>` is a description of the secret
+    Where `<APPNAME>` is the name of the app and `<SECRETNAME>` is the name of the secret.
+
+    `<DESCRIPTION>` should describe what the secret is used for and where to obtain the secret value. If the `ExternalSecret` uses `dataFrom.extract`, then the description should also document the fields expected in the YAML structure.
 
     For example, to create a secret for the Elections API for the [GOV.UK Frontend app](https://github.com/alphagov/govuk-frontend):
 
@@ -69,7 +67,7 @@ To add new secrets to your app, you must have access to the [AWS Secrets Manager
         {{- include "govuk-apps-conf.labels" . | nindent 4 }}
       annotations:
         kubernetes.io/description: >
-          Credentials used by Frontend to access external Elections API service
+          Credentials used by Frontend to access external Elections API service. Field names are "key" for the API key and "url" for the endpoint URL of the Elections API.
     spec:
       refreshInterval: {{ .Values.externalSecrets.refreshInterval }}
       secretStoreRef:
@@ -84,9 +82,22 @@ To add new secrets to your app, you must have access to the [AWS Secrets Manager
 
 1. Save the `.yaml` file and merge the change.
 
+1. Check the ArgoCD dashboard to find out whether you successfully changed the `govuk-apps-conf` chart.
+
+    If your change was not successful, then...
+
 ## Creating the secret in AWS Secrets Manager
 
-Before you create a secret in AWS Secrets Manager, you must check if there is a pre-existing shared secret that you can use.
+___TBC___
+Before you create a secret in AWS Secrets Manager, you must check if there is a pre-existing shared secret that you could use, or share, instead of adding a new secret.
+
+If a secret already exists, you must determine whether it is more appropriate to share that secret or to create a separate one for your app.
+
+You should avoid creating a new secret in AWS Secrets Manager if possible. Grant permissions using existing authorisation systems such as AWS IAM where possible.
+
+You should avoid sharing external secrets between multiple apps unless there is a compelling, specific, documented reason.
+
+___TBC___
 
 ### Checking if the secret already exists
 
