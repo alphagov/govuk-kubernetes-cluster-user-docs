@@ -31,7 +31,10 @@ Once you have merged your pull request, [Argo CD automatically deploys the older
 
 ## Triggering the deploy GitHub Action to deploy an older release
 
-This rollback method only works for the integration environment.
+When you manually trigger the deploy GitHub Action for an app,
+you will stop the automatic update of that app's images.
+You can re-enable the automatic image update by following the
+[documentation on re-enabling automatic image updates after manual deploys](#re-enabling-automatic-image-updates-after-manual-deploys).
 
 1. Go to your app's repo and select __Releases__.
 
@@ -49,3 +52,11 @@ Argo CD will then:
 - deploy that version of the app
 
 Check the [#govuk-deploy-alerts Slack channel](https://gds.slack.com/archives/C01EE7US9R6) for a notification when the older version of the app is successfully deployed.
+
+## Re-enabling automatic image updates after manual deploys
+
+1. Go to your app's repo.
+
+1. Go to __Actions__ and select __Workflows__ > __Set automatic_deploys_enabled (optionally image_tag too)__.
+
+1. Select __Run workflow__ and complete the fields as required.
