@@ -10,7 +10,7 @@ review_in: 6 months
 Generally, the reasons why an app has functional and/or performance issues belong the following categories:
 
 - the app's functional configuration is wrong
-- not enough resources are allocated to the app
+- the app does not have enough resources allocated
 - the app does not have access to required AWS services
 - the GOV.UK Kubernetes platform is malfunctioning
 
@@ -21,14 +21,13 @@ The following content summarises how to debug your app's performance issues in e
 Almost all GOV.UK apps are configured through environment variables. These environment variables are:
 
 - either in plain text or a [Kubernetes secret](https://kubernetes.io/docs/concepts/configuration/secret/)
-- located in the `values-<ENVIRONMENT>.yaml` file in [the `govuk-helm-charts` repo](https://github.com/alphagov/govuk-helm-charts)
+- located in the `values-<ENVIRONMENT>.yaml` file in the [`govuk-helm-charts` repo](https://github.com/alphagov/govuk-helm-charts)
 
-For example, the environment variables for the integration environment are stored in the [`values-integration.yaml` file in the `govuk-helm-charts` repo](https://github.com/alphagov/govuk-helm-charts/blob/main/charts/argocd-apps/values-integration.yaml).
+For example, the [`values-integration.yaml` file in the `govuk-helm-charts` repo](https://github.com/alphagov/govuk-helm-charts/blob/main/charts/argocd-apps/values-integration.yaml) contains the environment variables for the integration environment.
 
 You can check that you have set up your app's environment variables correctly by running the following in the command line:
 
 ```sh
-
 kubectl -n apps exec -it deploy/<APPNAME> -c app bash
 env
 ```
@@ -40,11 +39,10 @@ To change an app's Kubernetes secret, see the [Add secrets to your app documenta
 When you change an app's Kubernetes secret, you must restart the app. Run the following in the command line to restart your app:
 
 ```sh
-
 kubectl -n apps rollout restart deploy/<APPNAME>
 ```
 
-## Allocating more resources to the app
+## Allocating more resources to an app
 
 An app's pod or container can crash because of insufficient resources such as CPU and memory.
 
@@ -60,17 +58,17 @@ You can monitor the pod resource usage of an app in the [`General/Kubernetes/Com
 
 For more information on Grafana, see the [Grafana developer documentation](https://docs.publishing.service.gov.uk/manual/grafana.html).
 
-## Giving your app access to required AWS services
+## Giving an app access to required AWS services
 
-Some apps require access to other AWS services to work, but those AWS services are protected at a network level by [security groups](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_SecurityGroups.html).
+Some apps need access to other AWS services to work, but those AWS services are protected at a network level by [security groups](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_SecurityGroups.html).
 
-To fix this issue, you must make sure that the security groups of these upstream services are open to the [Kubernetes worker nodes](https://kubernetes.io/docs/concepts/architecture/nodes/) where the app is running.
+To fix this issue, you must make sure that the security groups of these services are open to the [Kubernetes worker nodes](https://kubernetes.io/docs/concepts/architecture/nodes/) where the app is running.
 
 To do this, you must make terraform changes to the [`security.tf` file in the `govuk-infrastructure` repo](https://github.com/alphagov/govuk-infrastructure/blob/main/terraform/deployments/govuk-publishing-infrastructure/security.tf).
 
 Use this [example pull request in the `govuk-infrastructure` repo](https://github.com/alphagov/govuk-infrastructure/pull/584/files) as a guide to making the necessary changes.
 
-Once you have made these changes, you must apply them by [deploying the `cluster-infrastructure` module](https://govuk-k8s-user-docs.publishing.service.gov.uk/manage-app/create-new-env/#2-deploy-the-cluster-infrastructure-module).
+Once you have made these changes, apply them by [deploying the `cluster-infrastructure` module](https://govuk-k8s-user-docs.publishing.service.gov.uk/manage-app/create-new-env/#2-deploy-the-cluster-infrastructure-module).
 
 ## Fixing the malfunctioning GOV.UK Kubernetes platform
 
@@ -99,7 +97,7 @@ kubectl -n <NAMESPACE> exec -it <POD> sh -c <CONTAINER>
 
 If you do not specify the container, the command creates a shell inside the first container in the app manifest.
 
-For more information, see the [Kubernetes documentation on get a shell to a running container](https://kubernetes.io/docs/tasks/debug-application-cluster/get-shell-running-container/).
+For more information, see the [Kubernetes documentation on getting a shell to a running container](https://kubernetes.io/docs/tasks/debug-application-cluster/get-shell-running-container/).
 
 ### Port-forwarding to a pod
 
@@ -117,4 +115,4 @@ You can find the pod port in the app configuration.
 
 ### Following a troubleshooting guide
 
-3. Follow this [visual guide on troubleshooting Kubernetes deployments](https://learnk8s.io/troubleshooting-deployments) to help diagnose issues.
+Follow this [visual guide on troubleshooting Kubernetes deployments](https://learnk8s.io/troubleshooting-deployments) to help diagnose issues.
