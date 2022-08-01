@@ -7,7 +7,7 @@ review_in: 6 months
 
 # Debug your app
 
-Generally, the reasons why an app has functional and/or performance issues belong the following categories:
+Generally, the reasons why an app has functional and/or performance issues belong to the following categories:
 
 - the app's functional configuration is wrong
 - the app does not have enough resources allocated
@@ -54,7 +54,9 @@ kubectl -n apps describe pods -l=app=<APPNAME>
 
 If the pod or container has crashed because of insufficient resources, you should [scale your app's resources](https://govuk-k8s-user-docs.publishing.service.gov.uk/manage-app/scale-app/).
 
-You can monitor the pod resource usage of an app in the [`General/Kubernetes/Compute Resources/Pod` Grafana dashboard](https://grafana.eks.integration.govuk.digital/).
+You can monitor the pod resource usage of an app in the `General/Kubernetes/Compute Resources/Pod` Grafana dashboard for the appropriate environment.
+
+For example, you can monitor the [Grafana dashboard for the GOV.UK integration environment](https://grafana.eks.integration.govuk.digital/).
 
 For more information on Grafana, see the [Grafana developer documentation](https://docs.publishing.service.gov.uk/manual/grafana.html).
 
