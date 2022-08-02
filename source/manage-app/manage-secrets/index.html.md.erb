@@ -9,14 +9,71 @@ review_in: 6 months
 
 You can add new [secrets](https://kubernetes.io/docs/concepts/configuration/secret/) to your app on the GOV.UK Kubernetes platform.
 
-To do this, you must:
+Before you create a secret, check whether you need to use a secret or if you should use another method instead, such as [AWS Identity and Access Management (IAM)](https://aws.amazon.com/iam/).
+
+If you decide that you need to use a secret, check if that secret already exists. If the secret does exist, use this secret instead of duplicating it.
+
+If the secret does not already exist, you need to create it. To create a secret, you must:
 
 - [have access to AWS](https://docs.publishing.service.gov.uk/manual/get-started.html#8-get-aws-access)
-- create a new secret for your app
 - create the secret in AWS Secrets Manager
-- define the secret as an environment value within the app
+- define an external Kubernetes secret
+- use the Kubernetes secret inside the app
 
-## Creating a new secret for your app
+## Creating the secret in AWS Secrets Manager
+
+You can create 2 types of secret in AWS Secrets Manager:
+
+- an [AWS managed database](https://aws.amazon.com/getting-started/hands-on/move-to-managed/) secret
+- a non-database secret
+
+### Creating an AWS managed database secret
+
+1. [Sign into the AWS Secrets Manager](https://console.aws.amazon.com/console/home?nc2=h_ct&src=header-signin).
+
+    You select either the integration, staging and production environment when you sign in. You must create the secret in all 3 environments.
+
+1. Select __Store a new secret__.
+
+1. Select the appropriate secret type, for example __Credentials for Amazon RDS database__.
+
+1. Enter the __Username__ and __Password__ for the database and select __Next__.
+
+1. Select the database that you want to connect to and select __Next__. [Contact the GOV.UK replatforming team on Slack](https://gds.slack.com/archives/C013F737737) if you are not sure which database you should connect to.
+
+1. Review the secret and then select __Store__.
+
+1. Repeat this process for all 3 environments.
+
+### Creating a non-database secret
+
+1. [Sign into the AWS Secrets Manager](https://console.aws.amazon.com/console/home?nc2=h_ct&src=header-signin).
+
+    You select either the integration, staging and production environment when you sign in. You must create the secret in all 3 environments.
+
+1. Select __Store a new secret__.
+
+1. Select the __Other type of secret__ secret type, enter the secret __Key__ and __Value__, and then select __Next__.
+    - __Key__ is a unique identifier for the secret
+    - __Value__ is the secret you want to store
+
+1. Enter the __Secret name__. You should also enter a __Description__.
+
+    Make sure the description is consistent with the `<DESCRIPTION>` in the `.yaml` file you created in the previous step.
+
+___DONT FORGET ABOUT THIS!!!___
+
+1. Add a __Tag__. Enter `added-manually` into the __Key__ field, and `true` into the __Value__ field, and select __Next__.
+
+1. Make sure __Automatic rotation__ is not enabled and select __Next__.
+
+1. Review the secret and then select __Store__.
+
+1. Repeat this process for all 3 environments.
+
+## Defining an external Kubernetes secret
+
+The external Kubernetes secret defines the mapping between the AWS Secrets Manager secret and the Kubernetes secret.
 
 1. Go to the [`external-secrets` folder in the `govuk-helm-charts` repo](https://github.com/alphagov/govuk-helm-charts/tree/main/charts/govuk-apps-conf/templates/external-secrets).
 
@@ -82,81 +139,12 @@ To do this, you must:
 
 1. Save the `.yaml` file and merge the change.
 
-1. Check the ArgoCD dashboard to find out whether you successfully changed the `govuk-apps-conf` chart.
+1. Check the Argo CD dashboard for the following environments to find out whether you successfully changed the `govuk-apps-conf` chart:
+    - [integration](https://argo.eks.integration.govuk.digital/applications/govuk-apps-conf)
+    - [staging](https://argo.eks.staging.govuk.digital/applications/govuk-apps-conf)
+    - [production](https://argo.eks.production.govuk.digital/applications/govuk-apps-conf)
 
-    If your change was not successful, then...
-
-## Creating the secret in AWS Secrets Manager
-
-___TBC___
-Before you create a secret in AWS Secrets Manager, you must check if there is a pre-existing shared secret that you could use, or share, instead of adding a new secret.
-
-If a secret already exists, you must determine whether it is more appropriate to share that secret or to create a separate one for your app.
-
-You should avoid creating a new secret in AWS Secrets Manager if possible. Grant permissions using existing authorisation systems such as AWS IAM where possible.
-
-You should avoid sharing external secrets between multiple apps unless there is a compelling, specific, documented reason.
-
-___TBC___
-
-### Checking if the secret already exists
-
-See this [`docdb.yaml` file in the `govuk-helm-charts` repo](https://github.com/alphagov/govuk-helm-charts/blob/main/charts/govuk-apps-conf/templates/external-secrets/asset-manager/docdb.yaml) for an example shared secret.
-
-1. [Sign into the AWS Secrets Manager](https://console.aws.amazon.com/console/home?nc2=h_ct&src=header-signin).
-
-    Make sure you are signing into the environment you want to create the secret in.
-
-1. Enter `govuk/common` into the __Search__ field to search for shared secrets. Shared secrets use a `govuk/common/<SECRETNAME>` naming format.
-
-1. Check the pre-existing shared secrets to see if you can use one of them.
-
-If you can use one of the pre-existing shared secrets, then you do not need to create a new secret in AWS Secrets Manager. Next you must [define the secret as an environment value within the app](#defining-the-secret-as-an-environment-value-within-the-app).
-
-If you need to create a new secret in AWS Secrets Manager, you can create 2 types of secret:
-
-- an [AWS managed database](https://aws.amazon.com/getting-started/hands-on/move-to-managed/) secret
-- a non-database secret
-
-### Creating an AWS managed database secret
-
-1. [Sign into the AWS Secrets Manager](https://console.aws.amazon.com/console/home?nc2=h_ct&src=header-signin).
-
-    Make sure you are signing into the environment you want to create the secret in.
-
-1. Select __Store a new secret__.
-
-1. Select the appropriate secret type, for example __Credentials for Amazon RDS database__.
-
-1. Enter the __Username__ and __Password__ for the database and select __Next__.
-
-1. Select the database that you want to connect to and select __Next__. [Contact the GOV.UK replatforming team on Slack](https://gds.slack.com/archives/C013F737737) if you are not sure which database you should connect to.
-
-1. Review the secret and then select __Store__.
-
-### Creating a non-database secret
-
-1. [Sign into the AWS Secrets Manager](https://console.aws.amazon.com/console/home?nc2=h_ct&src=header-signin).
-
-    Make sure you are signing into the environment you want to create the secret in.
-
-1. Select __Store a new secret__.
-
-1. Select the __Other type of secret__ secret type, enter the secret __Key__ and __Value__, and then select __Next__.
-    - __Key__ is a unique identifier for the secret
-    - __Value__ is the secret you want to store
-
-1. Enter the __Secret name__. You should also enter a __Description__.
-
-    Make sure the description is consistent with the `<DESCRIPTION>` in the `.yaml` file you created in the previous step.
-
-1. Add a __Tag__. Enter `added-manually` into the __Key__ field, and `true` into the __Value__ field, and select __Next__.
-
-1. Make sure __Automatic rotation__ is not enabled and select __Next__.
-
-1. Review the secret and then select __Store__.
-
-## Defining the secret as an environment value within the app
+## Using the Kubernetes secret inside the app
 
 1. Go to the [`argocd-apps` folder in the `govuk-helm-charts` repo](https://github.com/alphagov/govuk-helm-charts/tree/main/charts/argocd-apps).
 
