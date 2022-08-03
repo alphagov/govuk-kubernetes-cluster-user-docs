@@ -7,7 +7,7 @@ review_in: 6 months
 
 # Debug your app
 
-Generally, the reasons why an app has functional and/or performance issues belong to the following categories:
+Generally, the reasons why an app has functional or performance issues belong to the following categories:
 
 - the app's functional configuration is wrong
 - the app does not have enough resources allocated
@@ -16,7 +16,7 @@ Generally, the reasons why an app has functional and/or performance issues belon
 
 The following content summarises how to debug your app's performance issues in each of these categories.
 
-## Fixing an app's incorrect functional configuration
+## Fixing an app's configuration
 
 Almost all GOV.UK apps are configured through environment variables. These environment variables are:
 
@@ -25,7 +25,7 @@ Almost all GOV.UK apps are configured through environment variables. These envir
 
 For example, the [`values-integration.yaml` file in the `govuk-helm-charts` repo](https://github.com/alphagov/govuk-helm-charts/blob/main/charts/argocd-apps/values-integration.yaml) contains the environment variables for the integration environment.
 
-You can check that you have set up your app's environment variables correctly by running the following in the command line:
+To check you have set up your app's environment variables correctly, run the following in the command line:
 
 ```sh
 kubectl -n apps exec -it deploy/<APPNAME> -c app bash
@@ -36,7 +36,7 @@ If an environment variable is not configured correctly, you must correct it. You
 
 To change an app's Kubernetes secret, see the [Add secrets to your app documentation](https://govuk-k8s-user-docs.publishing.service.gov.uk/manage-app/manage-secrets).
 
-When you change an app's Kubernetes secret, you must restart the app. Run the following in the command line to restart your app:
+When you change an app's Kubernetes secret, run the following in the command line to restart your app:
 
 ```sh
 kubectl -n apps rollout restart deploy/<APPNAME>
@@ -44,15 +44,15 @@ kubectl -n apps rollout restart deploy/<APPNAME>
 
 ## Allocating more resources to an app
 
-An app's pod or container can crash because of insufficient resources such as CPU and memory.
+An app's pod or container can crash because of a lack of resources such as CPU and memory.
 
-You can check why a container or pod has crashed by running `describe pods` in the command line:
+To check why a container or pod has crashed, run `describe pods` in the command line:
 
 ```sh
 kubectl -n apps describe pods -l=app=<APPNAME>
 ```
 
-If the pod or container has crashed because of insufficient resources, you should [scale your app's resources](https://govuk-k8s-user-docs.publishing.service.gov.uk/manage-app/scale-app/).
+If the pod or container crashes because of a lack of resources, you should [scale your app's resources](https://govuk-k8s-user-docs.publishing.service.gov.uk/manage-app/scale-app/).
 
 You can monitor the pod resource usage of an app in the `General/Kubernetes/Compute Resources/Pod` Grafana dashboard for the appropriate environment.
 
@@ -64,9 +64,9 @@ For more information on Grafana, see the [Grafana developer documentation](https
 
 Some apps need access to other AWS services to work, but those AWS services are protected at a network level by [security groups](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_SecurityGroups.html).
 
-To fix this issue, you must make sure that the security groups of these services are open to the [Kubernetes worker nodes](https://kubernetes.io/docs/concepts/architecture/nodes/) where the app is running.
+To fix this issue, you must make sure the security groups of these services are open to the [Kubernetes worker nodes](https://kubernetes.io/docs/concepts/architecture/nodes/) where the app is running.
 
-To do this, you must make terraform changes to the [`security.tf` file in the `govuk-infrastructure` repo](https://github.com/alphagov/govuk-infrastructure/blob/main/terraform/deployments/govuk-publishing-infrastructure/security.tf).
+To open the security groups to the worker nodes, make terraform changes to the [`security.tf` file in the `govuk-infrastructure` repo](https://github.com/alphagov/govuk-infrastructure/blob/main/terraform/deployments/govuk-publishing-infrastructure/security.tf).
 
 Use this [example pull request in the `govuk-infrastructure` repo](https://github.com/alphagov/govuk-infrastructure/pull/584/files) as a guide to making the necessary changes.
 
@@ -85,7 +85,7 @@ If the platform is malfunctioning, you must [contact the GOV.UK replatforming te
 
 ### Getting logs for your apps
 
-You can get logs for your apps by following the [viewing app logs documentation](/manage-app/get-app-info/#view-app-logs).
+To get logs for your apps, follow the [viewing app logs documentation](/manage-app/get-app-info/#view-app-logs).
 
 ### Creating a shell inside a running container
 
@@ -103,7 +103,7 @@ For more information, see the [Kubernetes documentation on getting a shell to a 
 
 ### Port-forwarding to a pod
 
-You can make a port available on your local machine to send commands direct to the app from your local machine.
+You can make a port available on your local machine to send commands directly to the app.
 
 This command works on a pod level rather than a container level, as everything in a pod has the same IP address.
 
@@ -117,4 +117,4 @@ You can find the pod port in the app configuration.
 
 ### Following a troubleshooting guide
 
-Follow this [visual guide on troubleshooting Kubernetes deployments](https://learnk8s.io/troubleshooting-deployments) to help diagnose issues.
+To help diagnose issues, follow this [visual guide on troubleshooting Kubernetes deployments](https://learnk8s.io/troubleshooting-deployments).
