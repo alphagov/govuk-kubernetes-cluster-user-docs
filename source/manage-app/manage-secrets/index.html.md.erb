@@ -39,7 +39,9 @@ You can create 2 types of secret in AWS Secrets Manager:
 
 1. Enter the __Username__ and __Password__ for the database and select __Next__.
 
-1. Select the database that you want to connect to and select __Next__. [Contact the GOV.UK replatforming team on Slack](https://gds.slack.com/archives/C013F737737) if you are not sure which database you should connect to.
+1. Select the database that you want to connect to and select __Next__.
+
+    [Contact the GOV.UK replatforming team on Slack](https://gds.slack.com/archives/C013F737737) if you are not sure which database you should connect to.
 
 1. Review the secret and then select __Store__.
 
@@ -59,11 +61,9 @@ You can create 2 types of secret in AWS Secrets Manager:
 
 1. Enter the __Secret name__. You should also enter a __Description__.
 
-    Make sure the description is consistent with the `<DESCRIPTION>` in the `.yaml` file you created in the previous step.
+    The description should describe what the secret is used for and where to obtain the secret value.
 
-___DONT FORGET ABOUT THIS!!!___
-
-1. Add a __Tag__. Enter `added-manually` into the __Key__ field, and `true` into the __Value__ field, and select __Next__.
+1. Add a __Tag__. Enter `added-manually` into the __Key__ field and `true` into the __Value__ field, and select __Next__.
 
 1. Make sure __Automatic rotation__ is not enabled and select __Next__.
 
@@ -111,7 +111,7 @@ The external Kubernetes secret defines the mapping between the AWS Secrets Manag
     ```
     Where `<APPNAME>` is the name of the app and `<SECRETNAME>` is the name of the secret.
 
-    `<DESCRIPTION>` should describe what the secret is used for and where to obtain the secret value. If the `ExternalSecret` uses `dataFrom.extract`, then the description should also document the fields expected in the YAML structure.
+    Make sure the `<DESCRIPTION>` is consistent with the description you created in the AWS Secrets Manager. If the `ExternalSecret` uses `dataFrom.extract`, then the description should also document the fields expected in the YAML structure.
 
     For example, to create a secret for the Elections API for the [GOV.UK Frontend app](https://github.com/alphagov/govuk-frontend):
 
@@ -169,7 +169,7 @@ The external Kubernetes secret defines the mapping between the AWS Secrets Manag
     For example, to create a secret called `ELECTIONS_API_KEY` that relates to the `frontend-elections-api` secret in the AWS Secrets Manager (as per the previous example):
 
     ```
-    - name: ELECTIONS_API_KEY
+    - name: elections-api
             valueFrom:
               secretKeyRef:
                 name: frontend-elections-api
