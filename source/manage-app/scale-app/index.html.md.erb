@@ -7,17 +7,21 @@ review_in: 6 months
 
 # Scale your app
 
-If user demand on your app increases, you must increase the resources available to your app, also known as scaling your app.
+If user demand on your app increases, you must increase the resources available to your app. This is also known as scaling your app.
 
 ## Scaling your app
 
-To scale an app, change your app's `values.yaml` file in the [`charts` folder in the `govuk-helm-charts` repo](https://github.com/alphagov/govuk-helm-charts/blob/main/charts/), and then commit that change.
+1. Change your app's `values.yaml` file in the [`charts` folder in the `govuk-helm-charts` repo](https://github.com/alphagov/govuk-helm-charts/blob/main/charts/).
+1. Commit this change.
 
 When you merge the pull request, the changed configuration file will be [automatically synced by the Argo CD tool](https://govuk-k8s-user-docs.publishing.service.gov.uk/manage-app/access-ci-cd/#deploying-a-release-of-a-gov-uk-app).
 
-You should be aware of how your app interacts with other apps, and what effect scaling your app would have on the other apps.
+You should be aware of:
 
-For example, if you increase your frontend app's number of instances or pods, you may need to increase the number of instances of any backend apps that support your frontend as well.
+- how your app interacts with other apps
+- what effect scaling your app would have on the other apps
+
+For example, if you increase your frontend app's number of instances or pods, you may also need to increase the number of instances of any backend apps that support your frontend.
 
 ## What you can scale
 
@@ -25,18 +29,18 @@ You can scale your app vertically or horizontally.
 
 ### Vertically scaling your app
 
-You should have at least 3 replicas of each pod type of your app running in the GOV.UK Production or Staging environments.
+You should have at least 3 replicas of each pod type of your app running in the GOV.UK production or staging environments.
 
 This means greater reliability because the 3 replicas would cover the 3 AWS availability zones.
 
-You vertically scale your app by changing the following replicas:
+To vertically scale your app, change the following replicas:
 
-- `replicaCount`, that is the number of running instances or pods of your app
-- `workerReplicaCount`, this is the number of worker instances, if enabled, that run alongside your app within the pod (optional as it does not apply to all apps)
+- `replicaCount`, the number of running instances or pods of your app
+- `workerReplicaCount`, the number of worker instances that, if enabled, run alongside your app within the pod (optional as it does not apply to all apps)
 
 ### Horizontally scaling your app
 
-You horizontally scale your app by changing the request and/or limit value for the following resources:
+You can horizontally scale your app by changing the request and limit value for the following resources:
 
 - number of virtual CPU cores
 - amount of virtual memory
@@ -47,11 +51,11 @@ For more information on these resources, see the [Kubernetes documentation on po
 You can scale these resources for the following resource categories:
 
 - `appResources`, the resources that your app uses
-- `workerResources`, if enabled, the resources that your worker nodes use
-- `jobResources`, if enabled, the resources that your jobs use to upload assets
-- `nginxResources`, the resources that the NGINX proxy uses
+- `workerResources`, if enabled, the resources your worker nodes use
+- `jobResources`, if enabled, the resources your jobs use to upload assets
+- `nginxResources`, the resources the NGINX proxy uses
 
-Most of the time, you should only need to scale the `appResources` and `workerResources` (if enabled), but you may need to scale the other resources as well.
+Most of the time, you should only need to scale the `appResources` and `workerResources` (if enabled). However, you may sometimes need to scale the other resources as well.
 
 ## How scaling your app affects platform resources
 
@@ -59,4 +63,4 @@ If you increase the resources available to your app, this will increase the load
 
 You should be aware of this increased load on the platform, and look out for any [Argo CD deployment notifications or alerts](https://argocd-notifications.readthedocs.io/en/stable/).
 
-You can [contact the GOV.UK Replatforming team by email](mailto:govuk-replatforming-team@digital.cabinet-office.gov.uk) to discuss how scaling your app's resources affects the platform, and whether you need to scale the platform resources as well.
+[Contact the GOV.UK Replatforming team by email](mailto:govuk-replatforming-team@digital.cabinet-office.gov.uk) to discuss how scaling your app's resources affects the platform and whether you need to scale the platform resources as well.
