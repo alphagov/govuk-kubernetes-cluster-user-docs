@@ -11,12 +11,12 @@ You can add new [secrets](https://kubernetes.io/docs/concepts/configuration/secr
 
 Before you create a secret, check whether you need to use a secret or if you should use another method instead, such as [AWS Identity and Access Management (IAM)](https://aws.amazon.com/iam/).
 
-If you decide that you need to use a secret, check if that secret already exists. If the secret does exist, use this secret instead of duplicating it.
+If you decide that you need to use a secret, check if that secret already exists in the [AWS Secrets Manager](https://eu-west-1.console.aws.amazon.com/secretsmanager/listsecrets?region=eu-west-1). If the secret does exist, use this secret instead of duplicating it.
 
 If the secret does not already exist, you need to create it. To create a secret, you must:
 
 - [have access to AWS](https://docs.publishing.service.gov.uk/manual/get-started.html#8-get-aws-access)
-- create the secret in AWS Secrets Manager
+- create the secret in [AWS Secrets Manager](https://docs.aws.amazon.com/secretsmanager/)
 - define an [`ExternalSecret`](https://external-secrets.io/latest/api-externalsecret/) in Kubernetes
 - use the resulting Kubernetes secret inside the app
 
@@ -115,7 +115,7 @@ The Kubernetes `ExternalSecret` defines the mapping between the AWS Secrets Mana
 
     Make sure the `<DESCRIPTION>` is consistent with the description you created in the AWS Secrets Manager. If the `ExternalSecret` uses `dataFrom.extract`, then the description should also document the fields expected in the YAML structure.
 
-    For example, to create a secret for the Elections API for the [GOV.UK Frontend app](https://github.com/alphagov/govuk-frontend):
+    For example, to create a secret for the Elections API for the [GOV.UK Frontend app](https://github.com/alphagov/govuk-frontend), use the following format:
 
     ```
     apiVersion: external-secrets.io/v1beta1
@@ -151,7 +151,7 @@ The Kubernetes `ExternalSecret` defines the mapping between the AWS Secrets Mana
 You have:
 
 - created the secret in AWS Secrets Manager
-- defined the Kubernetes `ExternalSecret` which maps the AWS Secrets Manager secret to the Kubernetes secret inside the app
+- defined the Kubernetes `ExternalSecret`, which maps the AWS Secrets Manager secret to the Kubernetes secret inside the app
 
 Now you must use the Kubernetes secret inside the app by defining the secret in a `.yaml` file.
 
