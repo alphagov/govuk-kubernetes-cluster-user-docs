@@ -1,0 +1,16 @@
+---
+title: Testing and releasing your app
+weight: 42
+last_reviewed_on: 2022-08-16
+review_in: 6 months
+---
+
+# Testing and releasing applications
+
+Continious Integration is run in GitHub Actions workflow called 'CI'. This is run for pull requests and commits on the main branch. For Ruby application we use a re-usable worflow in the govuk-infrastructure repository. Where we define which backing services are required to run CI.
+
+This run in conjuction to CI Jenkins, and neither effect each other. Currently Jenkins is running end to end tests, however they are being removed as part of RFC-XXX and have not been migrated to the GitHub Actions.  
+
+When CI has been completed on a commit to main, this will trigger a automatic deployment to integration.
+
+CI consists of linting, security checks, and running tests.
