@@ -1,0 +1,61 @@
+---
+title: App update, deployment, monitoring and logs
+weight: 20
+last_reviewed_on: 2022-08-18
+review_in: 6 months
+---
+
+# App update, deployment, monitoring and logs
+
+This codelab will take you through steps to make changes to the test app which will then get deployed to the cluster. Once deployed you should be able to see your changes in the logs and make requests to return specified status codes which should be visible in the grafana dashboard. 
+
+## App update in the test app
+
+Add a new text file to the [test app](https://github.com/alphagov/govuk-replatform-test-app/tree/main/messages) `messages` directory on the `main` branch, this can be done via your chosen IDE or directly on github.
+
+## Notify other codelab devs
+
+Send a slack message to the #govuk-codelab channel to let them know that you are planning to deploy changes to the test app.
+
+## Deploying the changes to the app
+
+Commit your changes to the main branch to start the deployment process. 
+
+You would normally create a PR before pushing changes to the main branch but as you will be just adding text files to a directory there should be little chance of anything breaking.
+
+## Seeing the app changes being deployed
+
+You can monitor the app changes via [github actions](https://github.com/alphagov/govuk-replatform-test-app/actions) which triggers a [job](https://argo-workflows.eks.integration.govuk.digital/workflows/apps?limit=500) to update the image tag stored in [govuk-helms-chart](https://github.com/alphagov/govuk-helm-charts/blob/main/charts/argocd-apps/image-tags/integration/govuk-replatform-test-app) repo. 
+
+This causes the [app in the cluster](https://argo.eks.integration.govuk.digital/applications/argocd-apps?view=tree&resource=&node=argoproj.io%2FApplication%2Fcluster-services%2Fgovuk-replatform-test-app%2F0) to be out of sync with the image tag on the govuk-helms-chart so argo will attempt to redeploy the app to keep it in sync.
+
+Once the app has been deployed you should be able to see your changes on the [test app website](https://govuk-replatform-test-app.eks.integration.govuk.digital/?status=200).
+
+## Seeing the app website working and app metrics on the dashboard
+
+To see the app website working you can visit the page via the browser or `curl` it - https://govuk-replatform-test-app.eks.integration.govuk.digital/?status=200.
+
+Change the status to a 4xx status in order to see the error appearing in the [grafana dashboard](https://grafana.eks.integration.govuk.digital/d/000000109/app-request-rates-errors-durations?orgId=1&refresh=10s&var-namespace=apps&var-app=govuk-replatform-test-app&var-quantile=All&var-error_status=All).
+
+Be aware that if it is difficult to see your metrics in grafana because there are multiple users running the codelab, it should be possible to view your metrics in [prometheus](https://prometheus.eks.integration.govuk.digital/graph?g0.expr=http_request_duration_seconds%7Bjob%3D%22apps%2Fgovuk-replatform-test-app%22%2C%20install_id%3D%221660837311%22%7D&g0.tab=0&g0.stacked=0&g0.show_exemplars=0&g0.range_input=1h) instead using a filter for your identifier.
+
+## View the messages in your text file in the logs
+
+One of the outputs of the page will be an identifier which you can use to see the output of your deployment in the logs - 
+
+`Hello 1660815896! The time is 2022-08-18 14:58:02 +0000, you requested a 200 status response`
+
+Using the identifier - `1660815896` in this request -
+
+`https://kibana.logit.io/s/42f4d2d5-e9ce-451f-8ffc-cdb25bd624f8/app/discover#/?_g=(filters:!(),refreshInterval:(pause:!t,value:0),time:(from:now-4d,to:now))&_a=(columns:!(_source),filters:!(),index:'8ac115c0-aac1-11e8-88ea-0383c11b333a',interval:auto,query:(language:kuery,query:%221660815896%22),sort:!())` 
+
+Will bring up a page for logs relevant to your app deployment.
+
+## Tidy up your messages
+
+Once you are happy that you have seen your requests in grafana and logs for your deployment in kibana please remove your messages.
+
+## Maintenance
+
+Do not merge changes to the test app directly to the `main` branch,
+ if you want to make changes to the test app please create a PR and send it to the `#replatforming` slack channel for review.
