@@ -1,0 +1,20 @@
+---
+title: App configuration and deployment using the govuk helm chart
+weight: 20
+last_reviewed_on: 2022-08-18
+review_in: 6 months
+---
+
+## App configuration update in GOVUK helm chart
+
+Update the `HELM_MESSAGE` environment variable value for the test app configuration in [govuk-helm-charts](https://github.com/alphagov/govuk-helm-charts/blob/main/charts/argocd-apps/values-integration.yaml#L998) in a new branch.
+
+## Deploying the changes to the app
+
+Create the pull request on your branch and post it for review on the #govuk-codelab channel. After your PR has been approved for merging into the main branch, merge the PR in and look at the [argo CD apps workflow](https://argo.eks.integration.govuk.digital/applications/argocd-apps?view=tree&resource=) as your change gets deployed.
+
+After argo has finished syncing your changes you can find your changes by using this kubectl command - `kubectl get pods -n apps | grep "govuk-replatform-test-app"` 
+
+There should be 2 apps which are running matching this pattern - `govuk-replatform-test-app-xxxxxxxxxx-xxxxx`, copy the name of one of the apps and run this command - `kubectl describe pod <govuk-replatform-test-app-xxxxxxxxxx-xxxxx> -n apps`, this should return back a full description of the pod including the value you set for the HELM_MESSAGE. 
+
+Navigate to https://govuk-replatform-test-app.eks.integration.govuk.digital/?status=200 to see the HELM_MESSAGE as part of the page output, you have now successfully deployed the change to the GOV.UK kubernetes integration cluster.
