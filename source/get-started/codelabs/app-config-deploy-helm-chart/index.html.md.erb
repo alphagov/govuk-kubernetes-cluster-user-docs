@@ -13,7 +13,11 @@ Update the `HELM_MESSAGE` environment variable value for the test app configurat
 
 Create the pull request on your branch and post it for review on the #govuk-codelab channel. After your PR has been approved for merging into the main branch, merge the PR in and look at the [argo CD apps workflow](https://argo.eks.integration.govuk.digital/applications/argocd-apps?view=tree&resource=) as your change gets deployed.
 
-After argo has finished syncing your changes you can find your changes by using this kubectl command - `kubectl get pods -n apps | grep "govuk-replatform-test-app"` 
+It's a good idea to let the '#govuk-replatforming' channel know that you're' testing the app to avoid potential conflicts.
+
+You should ensure the desired manifest in Argo reflects the changes you made.
+
+After argo has finished syncing your changes you can find your changes by using this kubectl command - `kubectl get pods -n apps | grep "govuk-replatform-test-app"`
 
 There should be 2 apps which are running matching this pattern - `govuk-replatform-test-app-xxxxxxxxxx-xxxxx`, copy the name of one of the apps and run this command - `kubectl describe pod <govuk-replatform-test-app-xxxxxxxxxx-xxxxx> -n apps`, this should return back a full description of the pod including the value you set for the HELM_MESSAGE. 
 
