@@ -15,7 +15,7 @@ Add a new text file to the [test app](https://github.com/alphagov/govuk-replatfo
 
 ## Notify other codelab devs
 
-Send a slack message to the #govuk-codelab channel to let them know that you are planning to deploy changes to the test app.
+Send a slack message to the #govuk-replatforming-codelab channel to let them know that you are planning to deploy changes to the test app.
 
 ## Deploying the changes to the app
 
@@ -43,13 +43,28 @@ Be aware that if it is difficult to see your metrics in grafana because there ar
 
 One of the outputs of the page will be an identifier which you can use to see the output of your deployment in the logs - 
 
-`Hello 1660815896! The time is 2022-08-18 14:58:02 +0000, you requested a 200 status response`
+```
+From helm chart 1: your_helm_message_1
+From helm chart 2: your_helm_message_2
+From helm chart 3: your_helm_message_3
+From helm chart 4: your_helm_message_4
+From helm chart 5: your_helm_message_5
+From helm chart 6: your_helm_message_6
+From helm chart 7: your_helm_message_7
+From helm chart 8: your_helm_message_8
+From helm chart 9: your_helm_message_9
+Test message from govuk replatform test app
+Please clean up your messages after your codelab session
 
-Using the identifier - `1660815896` in this request -
+Test message on 18th August 2022
+Hello 1660815896! The time is 2022-08-18 14:58:02 +0000, you requested a 200 status response
+``
 
-`https://kibana.logit.io/s/42f4d2d5-e9ce-451f-8ffc-cdb25bd624f8/app/discover#/?_g=(filters:!(),refreshInterval:(pause:!t,value:0),time:(from:now-4d,to:now))&_a=(columns:!(_source),filters:!(),index:'8ac115c0-aac1-11e8-88ea-0383c11b333a',interval:auto,query:(language:kuery,query:%221660815896%22),sort:!())` 
+Use your identifier, `1660815896` in this case, to make the request -
 
-Will bring up a page for logs relevant to your app deployment.
+`https://kibana.logit.io/s/42f4d2d5-e9ce-451f-8ffc-cdb25bd624f8/app/discover#/?_g=(filters:!(),refreshInterval:(pause:!t,value:0),time:(from:now-4d,to:now))&_a=(columns:!(_source),filters:!(),index:'8ac115c0-aac1-11e8-88ea-0383c11b333a',interval:auto,query:(language:kuery,query:"1660815896"),sort:!())` 
+
+This will bring up a page for logs relevant to your app deployment.
 
 ## Tidy up your messages
 
@@ -57,5 +72,4 @@ Once you are happy that you have seen your requests in grafana and logs for your
 
 ## Maintenance
 
-Do not merge changes to the test app directly to the `main` branch,
- if you want to make changes to the test app please create a PR and send it to the `#replatforming` slack channel for review.
+Do not merge changes to the test app base code directly to the `main` branch, if you want to make changes to the test app please create a PR and send it to the `#replatforming` slack channel for review.
