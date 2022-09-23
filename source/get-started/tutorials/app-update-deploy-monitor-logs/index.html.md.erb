@@ -1,45 +1,41 @@
 ---
-title: App update, deployment, monitoring and logs
+title: Deploy a new version of the example test app, check the deployment, monitor the app on Grafana and view application logs
 weight: 20
 last_reviewed_on: 2022-09-08
 review_in: 6 months
 ---
 
-# App update, deployment, monitoring and logs
+# Deploy a new version of the example test app, check the deployment, monitor the app on grafana and view application logs
 
-This tutorial will take you through steps to make changes to the test app which will then get deployed to the cluster. Once deployed you should be able to see your changes in the logs and make requests to return specified status codes which should be visible in the grafana dashboard. 
+This tutorial will teach you how to deploy changes to an app and how to view application metrics and logs.
 
-1. App update in the test app
+In this tutorial, you will make a change to the example test app to print your message in the application output and view the message in the application logs. Later, you will make HTTP requests to the example test app and simulate responses with different status codes and view those response metics in Grafana. 
 
-Add a new text file with a prefix of your name, e.g. jblogs-test.txt, to the [test app](https://github.com/alphagov/govuk-replatform-test-app/tree/main/messages) `messages` directory on the `main` branch, this can be done via your chosen IDE or directly on github.
+1. Update the example test app with your message
 
-2. Notify other tutorial devs
+- Clone the [example test app](https://github.com/alphagov/govuk-replatform-test-app/tree/main/messages).
+- Create a new branch to add your changes.
+- Add a new text file with a prefix of your name, e.g. jblogs-test.txt, in the [test app](https://github.com/alphagov/govuk-replatform-test-app/tree/main/messages) `messages` directory.
 
-Send a slack message to the #govuk-replatforming-class channel to let them know that you are planning to deploy changes to the test app as this will cause them to require a pull of the latest main branch.
+2. Deploy the app changes to the integration environment
 
-3. Deploying the changes to the app
+Create a pull request (PR) and then merge your changes in to kick off the deployment process.
 
-Commit your changes to the main branch to start the deployment process. 
+3. See that the app changes have started the deployment
 
-You would normally create a PR before pushing changes to the main branch but as you will be just adding text files to a directory there should be little chance of anything breaking.
+You can check the ["Deploy" GitHub Action workflow](https://github.com/alphagov/govuk-replatform-test-app/actions) to see that the deployment has begun. This workflow builds a new container image with your application changes, and then triggers an [Argo workflow](https://argo-workflows.eks.integration.govuk.digital/workflows/apps?limit=500) to update the image tag stored in [govuk-helms-chart](https://github.com/alphagov/govuk-helm-charts/blob/main/charts/argocd-apps/image-tags/integration/govuk-replatform-test-app) repository.  
 
-4. Seeing the app changes being deployed
+This causes the [app in the cluster](https://argo.eks.integration.govuk.digital/applications/argocd-apps?view=tree&resource=&node=argoproj.io%2FApplication%2Fcluster-services%2Fgovuk-replatform-test-app%2F0) to be out of sync with the image tag on the govuk-helms-chart so Argo will attempt to redeploy the app to keep it in sync.
 
-You can monitor the app changes via [github actions](https://github.com/alphagov/govuk-replatform-test-app/actions) which triggers a [job](https://argo-workflows.eks.integration.govuk.digital/workflows/apps?limit=500) to update the image tag stored in [govuk-helms-chart](https://github.com/alphagov/govuk-helm-charts/blob/main/charts/argocd-apps/image-tags/integration/govuk-replatform-test-app) repo. 
+4. Check your message on the example test app website
 
-This causes the [app in the cluster](https://argo.eks.integration.govuk.digital/applications/argocd-apps?view=tree&resource=&node=argoproj.io%2FApplication%2Fcluster-services%2Fgovuk-replatform-test-app%2F0) to be out of sync with the image tag on the govuk-helms-chart so argo will attempt to redeploy the app to keep it in sync.
+To see your message on the example test app website visit the [example test app](https://govuk-replatform-test-app.eks.integration.govuk.digital/?status=200).
 
-5. Seeing the app website working
-
-To see the app website working you can visit the [test app](https://govuk-replatform-test-app.eks.integration.govuk.digital/?status=200).
-
-6. See app metrics on the grafana dashboard
+5. View app metrics on the Grafana dashboard
 
 Change the status parameter in the test app url to a 5xx status in order to see the error appearing in the [grafana dashboard](https://grafana.eks.integration.govuk.digital/d/000000109/app-request-rates-errors-durations?orgId=1&refresh=10s&var-namespace=tutorials&var-app=govuk-replatform-test-app&var-quantile=All&var-error_status=All).
 
-Be aware that if it is difficult to see your metrics in grafana because there are multiple users running the tutorial, it should be possible to view your metrics in [prometheus](https://prometheus.eks.integration.govuk.digital/graph?g0.expr=http_request_duration_seconds%7Bjob%3D%22apps%2Fgovuk-replatform-test-app%22%2C%20install_id%3D%221660837311%22%7D&g0.tab=0&g0.stacked=0&g0.show_exemplars=0&g0.range_input=1h) instead using a filter for your identifier.
-
-7. View the messages in your text file in the logs
+6. View the messages in your text file in the logs
 
 One of the outputs of the page will be an identifier which you can use to see the output of your deployment in the logs - 
 
@@ -55,10 +51,10 @@ Using the identifier - `1660815896` in this request -
 
 Will bring up a page for logs relevant to your app deployment.
 
-8. Tidy up your messages
+7. Tidy up your messages
 
-Once you are happy that you have seen your requests in grafana and logs for your deployment in kibana please remove your messages.
+Once you are happy that you have seen your requests in Grafana and logs for your deployment in Kibana please revert your PR to remove your messges.
 
 ## Maintenance
 
-Do not merge changes to the base test app directly to the `main` branch. If you want to make changes to the test app please create a PR and send it to the `#replatforming` slack channel for review.
+If you want to make changes to the test app please create a PR and send it to the `#replatforming` slack channel for review.
