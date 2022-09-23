@@ -1,32 +1,35 @@
 ---
-title: App configuration and deployment using the govuk helm chart
+title: Update an application's environment configuration
 weight: 20
 last_reviewed_on: 2022-09-08
 review_in: 6 months
 ---
 
-# App configuration and deployment using the govuk helm chart
+# Update an application's environment configuration
 
-This tutorial aims to guide you through the process of updating configuration in the govuk-helm-charts repo for the test app and seeing the deployment following the changes you made.
+This tutorial aims to guide you through the process of updating an applications configuration in the govuk-helm-charts repository. You will be updating the configuration of an example test app, deploy and verify your changes.
 
-In a real world situation you might also update the number of CPUs for the app, memory size etc.
+The govuk-helm-chart repository contains configuration for how an app is deployed into an environment, for example CPU and memory allocation for pods, environment variable values, health check configuration etc. 
 
-1. App configuration update in GOVUK helm chart
+1. Update the example test app configuration
 
-Add your `ENV_MESSAGE_<your name>` environment variable value for the test app configuration in [govuk-helm-charts](https://github.com/alphagov/govuk-helm-charts/blob/main/charts/argocd-apps/values-integration.yaml#L998) in a new branch.
+- Clone the [govuk-helm-charts repository](https://github.com/alphagov/govuk-helm-charts.git).
+- Create a new branch to add your changes.
+- Locate the `govuk-replatform-test-app` values in [govuk-helm-charts repository](https://github.com/alphagov/govuk-helm-charts/blob/main/charts/argocd-apps/values-integration.yaml)
+- Add your `ENV_MESSAGE_<your name>` environment variable value.
 
 2. Deploying the changes to the app
 
-Create the pull request on your branch and post it for review on the #govuk-replatforming-class channel. After your PR has been approved for merging into the main branch, merge the PR in and look at the [argo CD apps workflow](https://argo.eks.integration.govuk.digital/applications/argocd-apps?view=tree&resource=) as your change gets deployed.
+Create the pull request (PR) on your branch and post it for review on the #govuk-replatforming-class channel. After your PR has been approved and passed status checks you can merge your PR.
 
 3. See the changes in Argo
 
-You should be able to see your changes in the manifest within Argo (https://argo.eks.integration.govuk.digital/applications/argocd-apps?view=tree&resource=&node=argoproj.io%2FApplication%2Fcluster-services%2Fgovuk-replatform-test-app%2F0)
+You should be able to see your changes in the manifest within Argo (https://argo.eks.integration.govuk.digital/applications/govuk-replatform-test-app?view=tree&orphaned=false&resource=&node=argoproj.io%2FApplication%2Fcluster-services%2Fgovuk-replatform-test-app%2F0&tab=manifest)
 
-4. See your environment message in the test app
+4. See your message from the environment variable in the example test app
 
-Navigate to https://govuk-replatform-test-app.eks.integration.govuk.digital/?status=200 to see the `ENV_MESSAGE` as part of the page output, you have now successfully deployed the change to the GOV.UK kubernetes integration cluster.
+Navigate to https://govuk-replatform-test-app.eks.integration.govuk.digital/?status=200 to see the `ENV_MESSAGE` as part of the page output, you have now successfully deployed the change to the GOV.UK Kubernetes integration cluster.
 
 5. Tidy up your `ENV_MESSAGE`
 
-Please remove your `ENV_MESSAGE` once you are happy that you have seen your changes in the test app manifest within Argo and on the test app website.
+Revert your PR to tidy up the codebase and post it for review on the #govuk-replatforming-class channel. After your PR has been approved and passed status checks you can merge your PR to undo your changes.
