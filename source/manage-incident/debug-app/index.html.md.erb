@@ -23,7 +23,7 @@ Almost all GOV.UK apps are configured through environment variables. These envir
 - either in plain text or a [Kubernetes secret](https://kubernetes.io/docs/concepts/configuration/secret/)
 - located in the `values-<ENVIRONMENT>.yaml` file in the [`govuk-helm-charts` repo](https://github.com/alphagov/govuk-helm-charts)
 
-For example, the [`values-integration.yaml` file in the `govuk-helm-charts` repo](https://github.com/alphagov/govuk-helm-charts/blob/main/charts/argocd-apps/values-integration.yaml) contains the environment variables for the integration environment.
+For example, the [`values-integration.yaml` file in the `govuk-helm-charts` repo](https://github.com/alphagov/govuk-helm-charts/blob/main/charts/app-config/values-integration.yaml) contains the environment variables for the integration environment.
 
 To check you have set up your app's environment variables correctly, run the following in the command line:
 
