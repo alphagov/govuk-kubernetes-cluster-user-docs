@@ -35,7 +35,7 @@ The deployment process is as follows.
 
 1. An [Argo CD PreSync hook](https://argo-cd.readthedocs.io/en/stable/user-guide/resource_hooks/) pre-compiles the assets and uploads them to S3 as a Kubernetes Job. This PreSync hook occurs before the main [Sync operation](https://argo-cd.readthedocs.io/en/stable/user-guide/sync-options/) that updates the application containers.
 
-1. A [Kubernetes Job](https://github.com/alphagov/govuk-helm-charts/blob/main/charts/govuk-rails-app/templates/dbmigration-job.yaml) runs database migration as part of the Sync operation.
+1. A [Kubernetes Job](https://github.com/alphagov/govuk-helm-charts/blob/main/charts/generic-govuk-app/templates/dbmigration-job.yaml) runs database migration as part of the Sync operation.
 
      We do not guarantee the database migrations will occur before the new containers access the database. As best practice database migrations should be forward and backwards compatible by one version.
 
