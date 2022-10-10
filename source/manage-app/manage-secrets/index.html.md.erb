@@ -77,7 +77,7 @@ You can create 2 types of secret in AWS Secrets Manager:
 
 The Kubernetes `ExternalSecret` defines the mapping between the AWS Secrets Manager secret and the Kubernetes secret inside your app.
 
-1. Go to the [`external-secrets` folder in the `govuk-helm-charts` repo](https://github.com/alphagov/govuk-helm-charts/tree/main/charts/govuk-apps-conf/templates/external-secrets).
+1. Go to the [`external-secrets` folder in the `govuk-helm-charts` repo](https://github.com/alphagov/govuk-helm-charts/tree/main/charts/app-config/templates/external-secrets).
 
 1. Select your app's folder, or create the folder if necessary.
 
@@ -96,7 +96,7 @@ The Kubernetes `ExternalSecret` defines the mapping between the AWS Secrets Mana
     metadata:
       name: <APPNAME-SECRETNAME>
       labels:
-        {{- include "govuk-apps-conf.labels" . | nindent 4 }}
+        {{- include "app-config.labels" . | nindent 4 }}
       annotations:
         kubernetes.io/description: >
           <DESCRIPTION>
@@ -123,7 +123,7 @@ The Kubernetes `ExternalSecret` defines the mapping between the AWS Secrets Mana
     metadata:
       name: frontend-elections-api
       labels:
-        {{- include "govuk-apps-conf.labels" . | nindent 4 }}
+        {{- include "app-config.labels" . | nindent 4 }}
       annotations:
         kubernetes.io/description: >
           Credentials used by Frontend to access external Elections API service. Field names are "key" for the API key and "url" for the endpoint URL of the Elections API.
@@ -141,10 +141,10 @@ The Kubernetes `ExternalSecret` defines the mapping between the AWS Secrets Mana
 
 1. Save the `.yaml` file and merge the change.
 
-1. Check the Argo CD dashboard for the following environments to find out whether you successfully changed the `govuk-apps-conf` chart:
-    - [integration](https://argo.eks.integration.govuk.digital/applications/govuk-apps-conf)
-    - [staging](https://argo.eks.staging.govuk.digital/applications/govuk-apps-conf)
-    - [production](https://argo.eks.production.govuk.digital/applications/govuk-apps-conf)
+1. Check the Argo CD dashboard for the following environments to find out whether you successfully changed the `app-config` chart:
+    - [integration](https://argo.eks.integration.govuk.digital/applications/app-config)
+    - [staging](https://argo.eks.staging.govuk.digital/applications/app-config)
+    - [production](https://argo.eks.production.govuk.digital/applications/app-config)
 
 ## Use the Kubernetes secret inside the app
 
@@ -177,7 +177,7 @@ Now you must use the Kubernetes secret inside the app by defining the secret in 
 
     The `<ENV_VAR_NAME>` is the name of the environment variable whose value you want to be set to the value from the secret.
 
-    The `<APPNAME-SECRETNAME>` in this file must match the `<APPNAME-SECRETNAME>` in the `.yaml` file in the [`external-secrets` folder in the `govuk-helm-charts` repo](https://github.com/alphagov/govuk-helm-charts/tree/main/charts/govuk-apps-conf/templates/external-secrets).
+    The `<APPNAME-SECRETNAME>` in this file must match the `<APPNAME-SECRETNAME>` in the `.yaml` file in the [`external-secrets` folder in the `govuk-helm-charts` repo](https://github.com/alphagov/govuk-helm-charts/tree/main/charts/app-config/templates/external-secrets).
 
     The `<KEY>` must match the __Key__ in the AWS Secrets Manager secret.
 
