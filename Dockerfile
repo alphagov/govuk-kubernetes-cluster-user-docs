@@ -2,8 +2,8 @@ FROM ruby:3.0.4
 
 EXPOSE 4567
 
-RUN apt-get update -qq && \
-    apt-get install -y nodejs
+RUN curl -sL https://deb.nodesource.com/setup_16.x | bash - \
+    apt-get update -qq && apt-get install -y nodejs
 
 RUN adduser middleman
 USER middleman
