@@ -13,23 +13,23 @@ The govuk-helm-chart repository contains configuration for how an app is deploye
 
 1. Update the example test app configuration
 
-- Clone the [govuk-helm-charts repository](https://github.com/alphagov/govuk-helm-charts.git).
-- Create a new branch to add your changes.
-- Locate the `govuk-replatform-test-app` values in [govuk-helm-charts repository](https://github.com/alphagov/govuk-helm-charts/blob/main/charts/argocd-apps/values-integration.yaml)
-- Add your `ENV_MESSAGE_<your name>` environment variable value.
+    1. Clone the [govuk-helm-charts repository](https://github.com/alphagov/govuk-helm-charts.git).
+    1. Create a new branch to add your changes.
+    1. Locate the `govuk-replatform-test-app` values in [govuk-helm-charts repository](https://github.com/alphagov/govuk-helm-charts/tree/main/charts/app-config/values-integration.yaml)
+    1. Add your `ENV_MESSAGE_<your name>` environment variable value.
 
-2. Deploying the changes to the app
+1. Deploying the changes to the app
 
-Create the pull request (PR) on your branch and post it for review on the #govuk-replatforming-class channel. After your PR has been approved and passed status checks you can merge your PR.
+    Create the pull request (PR) on your branch, your changes will get posted automatically to the #govuk-replatforming channel for review by a member of the team. After your PR has been approved and passed status checks you can merge your PR.
 
-3. See the changes in Argo
+1. See the changes in Argo
 
-You should be able to see your changes in the manifest within Argo (https://argo.eks.integration.govuk.digital/applications/govuk-replatform-test-app?view=tree&orphaned=false&resource=&node=argoproj.io%2FApplication%2Fcluster-services%2Fgovuk-replatform-test-app%2F0&tab=manifest)
+    You should be able to see your changes in the manifest within [Argo](https://argo.eks.integration.govuk.digital/applications/govuk-replatform-test-app?view=tree&orphaned=false&resource=&node=argoproj.io%2FApplication%2Fcluster-services%2Fgovuk-replatform-test-app%2F0&tab=manifest)
 
-4. See your message from the environment variable in the example test app
+1. See your message from the environment variable in the example test app
 
-Navigate to https://govuk-replatform-test-app.eks.integration.govuk.digital/?status=200 to see the `ENV_MESSAGE` as part of the page output, you have now successfully deployed the change to the GOV.UK Kubernetes integration cluster.
+    Navigate to the [test app](https://govuk-replatform-test-app.eks.integration.govuk.digital/?status=200) to see the `ENV_MESSAGE` as part of the page output, you have now successfully deployed the change to the GOV.UK Kubernetes integration cluster.
 
-5. Tidy up your `ENV_MESSAGE`
+1. Tidy up your `ENV_MESSAGE`
 
-Revert your PR to tidy up the codebase and post it for review on the #govuk-replatforming-class channel. After your PR has been approved and passed status checks you can merge your PR to undo your changes.
+    Revert your PR to tidy up the codebase and post it for review on the #govuk-replatforming-class channel. After your PR has been approved and passed status checks you can merge your PR to undo your changes.
