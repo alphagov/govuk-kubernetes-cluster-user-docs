@@ -16,13 +16,13 @@ The govuk-helm-chart repository contains configuration for how an app is deploye
     1. Clone the [govuk-helm-charts repository](https://github.com/alphagov/govuk-helm-charts.git).
     1. Create a new branch to add your changes.
     1. Locate the `govuk-replatform-test-app` values in [govuk-helm-charts repository](https://github.com/alphagov/govuk-helm-charts/tree/main/charts/app-config/values-integration.yaml)
-    1. Add your `ENV_MESSAGE_<your name>` environment variable value.
+    1. Add your `ENV_MESSAGE_<your name>` environment variable value with your own message.
 
 1. Deploying the changes to the app
 
     Create the pull request (PR) on your branch, your changes will get posted automatically to the #govuk-replatforming channel for review by a member of the team. After your PR has been approved and passed status checks you can merge your PR.
 
-1. See the changes in Argo
+1. See the changes in (Argo)[https://argoproj.github.io/] (a tool to help manage app deployments)
 
     You should be able to see your changes in the manifest within [Argo](https://argo.eks.integration.govuk.digital/applications/govuk-replatform-test-app?view=tree&orphaned=false&resource=&node=argoproj.io%2FApplication%2Fcluster-services%2Fgovuk-replatform-test-app%2F0&tab=manifest)
 
