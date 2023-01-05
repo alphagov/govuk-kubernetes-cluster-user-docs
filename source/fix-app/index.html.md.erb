@@ -1,42 +1,41 @@
 ---
-title: Debug your app
+title: Fix your app
 weight: 51
-last_reviewed_on: 2022-08-01
+last_reviewed_on: 2023-01-05
 review_in: 6 months
 ---
 
-# Debug your app
+# Fix your app
 
 Generally, the reasons why an app has functional or performance issues belong to the following categories:
 
-- the app's functional configuration is wrong
+- the app's configuration is wrong
 - the app does not have enough resources allocated
 - the app does not have access to required AWS services
-- the GOV.UK Kubernetes platform is malfunctioning
+- the GOV.UK Kubernetes cluster is not working properly
 
-The following content summarises how to debug your app's performance issues in each of these categories.
+The following content summarises how to find issues in each of these categories.
 
 ## Fixing an app's configuration
 
 Almost all GOV.UK apps are configured through environment variables. These environment variables are:
 
-- either in plain text or a [Kubernetes secret](https://kubernetes.io/docs/concepts/configuration/secret/)
-- located in the `values-<ENVIRONMENT>.yaml` file in the [`govuk-helm-charts` repo](https://github.com/alphagov/govuk-helm-charts)
+- stored either as plain text or in a [Kubernetes secret](https://kubernetes.io/docs/concepts/configuration/secret/)
+- located in the `values-<ENVIRONMENT>.yaml` file or the `templates/env-configmap.yaml` template in the [`govuk-helm-charts` repo](https://github.com/alphagov/govuk-helm-charts)
 
-For example, the [`values-integration.yaml` file in the `govuk-helm-charts` repo](https://github.com/alphagov/govuk-helm-charts/blob/main/charts/app-config/values-integration.yaml) contains the environment variables for the integration environment.
+For example, the [`values-integration.yaml` file](https://github.com/alphagov/govuk-helm-charts/blob/main/charts/app-config/values-integration.yaml) contains the environment variables for the integration environment.
 
 To check you have set up your app's environment variables correctly, run the following in the command line:
 
 ```sh
-kubectl -n apps exec -it deploy/<APPNAME> -c app bash
-env
+kubectl -n apps exec deploy/<APPNAME> -c app -- env
 ```
 
-If an environment variable is not configured correctly, you must correct it. You can change a plain text environment variable directly in the `values-<ENVIRONMENT>.yaml` file.
+To change a plain text environment variable, edit the value in the `values-<ENVIRONMENT>.yaml` file.
 
-To change an app's Kubernetes secret, see the [Add secrets to your app documentation](https://govuk-k8s-user-docs.publishing.service.gov.uk/manage-app/manage-secrets).
+To change a Kubernetes secret, see the [Add secrets to your app documentation](https://govuk-k8s-user-docs.publishing.service.gov.uk/manage-app/manage-secrets).
 
-When you change an app's Kubernetes secret, run the following in the command line to restart your app:
+When you change a Kubernetes secret, run the following in the command line to restart your app so that the change takes effect:
 
 ```sh
 kubectl -n apps rollout restart deploy/<APPNAME>
@@ -44,7 +43,7 @@ kubectl -n apps rollout restart deploy/<APPNAME>
 
 ## Allocating more resources to an app
 
-An app's pod or container can crash because of a lack of resources such as CPU and memory.
+An app might become unresponsive if its CPU usage far exceeds its limit. An app's container or pod can crash or be evicted if it exceeds its memory limit.
 
 To check why a container or pod has crashed, run `describe pods` in the command line:
 
@@ -72,14 +71,15 @@ Use this [example pull request in the `govuk-infrastructure` repo](https://githu
 
 Once you have made these changes, apply them by [deploying the `cluster-infrastructure` module](https://govuk-k8s-user-docs.publishing.service.gov.uk/manage-app/create-new-env/#2-deploy-the-cluster-infrastructure-module).
 
-## Fixing the malfunctioning GOV.UK Kubernetes platform
+## If you suspect a problem with the cluster itself
 
-An app may face issues if the platform malfunctions. This could happen for multiple reasons, for example:
+An app may face issues if the cluster has a problem. Possible issues you might encounter include:
 
-- there may not be enough worker nodes to schedule the required number of replicas of the apps
-- the app may not be running the right image version
+- insufficient capacity in the cluster to schedule the required number of replicas of the apps, for example if a "stockout" in EC2 is preventing cluster-autoscaler from starting new nodes
+- a configuration problem with the cluster due to some recent change
+- a problem with a controller which might prevent an app's actual configuration from converging with its specified configuration
 
-If the platform is malfunctioning, you must [contact the GOV.UK replatforming team on Slack](https://gds.slack.com/archives/C013F737737) to ask for help.
+If you suspect a problem with the cluster, [contact #govuk-replatforming on Slack](https://gds.slack.com/archives/C013F737737) to ask for help.
 
 ## General debugging
 

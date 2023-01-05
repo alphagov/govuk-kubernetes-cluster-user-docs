@@ -3,7 +3,7 @@ host: https://govuk-k8s-user-docs.publishing.service.gov.uk
 
 # Header-related options
 show_govuk_logo: true
-service_name: GOV.UK Kubernetes platform technical documentation
+service_name: GOV.UK Kubernetes platform documentation
 service_link: https://govuk-k8s-user-docs.publishing.service.gov.uk
 phase: Alpha
 
