@@ -57,4 +57,4 @@ In this tutorial, you will make a change to the example test app to print your m
 
 ## Maintenance
 
-If you want to make changes to the test app please create a PR and send it to the `#replatforming` slack channel for review.
+If you want to make changes to the test app please create a PR and send it to the `#govuk-replatforming` slack channel for review.
