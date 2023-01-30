@@ -29,7 +29,7 @@ In this tutorial, you will make a change to the example test app to print your m
 
 1. Check your message on the example test app website
 
-    After 5 minutes you should be see your message on the example test app website visit the [example test app](https://govuk-replatform-test-app.eks.integration.govuk.digital/?status=200).
+    After about 10 minutes you should be see your message on the example test app website visit the [example test app](https://govuk-replatform-test-app.eks.integration.govuk.digital/?status=200).
 
 1. View app metrics on the Grafana dashboard
 
@@ -39,7 +39,7 @@ In this tutorial, you will make a change to the example test app to print your m
 
     One of the outputs of the page will be an identifier which you can use to see the output of your deployment in the logs - 
 
-    `Hello 1660815896! The time is 2022-09-08 15:00:00 +0000, you requested a 200 status response`
+    `Version: 1660815896. Hello, the time is 2022-09-08 15:00:00 +0000, you requested a 200 status response`
 
     Using the identifier - `1660815896` in this request -
 
