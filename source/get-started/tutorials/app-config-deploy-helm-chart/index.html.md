@@ -15,7 +15,8 @@ The govuk-helm-chart repository contains configuration for how an app is deploye
 
     1. Clone the [govuk-helm-charts repository](https://github.com/alphagov/govuk-helm-charts.git).
     1. Create a new branch to add your changes.
-    1. Locate the `govuk-replatform-test-app` values in [govuk-helm-charts repository](https://github.com/alphagov/govuk-helm-charts/tree/main/charts/app-config/values-integration.yaml)
+    1. Locate the `govuk-replatform-test-app` values in [govuk-helm-charts repository](https://github.com/alphagov/govuk-helm-charts/tree/main/charts/app-config/values-integration.yaml). 
+    (Please note that `app-config/ci/integration-values.yml` is symlinked to `values-integration.yaml`, you just need to make changes in one of the files.)
     1. Add your `ENV_MESSAGE_<your name>` environment variable value with your own message.
 
 1. Deploying the changes to the app
