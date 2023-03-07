@@ -1,7 +1,7 @@
 ---
 title: Update an application's environment configuration
 weight: 20
-last_reviewed_on: 2022-09-08
+last_reviewed_on: 2023-03-07
 review_in: 6 months
 ---
 
