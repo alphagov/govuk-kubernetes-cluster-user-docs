@@ -12,7 +12,7 @@ You must access the GOV.UK Kubernetes platform [Elastic Kubernetes Service clust
 To access the cluster, you must have:
 
 - [installed gds-cli](https://docs.publishing.service.gov.uk/manual/get-started.html#3-install-gds-command-line-tools)
-- [gotten access to AWS](https://docs.publishing.service.gov.uk/manual/get-started.html#7-get-aws-access)
+- [obtained access to AWS](https://docs.publishing.service.gov.uk/manual/get-started.html#7-get-aws-access)
 - [accessed AWS](https://docs.publishing.service.gov.uk/manual/get-started.html#8-access-aws-for-the-first-time) using `gds-cli`
 
 You must select a role and environment to make sure you gain access to the right cluster.
