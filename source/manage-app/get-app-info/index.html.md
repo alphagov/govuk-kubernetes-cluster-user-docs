@@ -11,12 +11,18 @@ You can get information about your app, your app deployment, and the pods and co
 
 Most of the following examples use the Kubernetes command-line tool, `kubectl`.
 
+## Choose and set a namespace
+
+All the GOV.UK applications are in the `apps` namespace. You can avoid having to specify this (`-n apps`) in every `kubectl` command by setting `apps` as your default namespace:
+
+`kubectl config set-context --current --namespace=apps`
+
 ## Get a list of all deployed apps in a namespace
 
-To get a list of all deployed apps in a namespace, run the following in the command line:
+To get a list of all deployed apps, run:
 
 ```sh
-kubectl -n <namespace> get deployments
+kubectl -n apps get deployments
 ```
 
 ## Describe an app deployment
