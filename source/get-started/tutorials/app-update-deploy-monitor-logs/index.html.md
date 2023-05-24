@@ -5,7 +5,7 @@ last_reviewed_on: 2023-03-07
 review_in: 6 months
 ---
 
-# Deploy a new version of the example test app, check the deployment, monitor the app on grafana and view application logs
+# Deploy a new version of the example test app, check the deployment, monitor the app on Grafana and view application logs
 
 This tutorial will teach you how to deploy changes to an app and how to view application metrics and logs.
 
@@ -23,9 +23,9 @@ In this tutorial, you will make a change to the example test app to print your m
 
 1. See that the app changes have started the deployment
 
-    You can check the ["Deploy" GitHub Action workflow](https://github.com/alphagov/govuk-replatform-test-app/actions) to see that the deployment has begun. This workflow builds a new container image with your application changes, and then triggers an [Argo workflow](https://argo-workflows.eks.integration.govuk.digital/workflows/apps?limit=500) (login via Github SSO, if you can't see any workflows set the namespace to `apps`) to update the image tag stored in [govuk-helm-charts](https://github.com/alphagov/govuk-helm-charts/tree/main/charts/app-config/image-tags/integration/govuk-replatform-test-app) repository.  
+    You can check the ["Deploy" GitHub Actions workflow](https://github.com/alphagov/govuk-replatform-test-app/actions) to see that the deployment has begun. This workflow builds a new container image with your application changes, and then triggers an [Argo Workflow](https://argo-workflows.eks.integration.govuk.digital/workflows/apps?limit=500) (login via Github SSO, if you can't see any workflows set the namespace to `apps`) to update the image tag stored in [govuk-helm-charts](https://github.com/alphagov/govuk-helm-charts/tree/main/charts/app-config/image-tags/integration/govuk-replatform-test-app) repository.
 
-    This will make the [app in the cluster](https://argo.eks.integration.govuk.digital/applications/cluster-services/govuk-replatform-test-app?view=tree&orphaned=false&resource=&node=argoproj.io%2FApplication%2Fcluster-services%2Fgovuk-replatform-test-app%2F0) to be out of sync with the image tag on the govuk-helms-chart so Argo will attempt to redeploy the app to keep it in sync. The annotations `imageTag` sha should match the commit sha on the main branch of the test app repository, Argos is currently set to poll for changes every 2 minutes.
+    This will cause the [app in the cluster](https://argo.eks.integration.govuk.digital/applications/cluster-services/govuk-replatform-test-app?view=tree&orphaned=false&resource=&node=argoproj.io%2FApplication%2Fcluster-services%2Fgovuk-replatform-test-app%2F0) to be out of sync with the image tag in the govuk-helm-charts repo so Argo will attempt to redeploy the app to keep it in sync. The `imageTag=release-...` SHA against `ANNOTATIONS` should match the commit SHA on the main branch of the test app repository. Argo CD is currently set to poll the repository for changes every 2 minutes.
 
 1. Check your message on the example test app website
 
@@ -33,7 +33,7 @@ In this tutorial, you will make a change to the example test app to print your m
 
 1. View app metrics on the Grafana dashboard
 
-    Change the status parameter in the test app url to a 5xx status in order to see the error appearing in the [grafana dashboard](https://grafana.eks.integration.govuk.digital/d/000000111/app-request-rates-errors-durations?orgId=1&refresh=10s&var-namespace=apps&var-app=govuk-replatform-test-app&var-quantile=All&var-error_status=All) (login via your govuk Google SSO)
+    Change the status parameter in the test app url to a 5xx status in order to see the error appearing in the [Grafana dashboard](https://grafana.eks.integration.govuk.digital/d/000000111/app-request-rates-errors-durations?orgId=1&refresh=10s&var-namespace=apps&var-app=govuk-replatform-test-app&var-quantile=All&var-error_status=All) (login via your govuk Google SSO)
 
 1. View the messages in your text file in the logs
 
@@ -57,4 +57,4 @@ In this tutorial, you will make a change to the example test app to print your m
 
 ## Maintenance
 
-If you want to make changes to the test app please create a PR and send it to the `#govuk-replatforming` slack channel for review.
+If you want to make changes to the test app please raise a PR and someone from Platform Engineering team will pick it up.

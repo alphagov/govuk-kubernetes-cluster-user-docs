@@ -5,30 +5,19 @@ last_reviewed_on: 2022-07-01
 review_in: 6 months
 ---
 
+> 🚧 This document is outdated and untested. 🚧
+>
+> If you are thinking about creating an additional GOV.UK Kubernetes cluster, please get in touch with [#govuk-platform-engineering team] and we'll be happy to help you to achieve your goals.
+
 # Create a new environment
-
-You can create a new test, staging, integration or production environment on the GOV.UK Kubernetes platform.
-
-You create a new environment to, for example, work on new functionality or resources for the platform.
 
 To create a new environment, you must:
 
-- complete the prerequisites
 - create secrets for the new environment
 - create a new empty environment
 - deploy the Terraform modules
 - create the Signon API token
 - check the environment is working
-
-## Complete the prerequisites
-
-Before creating a new environment, you must:
-
-- [set up the tools needed to use the GOV.UK Kubernetes platform](/get-started/set-up-tools/#set-up-tools-to-use-the-gov-uk-kubernetes-platform)
-- [request a new AWS account](https://gds-request-an-aws-account.cloudapps.digital/)
-- [install the AWS-CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
-- [install Terraform](https://www.terraform.io/downloads)
-- [install the `gds-cli`](https://docs.publishing.service.gov.uk/manual/get-started.html#4-install-gds-command-line-tools), which you should have done already as part of [getting started on GOV.UK](https://docs.publishing.service.gov.uk/manual/get-started.html)
 
 ## Create secrets for the new environment
 
@@ -91,8 +80,6 @@ The [`ecr` module](https://github.com/alphagov/govuk-infrastructure/tree/main/te
       terraform apply -var-file ../variables/<ENVIRONMENT>/ecr.tfvars
     ```
     `<ENVIRONMENT>` is the environment type you defined in the earlier step.
-
-If you’re creating an integration or staging environment, you must [contact the GOV.UK replatforming team on Slack](https://gds.slack.com/archives/C013F737737) to discuss the impact of deploying the `ecr` module.
 
 ### 2. Deploy the `cluster-infrastructure` module
 
@@ -173,11 +160,11 @@ This allows Signon resources to create or export tokens from Signon.
 
 You should now have successfully created a new environment on the GOV.UK Kubernetes platform.
 
-To check the environment is working, go to the new environment URL endpoint at `“https://www.eks.<ENVIRONMENT>.govuk.digital`. For example, the endpoint for a new production environment is `https://www.eks.production.govuk.digital`.
+To check the environment is working, go to the new environment URL endpoint at `https://www.eks.<ENVIRONMENT>.govuk.digital`. For example, the endpoint for a new production environment is `https://www.eks.production.govuk.digital`.
 
 You must be in the office or on the VPN to access this endpoint.
 
-If the environment URL endpoint is not behaving as expected or shows an error, [contact the GOV.UK replatforming team on Slack](https://gds.slack.com/archives/C013F737737).
+If the environment URL endpoint is not behaving as expected or shows an error, contact [#govuk-platform-engineering team].
 
 ## Supporting information
 
@@ -186,3 +173,5 @@ When you create the new environment, the process will also create an instance of
 See the [Kubescape user hub](https://hub.armosec.io/docs/welcome-to-kubescape-user-hub) for more information.
 
 See also the [Kubernetes conceptual overview documentation](https://kubernetes.io/docs/concepts/overview/what-is-kubernetes/) for more information on Kubernetes overall.
+
+[#govuk-platform-engineering team]: /contact-platform-engineering-team.html

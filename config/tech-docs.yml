@@ -38,4 +38,4 @@ show_contribution_banner: true
 github_repo: alphagov/govuk-kubernetes-cluster-user-docs
 github_branch: main
 owner_slack_workspace: gds
-default_owner_slack: '#govuk-replatforming'
+default_owner_slack: '#govuk-platform-engineering'

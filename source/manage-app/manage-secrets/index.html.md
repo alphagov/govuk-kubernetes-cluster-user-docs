@@ -183,7 +183,7 @@ Now you can use the Kubernetes secret inside the app referring to it in the app'
 
 1. Save the `.yaml` file and merge the change.
 
-    If you are not sure how to define the secret in the `.yaml` file, [contact the GOV.UK replatforming team on Slack](https://gds.slack.com/archives/C013F737737).
+    If you are not sure how to define the secret in the `.yaml` file, ask [Platform Engineering team](/contact-platform-engineering-team.html) and we'll help you.
 
 ## Supporting information
 
@@ -193,5 +193,5 @@ The operator reads information from external APIs and automatically injects the 
 
 For more information, see the:
 
-- [External Secrets Operator documentation](https://external-secrets.io/v0.5.8/guides-introduction/)
+- [External Secrets Operator documentation](https://external-secrets.io/)
 - [External Secrets Operator GitHub repository](https://github.com/external-secrets/external-secrets)

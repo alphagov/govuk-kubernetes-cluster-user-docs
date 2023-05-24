@@ -79,7 +79,7 @@ An app may face issues if the cluster has a problem. Possible issues you might e
 - a configuration problem with the cluster due to some recent change
 - a problem with a controller which might prevent an app's actual configuration from converging with its specified configuration
 
-If you suspect a problem with the cluster, [contact #govuk-replatforming on Slack](https://gds.slack.com/archives/C013F737737) to ask for help.
+If you suspect a problem with the cluster, [contact Platform Engineering team](/contact-platform-engineering-team.html) to ask for help.
 
 ## General debugging
 
