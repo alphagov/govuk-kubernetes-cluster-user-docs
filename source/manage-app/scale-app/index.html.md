@@ -59,8 +59,8 @@ Most of the time, you should only need to scale the `appResources` and `workerRe
 
 ## How scaling your app affects platform resources
 
-If you increase the resources available to your app, this will increase the load on the virtual machines (VMs) that the platform runs on.
+The cluster will automatically scale up in response to demand from application workloads, subject to some overall limits.
 
-You should be aware of this increased load on the platform, and look out for any [Argo CD deployment notifications or alerts](https://argocd-notifications.readthedocs.io/en/stable/).
+Very large increases to resource requests or replica counts could run into those limits or have other implications.
 
-[Contact the GOV.UK Replatforming team by email](mailto:govuk-replatforming-team@digital.cabinet-office.gov.uk) to discuss how scaling your app's resources affects the platform and whether you need to scale the platform resources as well.
+[GOV.UK Platform Engineering team](/contact-platform-engineering-team.html) can help advise you on how best to meet your scalability needs. Please don't hesitate to get it touch if you're at all unsure.

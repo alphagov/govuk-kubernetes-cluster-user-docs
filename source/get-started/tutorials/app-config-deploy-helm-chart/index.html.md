@@ -1,7 +1,7 @@
 ---
 title: Update an application's environment configuration
 weight: 20
-last_reviewed_on: 2023-03-07
+last_reviewed_on: 2023-05-24
 review_in: 6 months
 ---
 
@@ -21,9 +21,9 @@ The govuk-helm-chart repository contains configuration for how an app is deploye
 
 1. Deploying the changes to the app
 
-    Create the pull request (PR) on your branch, your changes will get posted automatically to the #govuk-replatforming channel for review by a member of the team. After your PR has been approved and passed status checks you can merge your PR.
+    Create the pull request (PR) on your branch. Your changes will get posted automatically to the #govuk-platform-engineering Slack channel for review by a member of the team. After your PR has been approved and passed status checks you can merge your PR.
 
-1. See the changes in [Argo](https://argoproj.github.io/) (a tool to help manage app deployments)
+1. See the changes in [Argo CD](https://argoproj.github.io/cd/) (a tool to help manage app deployments)
 
     You should be able to see your changes in the [manifest within Argo](https://argo.eks.integration.govuk.digital/applications/govuk-replatform-test-app?view=tree&orphaned=false&resource=&node=argoproj.io%2FApplication%2Fcluster-services%2Fgovuk-replatform-test-app%2F0&tab=manifest)
 
@@ -33,4 +33,4 @@ The govuk-helm-chart repository contains configuration for how an app is deploye
 
 1. Tidy up your `ENV_MESSAGE`
 
-    Revert your PR to tidy up the codebase and post it for review on the #govuk-replatforming-class channel. After your PR has been approved and passed status checks you can merge your PR to undo your changes.
+    Revert your PR to tidy up the codebase. After your PR has been approved and passed status checks you can merge your PR to undo your changes.
