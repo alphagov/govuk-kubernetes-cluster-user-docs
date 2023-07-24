@@ -15,13 +15,12 @@ To use the Tech Docs Template you need:
 
 To make changes to the documentation for the Tech Docs Template website, edit files in the `source` folder of this repository.
 
-You can add content by editing the `.html.md.erb` files. These files support content in:
+You can add content by editing the `.html.md` files. These files support content in:
 
 - Markdown
 - HTML
-- Ruby
 
-👉 You can use Markdown and HTML to [generate different content types][example-content] and [Ruby partials to manage content][partials].
+👉 You can use Markdown and HTML to [generate different content types][example-content].
 
 👉 Learn more about [producing more complex page structures][multipage] for your website.
 
@@ -57,12 +56,12 @@ Run `bundle exec middleman build --verbose` to get detailed error messages to he
 
 ## Licence
 
-Unless stated otherwise, the codebase is released under [the MIT License][mit].
+Unless stated otherwise, the codebase is released under the [MIT Licence].
 This covers both the codebase and any sample code in the documentation.
 
 The documentation is [© Crown copyright][copyright] and available under the terms of the [Open Government 3.0][ogl] licence.
 
-[mit]: LICENCE
+[MIT Licence]: LICENCE
 [copyright]: http://www.nationalarchives.gov.uk/information-management/re-using-public-sector-information/uk-government-licensing-framework/crown-copyright/
 [ogl]: http://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/
 [mmt]: https://middlemanapp.com/advanced/project_templates/
@@ -71,9 +70,8 @@ The documentation is [© Crown copyright][copyright] and available under the ter
 [frontmatter]: https://tdt-documentation.london.cloudapps.digital/frontmatter.html#frontmatter
 [multipage]: https://tdt-documentation.london.cloudapps.digital/multipage.html#build-a-multipage-site
 [example-content]: https://tdt-documentation.london.cloudapps.digital/content.html#content-examples
-[partials]: https://tdt-documentation.london.cloudapps.digital/single_page.html#add-partial-lines
 [install-ruby]: https://tdt-documentation.london.cloudapps.digital/install_macs.html#install-ruby
 [install-middleman]: https://tdt-documentation.london.cloudapps.digital/install_macs.html#install-middleman
 [gem]: https://github.com/alphagov/tech-docs-gem
 [template]: https://github.com/alphagov/tech-docs-template
-[documentation-home]: https://govuk-k8s-user-docs.publishing.service.gov.uk
+[documentation-home]: https://govuk-kubernetes-cluster-user-docs.publishing.service.gov.uk/

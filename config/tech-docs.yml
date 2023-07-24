@@ -1,20 +1,17 @@
+---
 # Host to use for canonical URL generation (without trailing slash)
-host: https://govuk-k8s-user-docs.publishing.service.gov.uk
+host: https://govuk-kubernetes-cluster-user-docs.publishing.service.gov.uk
 
 # Header-related options
 show_govuk_logo: true
-service_name: GOV.UK Kubernetes platform documentation
-service_link: https://govuk-k8s-user-docs.publishing.service.gov.uk
+service_name: GOV.UK Kubernetes cluster documentation for developers
+service_link: https://govuk-kubernetes-cluster-user-docs.publishing.service.gov.uk
 phase: Alpha
 
 # Links to show on right-hand-side of header
 header_links:
   Documentation: /
-  # About: https://www.larry-the-cat.service.gov.uk/about
-  # Get Started: https://www.larry-the-cat.service.gov.uk/get-started
-  # Support: https://www.larry-the-cat.service.gov.uk/support
 
-# Enables search functionality. This indexes pages only and is not recommended for single-page sites.
 enable_search: true
 
 # Tracking ID from Google Analytics (e.g. UA-XXXX-Y)

@@ -14,7 +14,7 @@ If user demand on your app increases, you must increase the resources available 
 1. Change your app's `values.yaml` file in the [`charts` folder in the `govuk-helm-charts` repo](https://github.com/alphagov/govuk-helm-charts/blob/main/charts/).
 1. Commit this change.
 
-When you merge the pull request, the changed configuration file will be [automatically synced by the Argo CD tool](https://govuk-k8s-user-docs.publishing.service.gov.uk/manage-app/access-ci-cd/#deploying-a-release-of-a-gov-uk-app).
+When you merge the pull request, the changed configuration file will be [automatically synced by the Argo CD tool](/manage-app/access-ci-cd/#deploying-a-release-of-a-gov-uk-app).
 
 You should be aware of:
 
