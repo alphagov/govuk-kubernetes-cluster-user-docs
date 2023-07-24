@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
-    <title>GOV.UK Kubernetes Platform User Documentation - GOV.UK Kubernetes platform documentation</title>
+    <title>GOV.UK Kubernetes cluster documentation for developers - GOV.UK Kubernetes platform documentation</title>
 
     <link href="/stylesheets/manifest.css" rel="stylesheet" />
 
@@ -14,12 +14,12 @@
       <meta name="twitter:card" content="summary" />
       <meta name="twitter:domain" content="govuk-k8s-user-docs.publishing.service.gov.uk" />
       <meta name="twitter:image" content="https://govuk-k8s-user-docs.publishing.service.gov.uk/images/govuk-large.png" />
-      <meta name="twitter:title" content="GOV.UK Kubernetes Platform User Documentation - GOV.UK Kubernetes platform documentation" />
+      <meta name="twitter:title" content="GOV.UK Kubernetes cluster documentation for developers - GOV.UK Kubernetes platform documentation" />
       <meta name="twitter:url" content="https://govuk-k8s-user-docs.publishing.service.gov.uk/" />
 
       <meta property="og:image" content="https://govuk-k8s-user-docs.publishing.service.gov.uk/images/govuk-large.png" />
       <meta property="og:site_name" content="GOV.UK Kubernetes platform documentation" />
-      <meta property="og:title" content="GOV.UK Kubernetes Platform User Documentation" />
+      <meta property="og:title" content="GOV.UK Kubernetes cluster documentation for developers" />
       <meta property="og:type" content="object" />
       <meta property="og:url" content="https://govuk-k8s-user-docs.publishing.service.gov.uk/" />
 
@@ -106,7 +106,12 @@
               <nav id="toc" class="js-toc-list toc__list" aria-labelledby="toc-heading" data-module="collapsible-navigation">
                       <ul>
   <li>
-    <a href="/"><span>GOV.UK Kubernetes platform user documentation</span></a>
+    <a href="/"><span>GOV.UK Kubernetes cluster documentation for developers</span></a>
+    <ul>
+      <li>
+        <a href="/#introduction"><span>Introduction</span></a>
+      </li>
+    </ul>
   </li>
   <li>
     <a href="/before-you-start/"><span>Before you start</span></a>
@@ -352,38 +357,41 @@
 
         <div class="app-pane__content toc-open-disabled" aria-label="Content" tabindex="0">
           <main id="content" class="technical-documentation" data-module="anchored-headings">
-            <h1 id="gov-uk-kubernetes-platform-user-documentation">GOV.UK Kubernetes platform user documentation</h1>
-<p>The GOV.UK Kubernetes platform is an AWS-hosted <a href="https://kubernetes.io">Kubernetes</a> cluster, using Amazon&rsquo;s <a href="https://aws.amazon.com/eks/">Elastic Kubernetes Service</a>.</p>
-<p>Kubernetes is a portable, extensible, open-source platform for managing containerized workloads and services.</p>
-<p>Kubernetes facilitates both <a href="https://kubernetes.io/docs/tasks/manage-kubernetes-objects/declarative-config/">declarative configuration</a> and automation.</p>
-<p>Kubernetes manages the entire lifecycle of containerised applications and provides mechanisms for:</p>
-
-<ul>
-<li>service discovery and load balancing</li>
-<li>persistent storage orchestration</li>
-<li>automated rollouts and rollbacks</li>
-<li>self-healing deployments</li>
-<li>secrets and config management</li>
-</ul>
-<p>See the official <a href="https://kubernetes.io/docs/concepts/overview/what-is-kubernetes/">Kubernetes overview documentation</a> for more details.</p>
+            <h1 id="gov-uk-kubernetes-cluster-documentation-for-developers">GOV.UK Kubernetes cluster documentation for developers</h1>
 <p>Use this documentation to find out how to:</p>
 
 <ul>
-<li>start using the platform</li>
-<li>manage your app on the platform</li>
+<li>start using the GOV.UK Kubernetes clusters</li>
+<li>manage your GOV.UK app on Kubernetes</li>
 </ul>
+<h2 id="introduction">Introduction</h2>
+<p>The GOV.UK website and content management system (known internally as the publishing platform) are hosted on <a href="https://kubernetes.io/">Kubernetes</a> clusters on Amazon Web Services (AWS), using <a href="https://aws.amazon.com/eks/">Elastic Kubernetes Service</a> (EKS).</p>
+<p>Kubernetes is a widely-used, open-source <a href="https://cloud.google.com/discover/what-is-container-orchestration">container orchestration system</a> for managing containerised workloads such as GOV.UK&rsquo;s.</p>
+<p>Kubernetes is designed for automation and emphasises <a href="https://github.com/kubernetes/design-proposals-archive/blob/main/architecture/declarative-application-management.md#declarative-configuration">declarative configuration</a> and <a href="https://thenewstack.io/a-brief-look-at-immutable-infrastructure-and-why-it-is-such-a-quest/">immutable infrastructure</a>. It provides mechanisms for:</p>
 
-              <div data-module='page-expiry' data-last-reviewed-on="2022-08-01">
+<ul>
+<li>efficiently and automatically fitting workloads into available compute resources</li>
+<li>resilient, &ldquo;self-healing&rdquo; deployments</li>
+<li>service discovery and load balancing</li>
+<li>automated rollouts and rollbacks</li>
+<li>quotas and isolation of compute resources between workloads</li>
+<li>authentication, authorisation and audit logging</li>
+<li>secrets and configuration management</li>
+<li>managing persistent storage</li>
+</ul>
+<p>See the official <a href="https://kubernetes.io/docs/concepts/overview/what-is-kubernetes/">Kubernetes overview documentation</a> for more information about Kubernetes.</p>
+
+              <div data-module='page-expiry' data-last-reviewed-on="2024-01-24">
     <div class='page-expiry--not-expired'>
-      This page was last reviewed on 1 February 2022.
+      This page was last reviewed on 24 July 2023.
 
-        It needs to be reviewed again on 1 August 2022
+        It needs to be reviewed again on 24 January 2024
         by the page owner <a href="https://gds.slack.com/messages/govuk-platform-engineering">#govuk-platform-engineering</a>
         .
     </div>
 
     <div class='page-expiry--expired'>
-      This page was set to be reviewed before 1 August 2022
+      This page was set to be reviewed before 24 January 2024
        by the page owner <a href="https://gds.slack.com/messages/govuk-platform-engineering">#govuk-platform-engineering</a>.
       This might mean the content is out of date.
     </div>
@@ -394,7 +402,7 @@
           <aside>
               <ul class="contribution-banner">
                 <li><a href="https://github.com/alphagov/govuk-kubernetes-cluster-user-docs/blob/main/source/index.html.md">View source</a></li>
-                <li><a href="https://github.com/alphagov/govuk-kubernetes-cluster-user-docs/issues/new?body=Problem+with+%27GOV.UK+Kubernetes+Platform+User+Documentation%27+%28https%3A%2F%2Fgovuk-k8s-user-docs.publishing.service.gov.uk%2F%29&amp;labels=bug&amp;title=Re%3A+%27GOV.UK+Kubernetes+Platform+User+Documentation%27">Report problem</a></li>
+                <li><a href="https://github.com/alphagov/govuk-kubernetes-cluster-user-docs/issues/new?body=Problem+with+%27GOV.UK+Kubernetes+cluster+documentation+for+developers%27+%28https%3A%2F%2Fgovuk-k8s-user-docs.publishing.service.gov.uk%2F%29&amp;labels=bug&amp;title=Re%3A+%27GOV.UK+Kubernetes+cluster+documentation+for+developers%27">Report problem</a></li>
                 <li><a href="https://github.com/alphagov/govuk-kubernetes-cluster-user-docs">GitHub Repo</a></li>
               </ul>
           </aside>
