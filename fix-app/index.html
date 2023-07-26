@@ -5,23 +5,23 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
-    <title>Fix your app - GOV.UK Kubernetes platform documentation</title>
+    <title>Fix your app - GOV.UK Kubernetes cluster documentation for developers</title>
 
     <link href="/stylesheets/manifest.css" rel="stylesheet" />
 
-    <link rel="canonical" href="https://govuk-k8s-user-docs.publishing.service.gov.uk/fix-app/">
+    <link rel="canonical" href="https://govuk-kubernetes-cluster-user-docs.publishing.service.gov.uk/fix-app/">
 
       <meta name="twitter:card" content="summary" />
-      <meta name="twitter:domain" content="govuk-k8s-user-docs.publishing.service.gov.uk" />
-      <meta name="twitter:image" content="https://govuk-k8s-user-docs.publishing.service.gov.uk/images/govuk-large.png" />
-      <meta name="twitter:title" content="Fix your app - GOV.UK Kubernetes platform documentation" />
-      <meta name="twitter:url" content="https://govuk-k8s-user-docs.publishing.service.gov.uk/fix-app/" />
+      <meta name="twitter:domain" content="govuk-kubernetes-cluster-user-docs.publishing.service.gov.uk" />
+      <meta name="twitter:image" content="https://govuk-kubernetes-cluster-user-docs.publishing.service.gov.uk/images/govuk-large.png" />
+      <meta name="twitter:title" content="Fix your app - GOV.UK Kubernetes cluster documentation for developers" />
+      <meta name="twitter:url" content="https://govuk-kubernetes-cluster-user-docs.publishing.service.gov.uk/fix-app/" />
 
-      <meta property="og:image" content="https://govuk-k8s-user-docs.publishing.service.gov.uk/images/govuk-large.png" />
-      <meta property="og:site_name" content="GOV.UK Kubernetes platform documentation" />
+      <meta property="og:image" content="https://govuk-kubernetes-cluster-user-docs.publishing.service.gov.uk/images/govuk-large.png" />
+      <meta property="og:site_name" content="GOV.UK Kubernetes cluster documentation for developers" />
       <meta property="og:title" content="Fix your app" />
       <meta property="og:type" content="object" />
-      <meta property="og:url" content="https://govuk-k8s-user-docs.publishing.service.gov.uk/fix-app/" />
+      <meta property="og:url" content="https://govuk-kubernetes-cluster-user-docs.publishing.service.gov.uk/fix-app/" />
 
     
   </head>
@@ -36,7 +36,7 @@
         <header class="govuk-header app-header" role="banner" data-module="govuk-header">
   <div class="govuk-header__container govuk-header__container--full-width">
     <div class="govuk-header__logo">
-      <a href="https://govuk-k8s-user-docs.publishing.service.gov.uk" class="govuk-header__link govuk-header__link--homepage">
+      <a href="https://govuk-kubernetes-cluster-user-docs.publishing.service.gov.uk" class="govuk-header__link govuk-header__link--homepage">
         <span class="govuk-header__logotype">
           <svg
             aria-hidden="true"
@@ -57,7 +57,7 @@
           </span>
         </span>
         <span class="govuk-header__product-name">
-          GOV.UK Kubernetes platform documentation
+          GOV.UK Kubernetes cluster documentation for developers
         </span>
       </a>
         <strong class="govuk-tag">Alpha</strong>
@@ -88,7 +88,7 @@
             <div class="toc" data-module="table-of-contents" tabindex="-1" aria-label="Table of contents" role="dialog">
               <div class="search" data-module="search" data-path-to-site-root="/">
   <form action="https://www.google.co.uk/search" method="get" role="search" class="search__form govuk-!-margin-bottom-4">
-    <input type="hidden" name="as_sitesearch" value="https://govuk-k8s-user-docs.publishing.service.gov.uk"/>
+    <input type="hidden" name="as_sitesearch" value="https://govuk-kubernetes-cluster-user-docs.publishing.service.gov.uk"/>
     <label class="govuk-label search__label" for="search" aria-hidden="true">
       Search (via Google)
     </label>
@@ -378,14 +378,14 @@
 <p>To check you have set up your app&rsquo;s environment variables correctly, run the following in the command line:</p>
 <div class="highlight"><pre class="highlight shell" tabindex="0"><code>kubectl <span class="nt">-n</span> apps <span class="nb">exec </span>deploy/&lt;APPNAME&gt; <span class="nt">-c</span> app <span class="nt">--</span> <span class="nb">env</span>
 </code></pre></div><p>To change a plain text environment variable, edit the value in the <code>values-&lt;ENVIRONMENT&gt;.yaml</code> file.</p>
-<p>To change a Kubernetes secret, see the <a href="https://govuk-k8s-user-docs.publishing.service.gov.uk/manage-app/manage-secrets">Add secrets to your app documentation</a>.</p>
+<p>To change a Kubernetes secret, see the <a href="/manage-app/manage-secrets">Add secrets to your app documentation</a>.</p>
 <p>When you change a Kubernetes secret, run the following in the command line to restart your app so that the change takes effect:</p>
 <div class="highlight"><pre class="highlight shell" tabindex="0"><code>kubectl <span class="nt">-n</span> apps rollout restart deploy/&lt;APPNAME&gt;
 </code></pre></div><h2 id="allocating-more-resources-to-an-app">Allocating more resources to an app</h2>
 <p>An app might become unresponsive if its CPU usage far exceeds its limit. An app&rsquo;s container or pod can crash or be evicted if it exceeds its memory limit.</p>
 <p>To check why a container or pod has crashed, run <code>describe pods</code> in the command line:</p>
 <div class="highlight"><pre class="highlight shell" tabindex="0"><code>kubectl <span class="nt">-n</span> apps describe pods <span class="nt">-l</span><span class="o">=</span><span class="nv">app</span><span class="o">=</span>&lt;APPNAME&gt;
-</code></pre></div><p>If the pod or container crashes because of a lack of resources, you should <a href="https://govuk-k8s-user-docs.publishing.service.gov.uk/manage-app/scale-app/">scale your app&rsquo;s resources</a>.</p>
+</code></pre></div><p>If the pod or container crashes because of a lack of resources, you should <a href="/manage-app/scale-app/">scale your app&rsquo;s resources</a>.</p>
 <p>You can monitor the pod resource usage of an app in the <code>General/Kubernetes/Compute Resources/Pod</code> Grafana dashboard for the appropriate environment.</p>
 <p>For example, you can monitor the <a href="https://grafana.eks.integration.govuk.digital/">Grafana dashboard for the GOV.UK integration environment</a>.</p>
 <p>For more information on Grafana, see the <a href="https://docs.publishing.service.gov.uk/manual/grafana.html">Grafana developer documentation</a>.</p>
@@ -394,7 +394,7 @@
 <p>To fix this issue, you must make sure the security groups of these services are open to the <a href="https://kubernetes.io/docs/concepts/architecture/nodes/">Kubernetes worker nodes</a> where the app is running.</p>
 <p>To open the security groups to the worker nodes, make terraform changes to the <a href="https://github.com/alphagov/govuk-infrastructure/blob/main/terraform/deployments/govuk-publishing-infrastructure/security.tf"><code>security.tf</code> file in the <code>govuk-infrastructure</code> repo</a>.</p>
 <p>Use this <a href="https://github.com/alphagov/govuk-infrastructure/pull/584/files">example pull request in the <code>govuk-infrastructure</code> repo</a> as a guide to making the necessary changes.</p>
-<p>Once you have made these changes, apply them by <a href="https://govuk-k8s-user-docs.publishing.service.gov.uk/manage-app/create-new-env/#2-deploy-the-cluster-infrastructure-module">deploying the <code>cluster-infrastructure</code> module</a>.</p>
+<p>Once you have made these changes, apply them by <a href="/manage-app/create-new-env/#2-deploy-the-cluster-infrastructure-module">deploying the <code>cluster-infrastructure</code> module</a>.</p>
 <h2 id="if-you-suspect-a-problem-with-the-cluster-itself">If you suspect a problem with the cluster itself</h2>
 <p>An app may face issues if the cluster has a problem. Possible issues you might encounter include:</p>
 
@@ -443,7 +443,7 @@
           <aside>
               <ul class="contribution-banner">
                 <li><a href="https://github.com/alphagov/govuk-kubernetes-cluster-user-docs/blob/main/source/fix-app/index.html.md">View source</a></li>
-                <li><a href="https://github.com/alphagov/govuk-kubernetes-cluster-user-docs/issues/new?body=Problem+with+%27Fix+your+app%27+%28https%3A%2F%2Fgovuk-k8s-user-docs.publishing.service.gov.uk%2Ffix-app%2F%29&amp;labels=bug&amp;title=Re%3A+%27Fix+your+app%27">Report problem</a></li>
+                <li><a href="https://github.com/alphagov/govuk-kubernetes-cluster-user-docs/issues/new?body=Problem+with+%27Fix+your+app%27+%28https%3A%2F%2Fgovuk-kubernetes-cluster-user-docs.publishing.service.gov.uk%2Ffix-app%2F%29&amp;labels=bug&amp;title=Re%3A+%27Fix+your+app%27">Report problem</a></li>
                 <li><a href="https://github.com/alphagov/govuk-kubernetes-cluster-user-docs">GitHub Repo</a></li>
               </ul>
           </aside>
