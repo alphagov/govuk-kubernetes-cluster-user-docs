@@ -16,31 +16,18 @@ To create a new environment, you must:
 - create secrets for the new environment
 - create a new empty environment
 - deploy the Terraform modules
-- create the Signon API token
 - check the environment is working
 
 ## Create secrets for the new environment
 
-The [AWS Secrets Manager](https://aws.amazon.com/secrets-manager/) stores and manages GOV.UK Kubernetes platform [secrets](https://kubernetes.io/docs/concepts/configuration/secret/).
+Copy the secrets from an existing environment, for example by running [the `copy_sm_secrets.py` transfer script](https://gist.github.com/theseanything/1bb8add0077d3a2f5d979c12c6b9f140) with the following aws-cli profile names:
 
-You must create secrets for the new environment before creating the environment itself. You do this by copying an existing environment's secrets in the AWS Secrets Manager.
+- `--src-profile`, the existing environment to copy the secrets from
+- `--dst-profile`, the new environment to copy the secrets to
 
-To copy the secrets, [run the `copy_sm_secrets.py` transfer script](https://gist.github.com/theseanything/1bb8add0077d3a2f5d979c12c6b9f140) in your command line.
+You can edit the copied secrets for the new environment using the AWS console for Secrets Manager.
 
-When running this script, specify the following AWS-CLI profile names:
-
-- `--src-profile`, that is the existing environment to copy the secrets from
-- `--dst-profile`, that is the new environment to copy the secrets to
-
-You can change the copied secrets for the new environment using the AWS console.
-
-1. [Sign in to the AWS console](https://console.aws.amazon.com/) for the new environment.
-1. Search for and select the __Secrets Manager__.
-1. Make sure you are in the [`eu-west-2` region](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html).
-1. Select the secret you want to change.
-1. Change the secret, then select __Save__.
-
-## Create a new empty environment
+## Create a new cluster
 
 1. Run `export ENV=<ENVIRONMENT>` in the command line to define the type of environment you’re creating.
 
@@ -60,11 +47,11 @@ You can change the copied secrets for the new environment using the AWS console.
 
 ## Deploy the Terraform modules
 
-Deploy the root Terraform modules in the following order.
+Deploy the Terraform root modules in order.
 
 ### 1. Deploy the `ecr` module
 
-The [AWS elastic container registry (ECR)](https://docs.aws.amazon.com/AmazonECR/latest/userguide/what-is-ecr.html) stores [container images](https://kubernetes.io/docs/concepts/containers/images/) for the GOV.UK Kubernetes platform.
+[Amazon Elastic Container Registry (ECR)](https://docs.aws.amazon.com/AmazonECR/latest/userguide/what-is-ecr.html) stores [container images](https://kubernetes.io/docs/concepts/containers/images/) for the GOV.UK Kubernetes platform.
 
 The [`ecr` module](https://github.com/alphagov/govuk-infrastructure/tree/main/terraform/deployments/ecr) creates the ECR for the new environment.
 
@@ -143,18 +130,6 @@ The [`cluster-services` module](https://github.com/alphagov/govuk-infrastructure
       terraform apply
     ```
     `<ENVIRONMENT>` is the environment type you defined in the earlier step.
-
-## Create the Signon API token
-
-[Signon](https://github.com/alphagov/signon) is an OAuth2-based single sign-on provider for GDS services.
-
-Run the following to create the [Signon API token](https://github.com/alphagov/govuk-infrastructure/blob/main/docs/signon-secrets.md) as a Kubernetes secret:
-
-```
-kubectl -n apps create secret generic signon-auth-token --from-literal=token=$(openssl rand -base64 40)
-```
-
-This allows Signon resources to create or export tokens from Signon.
 
 ## Check the environment is working
 
