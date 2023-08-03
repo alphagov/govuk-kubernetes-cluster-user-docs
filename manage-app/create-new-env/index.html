@@ -288,13 +288,10 @@
         <a href="/manage-app/create-new-env/#create-secrets-for-the-new-environment"><span>Create secrets for the new environment</span></a>
       </li>
       <li>
-        <a href="/manage-app/create-new-env/#create-a-new-empty-environment"><span>Create a new empty environment</span></a>
+        <a href="/manage-app/create-new-env/#create-a-new-cluster"><span>Create a new cluster</span></a>
       </li>
       <li>
         <a href="/manage-app/create-new-env/#deploy-the-terraform-modules"><span>Deploy the Terraform modules</span></a>
-      </li>
-      <li>
-        <a href="/manage-app/create-new-env/#create-the-signon-api-token"><span>Create the Signon API token</span></a>
       </li>
       <li>
         <a href="/manage-app/create-new-env/#check-the-environment-is-working"><span>Check the environment is working</span></a>
@@ -368,29 +365,17 @@
 <li>create secrets for the new environment</li>
 <li>create a new empty environment</li>
 <li>deploy the Terraform modules</li>
-<li>create the Signon API token</li>
 <li>check the environment is working</li>
 </ul>
 <h2 id="create-secrets-for-the-new-environment">Create secrets for the new environment</h2>
-<p>The <a href="https://aws.amazon.com/secrets-manager/">AWS Secrets Manager</a> stores and manages GOV.UK Kubernetes platform <a href="https://kubernetes.io/docs/concepts/configuration/secret/">secrets</a>.</p>
-<p>You must create secrets for the new environment before creating the environment itself. You do this by copying an existing environment&rsquo;s secrets in the AWS Secrets Manager.</p>
-<p>To copy the secrets, <a href="https://gist.github.com/theseanything/1bb8add0077d3a2f5d979c12c6b9f140">run the <code>copy_sm_secrets.py</code> transfer script</a> in your command line.</p>
-<p>When running this script, specify the following AWS-CLI profile names:</p>
+<p>Copy the secrets from an existing environment, for example by running <a href="https://gist.github.com/theseanything/1bb8add0077d3a2f5d979c12c6b9f140">the <code>copy_sm_secrets.py</code> transfer script</a> with the following aws-cli profile names:</p>
 
 <ul>
-<li><code>--src-profile</code>, that is the existing environment to copy the secrets from</li>
-<li><code>--dst-profile</code>, that is the new environment to copy the secrets to</li>
+<li><code>--src-profile</code>, the existing environment to copy the secrets from</li>
+<li><code>--dst-profile</code>, the new environment to copy the secrets to</li>
 </ul>
-<p>You can change the copied secrets for the new environment using the AWS console.</p>
-
-<ol>
-<li><a href="https://console.aws.amazon.com/">Sign in to the AWS console</a> for the new environment.</li>
-<li>Search for and select the <strong>Secrets Manager</strong>.</li>
-<li>Make sure you are in the <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html"><code>eu-west-2</code> region</a>.</li>
-<li>Select the secret you want to change.</li>
-<li>Change the secret, then select <strong>Save</strong>.</li>
-</ol>
-<h2 id="create-a-new-empty-environment">Create a new empty environment</h2>
+<p>You can edit the copied secrets for the new environment using the AWS console for Secrets Manager.</p>
+<h2 id="create-a-new-cluster">Create a new cluster</h2>
 
 <ol>
 <li><p>Run <code>export ENV=&lt;ENVIRONMENT&gt;</code> in the command line to define the type of environment you’re creating.</p>
@@ -403,9 +388,9 @@
 </code></pre></div></li>
 </ol>
 <h2 id="deploy-the-terraform-modules">Deploy the Terraform modules</h2>
-<p>Deploy the root Terraform modules in the following order.</p>
+<p>Deploy the Terraform root modules in order.</p>
 <h3 id="1-deploy-the-ecr-module">1. Deploy the <code>ecr</code> module</h3>
-<p>The <a href="https://docs.aws.amazon.com/AmazonECR/latest/userguide/what-is-ecr.html">AWS elastic container registry (ECR)</a> stores <a href="https://kubernetes.io/docs/concepts/containers/images/">container images</a> for the GOV.UK Kubernetes platform.</p>
+<p><a href="https://docs.aws.amazon.com/AmazonECR/latest/userguide/what-is-ecr.html">Amazon Elastic Container Registry (ECR)</a> stores <a href="https://kubernetes.io/docs/concepts/containers/images/">container images</a> for the GOV.UK Kubernetes platform.</p>
 <p>The <a href="https://github.com/alphagov/govuk-infrastructure/tree/main/terraform/deployments/ecr"><code>ecr</code> module</a> creates the ECR for the new environment.</p>
 
 <ol>
@@ -462,11 +447,6 @@ gds aws govuk-&lt;ENVIRONMENT&gt;-admin -- \
   terraform apply
 </code></pre></div><p><code>&lt;ENVIRONMENT&gt;</code> is the environment type you defined in the earlier step.</p></li>
 </ol>
-<h2 id="create-the-signon-api-token">Create the Signon API token</h2>
-<p><a href="https://github.com/alphagov/signon">Signon</a> is an OAuth2-based single sign-on provider for GDS services.</p>
-<p>Run the following to create the <a href="https://github.com/alphagov/govuk-infrastructure/blob/main/docs/signon-secrets.md">Signon API token</a> as a Kubernetes secret:</p>
-<div class="highlight"><pre class="highlight plaintext" tabindex="0"><code>kubectl -n apps create secret generic signon-auth-token --from-literal=token=$(openssl rand -base64 40)
-</code></pre></div><p>This allows Signon resources to create or export tokens from Signon.</p>
 <h2 id="check-the-environment-is-working">Check the environment is working</h2>
 <p>You should now have successfully created a new environment on the GOV.UK Kubernetes platform.</p>
 <p>To check the environment is working, go to the new environment URL endpoint at <code>https://www.eks.&lt;ENVIRONMENT&gt;.govuk.digital</code>. For example, the endpoint for a new production environment is <code>https://www.eks.production.govuk.digital</code>.</p>
