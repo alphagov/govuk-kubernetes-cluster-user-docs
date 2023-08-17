@@ -11,8 +11,9 @@ If user demand on your app increases, you must increase the resources available 
 
 ## Scaling your app
 
-1. Change your app's `values.yaml` file in the [`charts` folder in the `govuk-helm-charts` repo](https://github.com/alphagov/govuk-helm-charts/blob/main/charts/).
-1. Commit this change.
+1. Determine if you need to update your app's `values.yaml` or enviroment yaml file, for example - [`values-integration.yaml`](https://github.com/alphagov/govuk-helm-charts/blob/main/charts/app-config/values-integration.yaml)
+2. Change your app's configuration by [following the guidance](#what-you-can-scale) below
+3. Commit this change
 
 When you merge the pull request, the changed configuration file will be [automatically synced by the Argo CD tool](/manage-app/access-ci-cd/#deploying-a-release-of-a-gov-uk-app).
 
