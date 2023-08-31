@@ -42,9 +42,7 @@ The readonly role:
 - has readonly access to a specific cluster in a specific environment
 - can view everything in that cluster excluding secrets
 
-1. Open the `gds-cli`.
-
-1. Run the following to export the AWS credentials for the appropriate GOV.UK environment and role:
+1. Run the following to export the AWS credentials into your shell environment for the appropriate GOV.UK environment and role:
 
   ```sh
   eval $(gds aws govuk-<govuk-environment>-<role> -e --art 8h)
