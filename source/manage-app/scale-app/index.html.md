@@ -11,7 +11,7 @@ If user demand on your app increases, you must increase the resources available 
 
 ## Scaling your app
 
-1. Determine if you need to update your app's `values.yaml` or enviroment yaml file, for example - [`values-integration.yaml`](https://github.com/alphagov/govuk-helm-charts/blob/main/charts/app-config/values-integration.yaml)
+1. Find the Helm values file for the environment that you want to change, for example [`values-integration.yaml`](https://github.com/alphagov/govuk-helm-charts/blob/main/charts/app-config/values-integration.yaml).
 2. Change your app's configuration by [following the guidance](#what-you-can-scale) below
 3. Commit this change
 
