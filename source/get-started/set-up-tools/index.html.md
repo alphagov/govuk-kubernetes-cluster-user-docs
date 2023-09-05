@@ -13,6 +13,7 @@ You must set up the following tools to use the GOV.UK Kubernetes platform:
 - Helm
 - Argo CLI to manage Argo Workflows
 - `gds-cli` and `aws-vault`
+- AWS CLI (`aws`)
 
 ## Install kubectl
 
@@ -146,3 +147,7 @@ v6.2.0
 ```
 
 See the [`aws-vault` README](https://github.com/99designs/aws-vault#readme) for more information on how to use `aws-vault`.
+
+### Install AWS CLI (`aws`)
+
+Install the [AWS CLI](https://aws.amazon.com/cli/). This is needed to export the EKS kubectl configuration into your `~/.kube/config`.
