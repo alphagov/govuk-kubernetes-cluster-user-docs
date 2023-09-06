@@ -1,3 +1,5 @@
+*This documentation was moved into the [GOV.UK Developer Docs](https://docs.publishing.service.gov.uk/kubernetes/)* [in September 2023](https://github.com/alphagov/govuk-developer-docs/pull/4186).
+
 # GOV.UK Kubernetes Cluster User Documentation
 
 The documentation is available to view online [here][documentation-home].
